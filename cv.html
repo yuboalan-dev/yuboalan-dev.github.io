@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>游博安 CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<!-- 顏色沿用 style.css 第 0 段，改那邊 CV 也會跟著變 -->
+<link rel="stylesheet" href="style.css">
+<style>
+/* =========================================================
+   正式 CV 版面（平常不用改；文字請改 content.js）
+   A4 直式。螢幕上看起來是一張紙，列印時就是那張紙。
+   ========================================================= */
+@page { size: A4; margin: 11mm 14mm; }
+
+body { background: #e9e9ee; }
+
+/* --- 工具列（列印時隱藏） --- */
+.cv-tools {
+    position: sticky; top: 0; z-index: 10;
+    background: var(--navy); color: #fff;
+    border-bottom: 4px solid var(--accent);
+}
+.cv-tools .wrap {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px;
+    padding-top: 12px; padding-bottom: 12px;
+}
+.cv-tools a.back { color: #fff; font-weight: 800; font-size: 14px; text-decoration: none; margin-right: auto; }
+.cv-tools a.back:hover { color: var(--accent-light, #ff4d5a); }
+.cv-tools label { font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.cv-tools input { accent-color: var(--accent); width: 16px; height: 16px; }
+.seg { display: inline-flex; border: 2px solid #fff; border-radius: 999px; overflow: hidden; }
+.seg button {
+    font: inherit; font-size: 13px; font-weight: 800; padding: 4px 12px;
+    border: 0; background: transparent; color: #fff; cursor: pointer;
+}
+.seg button.on { background: #fff; color: var(--navy); }
+.cv-tools .btn { background: var(--accent); border-color: var(--accent); }
+.cv-tools .btn:hover { background: #fff; color: var(--navy); border-color: #fff; }
+.hint { width: 100%; font-size: 12.5px; color: rgba(255,255,255,.7); line-height: 1.5; }
+
+/* --- 紙張 --- */
+.paper {
+    width: 210mm; min-height: 297mm; margin: 28px auto 60px;
+    background: #fff; padding: 14mm 15mm;
+    box-shadow: 0 10px 40px rgba(0,0,36,.15);
+    font-size: 9.4pt; line-height: 1.42; color: var(--text);
+}
+@media (max-width: 860px) {
+    /* 手機上縮成螢幕寬度預覽，列印時仍是 A4 */
+    .paper { width: auto; min-height: 0; margin: 16px; padding: 22px 18px; }
+}
+
+/* --- 抬頭 --- */
+.cv-head { display: flex; justify-content: space-between; gap: 8mm; align-items: flex-start; }
+.cv-name { font-size: 24pt; font-weight: 900; color: var(--navy); line-height: 1.1; letter-spacing: .5pt; }
+.cv-name small { font-size: 14pt; font-weight: 700; color: var(--muted); margin-left: 10pt; letter-spacing: 0; }
+.cv-headline { font-size: 11.5pt; font-weight: 700; color: var(--navy); margin-top: 5pt; }
+.cv-expertise { font-size: 9.5pt; margin-top: 3pt; color: var(--text); }
+.cv-expertise b { color: var(--accent); font-weight: 800; }
+.cv-contact { display: flex; flex-wrap: wrap; gap: 3pt 14pt; margin-top: 8pt; font-size: 9.5pt; color: var(--muted); }
+.cv-contact span { display: inline-flex; align-items: center; gap: 4pt; }
+.cv-contact svg { width: 10pt; height: 10pt; color: var(--navy); flex-shrink: 0; }
+.cv-contact a { color: inherit; text-decoration: none; }
+.cv-photo { width: 28mm; aspect-ratio: 3/4; object-fit: cover; border-radius: 2mm; border: 1px solid var(--line); flex-shrink: 0; }
+.cv-rule { height: 0; border-top: 2.5pt solid var(--navy); margin: 9pt 0 0; position: relative; }
+.cv-rule::after { content: ""; position: absolute; left: 0; top: -2.5pt; width: 22mm; border-top: 2.5pt solid var(--accent); }
+
+/* --- 區段 --- */
+.cv-sec { margin-top: 8pt; }
+.cv-sec h2 {
+    font-size: 11.5pt; font-weight: 900; color: var(--navy);
+    letter-spacing: 1.5pt; text-transform: uppercase;
+    border-bottom: 1px solid var(--line); padding-bottom: 2pt; margin-bottom: 4pt;
+    break-after: avoid;
+}
+.cv-sec h2 small { font-weight: 700; color: var(--muted); letter-spacing: .5pt; margin-left: 6pt; font-size: 9pt; }
+.cv-summary { color: var(--text); }
+
+.cv-entry { display: grid; grid-template-columns: 1fr auto; column-gap: 10pt; padding: 1pt 0; break-inside: avoid; }
+.cv-org { font-weight: 800; color: var(--navy); }
+.cv-role { color: var(--text); white-space: pre-line; }
+.cv-entry.inline .cv-role { display: inline; }
+.cv-entry.inline .cv-org::after { content: "｜"; color: var(--line); font-weight: 400; margin: 0 2pt; }
+html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--text); margin: 0 1pt 0 0; }
+.cv-period { color: var(--muted); font-size: 9.5pt; white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+.cv-points { grid-column: 1 / -1; margin: 2pt 0 0; padding-left: 13pt; color: var(--text); }
+.cv-points li { margin: 0; }
+.cv-points li::marker { color: var(--accent); }
+
+.cv-two { display: grid; grid-template-columns: auto 1fr; gap: 3pt 12pt; }
+.cv-two dt { font-weight: 800; color: var(--navy); }
+.cv-two dd { margin: 0; }
+
+.cv-media { margin: 0; padding-left: 13pt; }
+.cv-media li { margin: 1pt 0; }
+.cv-media li::marker { color: var(--accent); }
+.cv-media b { color: var(--navy); }
+
+.cv-foot { margin-top: 10pt; padding-top: 4pt; border-top: 1px solid var(--line); font-size: 8.5pt; color: var(--muted); display: flex; justify-content: space-between; gap: 10pt; }
+
+/* --- 列印 --- */
+@media print {
+    body { background: #fff; }
+    .cv-tools { display: none !important; }
+    .paper { width: auto; min-height: 0; margin: 0; padding: 0; box-shadow: none; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { text-decoration: none; }
+}
+</style>
+</head>
+<body>
+<!-- 這個檔案平常不用改。文字請改 content.js -->
+
+<div class="cv-tools">
+  <div class="wrap">
+    <a class="back" id="back" href="index.html"></a>
+    <span class="seg" role="group" aria-label="Language">
+      <button type="button" data-lang="zh">中文</button>
+      <button type="button" data-lang="en">English</button>
+    </span>
+    <label><input type="checkbox" id="opt-photo"><span data-t="photo"></span></label>
+    <label><input type="checkbox" id="opt-focus"><span data-t="focus"></span></label>
+    <label><input type="checkbox" id="opt-works"><span data-t="works"></span></label>
+    <label><input type="checkbox" id="opt-media"><span data-t="mediaOpt"></span></label>
+    <button class="btn" id="printBtn" type="button"></button>
+    <p class="hint" id="hint"></p>
+  </div>
+</div>
+
+<article class="paper" id="cv"></article>
+
+<script src="content.js"></script>
+<script src="common.js"></script>
+<script>
+(function () {
+  var U = window.UTIL, S = U.S, t = U.t, esc = U.esc;
+  var params = new URLSearchParams(location.search);
+  var L = U.getLang();
+
+  /* 勾選項：預設值寫在這裡（"1" 開、"0" 關）。預設組合剛好一頁 A4 */
+  var DEFAULTS = { photo: "0", focus: "0", works: "0", media: "1" };
+  var opt = {};
+  Object.keys(DEFAULTS).forEach(function (k) { opt[k] = (params.get(k) || DEFAULTS[k]) === "1"; });
+
+  /* CV 段落順序：先學歷，再依 content.js 的 groups 順序 */
+  var CV_ORDER = ["education", "current", "research", "experience"];
+
+  var TX = {
+    zh: { back: "← 回個人網站", photo: "附照片", focus: "附關注領域", works: "附代表作", mediaOpt: "附媒體",
+          print: "列印／存成 PDF",
+          hint: "按「列印／存成 PDF」→ 目的地選「另存為 PDF」，紙張 A4、邊界「預設」，勾選「背景圖形」。勾選的選項會記在網址裡，可以直接把網址傳給別人。",
+          summary: "簡介", media: "媒體與評論", shows: "政論節目來賓", news: "新聞受訪", focusT: "關注領域", worksT: "代表作",
+          expertise: "專長", updated: "更新日期", ep: "集" },
+    en: { back: "← Back to website", photo: "Photo", focus: "Focus areas", works: "Selected work", mediaOpt: "Media",
+          print: "Print / Save as PDF",
+          hint: "In the print dialog choose “Save as PDF”, paper A4, default margins, and enable “Background graphics”. Your options are kept in the URL so you can share it.",
+          summary: "Profile", media: "Media & Commentary", shows: "Political talk shows", news: "News interviews", focusT: "Focus Areas", worksT: "Selected Work",
+          expertise: "Expertise", updated: "Updated", ep: "episodes" }
+  }[L];
+
+  document.documentElement.lang = L === "en" ? "en" : "zh-Hant";
+  document.title = (L === "en" ? S.name.en : S.name.zh) + " – CV";
+
+  /* 工具列 */
+  document.getElementById("back").textContent = TX.back;
+  document.getElementById("back").href = "index.html?lang=" + L;
+  document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = TX[el.getAttribute("data-t")]; });
+  document.getElementById("printBtn").textContent = TX.print;
+  document.getElementById("hint").textContent = TX.hint;
+  document.getElementById("printBtn").onclick = function () { window.print(); };
+  document.querySelectorAll(".seg button").forEach(function (b) {
+    if (b.dataset.lang === L) b.classList.add("on");
+    b.onclick = function () { if (b.dataset.lang !== L) U.setLang(b.dataset.lang); };
+  });
+  Object.keys(opt).forEach(function (k) {
+    var el = document.getElementById("opt-" + k);
+    el.checked = opt[k];
+    el.onchange = function () {
+      opt[k] = el.checked;
+      var u = new URL(location.href); u.searchParams.set(k, el.checked ? "1" : "0");
+      history.replaceState(null, "", u.toString());
+      render();
+    };
+  });
+
+  function entries(list) {
+    return U.visible(list, "cv").map(function (it) {
+      var role = t(it.role, L);
+      var pts = (it.points || []).filter(function (p) { return p.show !== false && p.cv !== false; })
+        .map(function (p) { return "<li>" + esc(t(p, L)) + "</li>"; }).join("");
+      return '<div class="cv-entry inline"><div>' +
+        '<span class="cv-org">' + esc(t(it.org, L)) + "</span>" +
+        (role ? ' <span class="cv-role">' + esc(role) + "</span>" : "") + "</div>" +
+        '<div class="cv-period">' + esc(U.period(it.period, L)) + "</div>" +
+        (pts ? '<ul class="cv-points">' + pts + "</ul>" : "") + "</div>";
+    }).join("");
+  }
+  function section(title, body) {
+    return body ? '<section class="cv-sec"><h2>' + esc(title) + "</h2>" + body + "</section>" : "";
+  }
+  function year(d) { return String(d || "").slice(0, 4); }
+
+  /* 媒體：自動統計每個節目的集數與年份 */
+  function mediaSummary() {
+    var media = U.visible(S.media, "cv");
+    if (!media.length) return "";
+    var shows = {}, order = [], outlets = [];
+    media.forEach(function (m) {
+      if (m.kind === "show") {
+        var k = t(m.program, L);
+        if (!shows[k]) { shows[k] = []; order.push(k); }
+        shows[k].push(year(m.date));
+      } else {
+        var o = t(m.outlet, L);
+        if (outlets.indexOf(o) < 0) outlets.push(o);
+      }
+    });
+    var lines = [];
+    if (order.length) lines.push("<li><b>" + esc(TX.shows) + "</b>：" + order.map(function (k) {
+      var ys = shows[k].filter(Boolean).sort(), span = ys.length ? (ys[0] === ys[ys.length - 1] ? ys[0] : ys[0] + "–" + ys[ys.length - 1]) : "";
+      return esc(k) + "（" + (span ? span + "，" : "") + shows[k].length + " " + esc(TX.ep) + "）";
+    }).join("、") + "</li>");
+    if (outlets.length) lines.push("<li><b>" + esc(TX.news) + "</b>：" + outlets.map(esc).join("、") + "</li>");
+    var html = '<ul class="cv-media">' + lines.join("") + "</ul>";
+    return L === "en" ? html.replace(/：/g, ": ").replace(/、/g, "; ").replace(/（/g, " (").replace(/，/g, ", ").replace(/）/g, ")") : html;
+  }
+
+  function render() {
+    var links = U.activeLinks(), contact = [];
+    links.filter(function (l) { return l.type === "email"; }).forEach(function (l) {
+      contact.push("<span>" + U.icon("email") + '<a href="' + esc(U.href(l)) + '">' + esc(U.prettyUrl(l)) + "</a></span>");
+    });
+    if (S.cvContact && S.cvContact.phone) contact.push("<span>" + U.icon("phone") + esc(S.cvContact.phone) + "</span>");
+    if (S.cvContact && S.cvContact.location) contact.push("<span>" + U.icon("location") + esc(t(S.cvContact.location, L)) + "</span>");
+    var site = location.href.indexOf("http") === 0 && location.hostname !== "localhost"
+      ? location.origin + location.pathname.replace(/cv\.html$/, "") : "";
+    if (site) contact.push("<span>" + U.icon("website") + '<a href="' + esc(site) + '">' + esc(site.replace(/^https?:\/\//, "").replace(/\/$/, "")) + "</a></span>");
+    links.filter(function (l) { return l.type !== "email" && l.type !== "youtube"; }).forEach(function (l) {
+      contact.push("<span>" + U.icon(l.type) + '<a href="' + esc(l.url) + '">' + esc(U.prettyUrl(l)) + "</a></span>");
+    });
+
+    var first = L === "en" ? S.name.en : S.name.zh, second = L === "en" ? S.name.zh : S.name.en;
+    var headline = t(S.tagline, L) || t((U.visible(S.roles, "cv")[0]) || "", L);
+
+    var html =
+      '<header class="cv-head"><div>' +
+        '<div class="cv-name">' + esc(first) + "<small>" + esc(second) + "</small></div>" +
+        (headline ? '<div class="cv-headline">' + esc(headline) + "</div>" : "") +
+        (U.visible(S.expertise, "cv").length ? '<div class="cv-expertise"><b>' + esc(TX.expertise) + "</b>　" +
+          U.visible(S.expertise, "cv").map(function (e) { return esc(t(e, L)); }).join(L === "en" ? " · " : "、") + "</div>" : "") +
+        '<div class="cv-contact">' + contact.join("") + "</div>" +
+      "</div>" +
+      (opt.photo && S.photo ? '<img class="cv-photo" src="' + esc(S.photo) + '" alt="" onerror="this.remove()">' : "") +
+      '</header><div class="cv-rule"></div>';
+
+    html += section(TX.summary, S.summary ? '<p class="cv-summary">' + esc(t(S.summary, L)) + "</p>" : "");
+
+    var gs = (S.groups || []).filter(function (g) { return g.show !== false && g.cv !== false; });
+    gs.sort(function (a, b) {
+      var ia = CV_ORDER.indexOf(a.key), ib = CV_ORDER.indexOf(b.key);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    });
+    gs.forEach(function (g) { html += section(t(g.title, L), entries(g.items)); });
+
+    if (opt.works) html += section(TX.worksT, U.visible(S.works, "cv").map(function (w) {
+      return '<div class="cv-entry"><div><span class="cv-org">' + esc(t(w.title, L)) + "</span>　" +
+        '<span class="cv-role">' + esc(t(w.text, L)) + "</span></div><div></div></div>";
+    }).join(""));
+    if (opt.media) html += section(TX.media, mediaSummary());
+    if (opt.focus) html += section(TX.focusT, '<dl class="cv-two">' + U.visible(S.focus, "cv").map(function (i) {
+      return "<dt>" + esc(t(i.title, L)) + "</dt><dd>" + esc(t(i.text, L)) + "</dd>";
+    }).join("") + "</dl>");
+
+    html += '<footer class="cv-foot"><span>' + esc(S.name.zh + " " + S.name.en) + "</span><span>" +
+            esc(TX.updated) + " " + esc(S.updated || "") + "</span></footer>";
+    document.getElementById("cv").innerHTML = html;
+  }
+  render();
+})();
+</script>
+</body>
+</html>

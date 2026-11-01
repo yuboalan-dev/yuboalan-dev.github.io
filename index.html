@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>游博安 Alan Yu</title>
+<meta name="description" content="游博安（Alan Yu）：政大政治系學生，關注議事與治理、兩岸與中國政治、人本交通與地方提案。">
+<meta property="og:title" content="游博安 Alan Yu">
+<meta property="og:type" content="profile">
+<meta property="og:image" content="assets/photo.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23000024'/><text x='32' y='45' font-size='36' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='900'>游</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- 這個檔案平常不用改。文字請改 content.js -->
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top" id="brand"></a>
+    <nav class="topnav">
+      <a class="navlink" href="#experience" data-zh="經歷" data-en="Experience"></a>
+      <a class="navlink" href="#focus" data-zh="關注領域" data-en="Focus"></a>
+      <a class="navlink" href="#works" data-zh="代表作" data-en="Work"></a>
+      <a class="navlink" href="#media" data-zh="媒體" data-en="Media"></a>
+      <button class="lang-btn" id="langBtn" type="button"></button>
+      <a class="btn" id="cvBtn" href="cv.html" data-zh="正式 CV" data-en="CV"></a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+  <div class="dashboard-container">
+
+    <!-- 1. 姓名 + 相片 -->
+    <section class="profile-section">
+      <div class="profile-left">
+        <div class="name-title-grid" id="nameGrid"></div>
+        <p class="tagline" id="tagline"></p>
+        <p class="summary" id="summary"></p>
+        <div class="chips" id="chips"></div>
+        <div class="social" id="socialTop"></div>
+        <div class="roles-area" id="roles"></div>
+      </div>
+      <div class="profile-right">
+        <div class="photo-frame-decoration"></div>
+        <div class="photo-main-wrap" id="photoWrap"></div>
+      </div>
+    </section>
+
+    <!-- 2. 經歷卡片 -->
+    <section class="interactive-grid" id="experience"></section>
+
+    <!-- 3. 關注領域 -->
+    <section class="panel" id="focus">
+      <h2 class="panel-header" id="focusHeading"></h2>
+      <div class="panel-content three" id="focusBody"></div>
+    </section>
+
+    <!-- 4. 代表作 -->
+    <section class="sec" id="works">
+      <h2 class="sec-title" data-zh="代表作" data-en="Selected Work"></h2>
+      <div class="works-list" id="worksBody"></div>
+    </section>
+
+    <!-- 5. 媒體 -->
+    <section class="sec" id="media">
+      <h2 class="sec-title" data-zh="媒體與評論" data-en="Media & Commentary"></h2>
+      <div class="media-feat" id="mediaFeat"></div>
+      <div class="media-groups" id="mediaGroups"></div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="contact" id="contact">
+  <div class="wrap">
+    <div>
+      <h2 data-zh="聯絡我" data-en="Get in touch"></h2>
+      <p id="contactName"></p>
+    </div>
+    <div class="social" id="socialBottom"></div>
+    <a class="btn" id="cvBtn2" href="cv.html" data-zh="下載正式 CV" data-en="Download CV"></a>
+    <p class="footnote" id="updated"></p>
+  </div>
+</footer>
+
+<script src="content.js"></script>
+<script src="common.js"></script>
+<script>
+(function () {
+  var U = window.UTIL, S = U.S, L = U.getLang(), t = U.t, esc = U.esc;
+  var other = L === "en" ? "zh" : "en";
+  function $(id) { return document.getElementById(id); }
+  function drop(id) { var el = $(id); if (el) el.remove(); }
+  document.documentElement.lang = L === "en" ? "en" : "zh-Hant";
+
+  /* 固定字樣與按鈕 */
+  document.querySelectorAll("[data-zh]").forEach(function (el) { el.textContent = el.getAttribute("data-" + L); });
+  $("langBtn").textContent = L === "en" ? "中文" : "EN";
+  $("langBtn").onclick = function () { U.setLang(other); };
+  ["cvBtn", "cvBtn2"].forEach(function (id) { $(id).href = "cv.html?lang=" + L; });
+
+  /* 姓名：中文模式大字中文，英文模式大字英文。有 title 才顯示右欄 */
+  var big = L === "en" ? "en" : "zh", small = L === "en" ? "zh" : "en";
+  document.title = S.name.zh + " " + S.name.en;
+  $("brand").innerHTML = esc(S.name[big]) + "<span>" + esc(S.name[small]) + "</span>";
+  var hasTitle = S.title && S.title.zh;
+  $("nameGrid").innerHTML = hasTitle
+    ? '<h1 class="name-ch">' + esc(S.name[big]) + '</h1><div class="title-ch">' + esc(S.title[big]) +
+      '</div><div class="name-en">' + esc(S.name[small]) + '</div><div class="title-en">' + esc(S.title[small]) + "</div>"
+    : '<h1 class="name-ch">' + esc(S.name[big]) + '</h1><div></div><div class="name-en">' + esc(S.name[small]) + "</div><div></div>";
+
+  var tl = t(S.tagline, L);
+  if (tl) $("tagline").textContent = tl; else drop("tagline");
+  $("summary").textContent = t(S.summary, L);
+  var ex = U.visible(S.expertise, "web");
+  if (ex.length) $("chips").innerHTML = ex.map(function (e) { return "<span>" + esc(t(e, L)) + "</span>"; }).join("");
+  else drop("chips");
+  $("roles").innerHTML = U.visible(S.roles, "web").map(function (r) { return "<p>" + esc(t(r, L)) + "</p>"; }).join("");
+
+  /* 相片：找不到檔案就換成姓氏字樣 */
+  var pw = $("photoWrap");
+  function fallback() { pw.innerHTML = '<div class="photo-fallback">' + esc(S.name.zh.charAt(0)) + "</div>"; }
+  if (S.photo) {
+    var img = new Image();
+    img.className = "profile-photo"; img.alt = S.name.zh;
+    img.onerror = fallback; img.src = S.photo;
+    pw.appendChild(img);
+  } else fallback();
+
+  /* 社群連結 */
+  var socialHTML = U.activeLinks().map(function (l) {
+    var ext = l.type === "email" ? "" : ' target="_blank" rel="noopener"';
+    return '<a href="' + esc(U.href(l)) + '"' + ext + ' aria-label="' + esc(l.label) + '" title="' + esc(l.label) + '">' + U.icon(l.type) + "</a>";
+  }).join("");
+  ["socialTop", "socialBottom"].forEach(function (id) { if (socialHTML) $(id).innerHTML = socialHTML; else drop(id); });
+
+  /* 經歷卡片 */
+  (S.groups || []).forEach(function (g) {
+    var items = U.visible(g.items, "web");
+    if (!items.length || g.web === false) return;
+    var card = document.createElement("div");
+    card.className = "foldable-card";
+    card.innerHTML =
+      '<button class="card-header" type="button" aria-expanded="false">' + esc(t(g.title, L)) + "</button>" +
+      '<div class="card-body">' + items.map(function (it) {
+        var p = U.period(it.period, L), role = t(it.role, L);
+        return '<div class="item-box"><div class="item-main">' + esc(t(it.org, L)) + "</div>" +
+               (role ? '<div class="item-sub">' + esc(role) + "</div>" : "") +
+               (p ? '<div class="item-period">' + esc(p) + "</div>" : "") + "</div>";
+      }).join("") + "</div>";
+    card.addEventListener("click", function () {
+      var on = card.classList.toggle("active");
+      card.querySelector(".card-header").setAttribute("aria-expanded", on);
+    });
+    $("experience").appendChild(card);
+  });
+
+  /* 關注領域 */
+  var focus = U.visible(S.focus, "web");
+  if (focus.length) {
+    $("focusHeading").textContent = t(S.focusHeading, L);
+    $("focusBody").innerHTML = focus.map(function (i) {
+      return '<div class="wp-item"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
+    }).join("");
+  } else drop("focus");
+
+  /* 代表作 */
+  var works = U.visible(S.works, "web");
+  if (works.length) {
+    $("worksBody").innerHTML = works.map(function (w) {
+      var links = (w.links || []).filter(function (l) { return l.url; }).map(function (l) {
+        return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(t(l.label, L)) + "</a>";
+      }).join("");
+      var steps = (w.steps || []).map(function (s) { return "<li>" + esc(t(s, L)) + "</li>"; }).join("");
+      return '<article class="work"><div><h3>' + esc(t(w.title, L)) + '</h3><p class="desc">' + esc(t(w.text, L)) + "</p>" +
+        (links ? '<div class="proof">' + links + "</div>" : "") + "</div>" +
+        (steps ? '<ol class="steps">' + steps + "</ol>" : "") + "</article>";
+    }).join("");
+  } else drop("works");
+
+  /* 媒體 */
+  var media = U.visible(S.media, "web");
+  function src(m) { return t(m.kind === "show" ? m.program : m.outlet, L); }
+  function vurl(m) { return m.url || ("https://www.youtube.com/watch?v=" + m.id); }
+  var feat = media.filter(function (m) { return m.featured; });
+  if (feat.length) {
+    $("mediaFeat").innerHTML = feat.map(function (m) {
+      var thumb = m.id ? '<img loading="lazy" alt="" onerror="this.remove()" src="https://i.ytimg.com/vi/' + esc(m.id) + '/hqdefault.jpg">' : "";
+      return '<a class="vid" href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><div class="thumb">' + thumb + "</div>" +
+        '<div class="src">' + esc(src(m)) + '</div><div class="vt">' + esc(t(m.title, L)) + '</div><div class="vd">' + esc(m.date || "") + "</div></a>";
+    }).join("");
+  } else drop("mediaFeat");
+  /* 依節目／媒體分組，組內照日期新到舊 */
+  var groups = {}, order = [];
+  var NEWS = L === "en" ? "News interviews" : "新聞受訪";
+  media.forEach(function (m) {
+    var k = m.kind === "show" ? src(m) : NEWS;   /* 新聞受訪合成一組，避免一組只有一則 */
+    if (!groups[k]) { groups[k] = []; order.push(k); }
+    groups[k].push(m);
+  });
+  if (media.length) {
+    $("mediaGroups").innerHTML = order.map(function (k) {
+      var list = groups[k].slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
+      var unit = L === "en" ? (list.length > 1 ? " items" : " item") : (list[0].kind === "show" ? " 集" : " 則");
+      return '<div class="mgroup"><h3>' + esc(k) + "<small>" + list.length + unit + "</small></h3><ul>" +
+        list.map(function (m) {
+          return '<li><a href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><span class="d">' + esc(m.date || "") +
+            "</span><span>" + (m.kind === "show" ? "" : "<b>" + esc(src(m)) + "</b>　") + esc(t(m.title, L)) + "</span></a></li>";
+        }).join("") + "</ul></div>";
+    }).join("");
+  } else drop("media");
+
+  $("contactName").textContent = S.name.zh + "　" + S.name.en;
+  $("updated").textContent = (L === "en" ? "Last updated " : "最後更新 ") + (S.updated || "");
+})();
+</script>
+</body>
+</html>
