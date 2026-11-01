@@ -395,6 +395,10 @@ a.work-item h3::after { content: "↗"; color: var(--accent); }
 .mgroup li:first-child { border-top: 0; }
 .mgroup a { display: flex; gap: 12px; padding: 8px 0; text-decoration: none; font-size: 14.5px; color: var(--text); line-height: 1.5; }
 .mgroup a:hover { color: var(--accent); }
+.mgroup .mline { display: flex; gap: 12px; padding: 8px 0; font-size: 14.5px; line-height: 1.5; }
+.mgroup b { color: var(--navy); }
+/* 精簡模式只有兩組，改成兩欄 */
+.media-groups { columns: 2 340px; }
 .mgroup .d { color: var(--muted); font-size: 12.5px; min-width: 6.6em; padding-top: 2px; font-variant-numeric: tabular-nums; }
 
 

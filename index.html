@@ -200,25 +200,51 @@
         '<div class="src">' + esc(src(m)) + '</div><div class="vt">' + esc(t(m.title, L)) + '</div><div class="vd">' + esc(m.date || "") + "</div></a>";
     }).join("");
   } else drop("mediaFeat");
-  /* 依節目／媒體分組，組內照日期新到舊 */
-  var groups = {}, order = [];
+  /* 下方清單：
+     政論節目依 content.js 的 mediaList 決定——
+       "summary"（預設）每個節目一行：節目名、集數、年份，不列每一集
+       "full"            逐集列出
+     新聞受訪一律逐則列出（則數少、內容中性）。 */
   var NEWS = L === "en" ? "News interviews" : "新聞受訪";
+  var SHOWS = L === "en" ? "Political talk shows (guest commentator)" : "政論節目來賓";
+  var full = S.mediaList === "full";
+  var shows = {}, showOrder = [], news = [];
   media.forEach(function (m) {
-    var k = m.kind === "show" ? src(m) : NEWS;   /* 新聞受訪合成一組，避免一組只有一則 */
-    if (!groups[k]) { groups[k] = []; order.push(k); }
-    groups[k].push(m);
+    if (m.kind === "show") {
+      var k = src(m);
+      if (!shows[k]) { shows[k] = []; showOrder.push(k); }
+      shows[k].push(m);
+    } else news.push(m);
   });
-  if (media.length) {
-    $("mediaGroups").innerHTML = order.map(function (k) {
-      var list = groups[k].slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
-      var unit = L === "en" ? (list.length > 1 ? " items" : " item") : (list[0].kind === "show" ? " 集" : " 則");
-      return '<div class="mgroup"><h3>' + esc(k) + "<small>" + list.length + unit + "</small></h3><ul>" +
-        list.map(function (m) {
-          return '<li><a href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><span class="d">' + esc(m.date || "") +
-            "</span><span>" + (m.kind === "show" ? "" : "<b>" + esc(src(m)) + "</b>　") + esc(t(m.title, L)) + "</span></a></li>";
-        }).join("") + "</ul></div>";
+  function byDate(a, b) { return String(b.date).localeCompare(String(a.date)); }
+  function row(m, label) {
+    return '<li><a href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><span class="d">' + esc(m.date || "") +
+      "</span><span>" + (label ? "<b>" + esc(label) + "</b>　" : "") + esc(t(m.title, L)) + "</span></a></li>";
+  }
+  var html = "";
+  if (news.length) {
+    html += '<div class="mgroup"><h3>' + esc(NEWS) + "<small>" + news.length + (L === "en" ? "" : " 則") + "</small></h3><ul>" +
+      news.slice().sort(byDate).map(function (m) { return row(m, src(m)); }).join("") + "</ul></div>";
+  }
+  if (showOrder.length && !full) {
+    var total = 0;
+    var lines = showOrder.map(function (k) {
+      var ys = shows[k].map(function (m) { return String(m.date || "").slice(0, 4); }).filter(Boolean).sort();
+      var span = ys.length ? (ys[0] === ys[ys.length - 1] ? ys[0] : ys[0] + "–" + ys[ys.length - 1]) : "";
+      total += shows[k].length;
+      return '<li><span class="mline"><span class="d">' + esc(span) + "</span><span><b>" + esc(k) + "</b>　" +
+        shows[k].length + (L === "en" ? " episodes" : " 集") + "</span></span></li>";
     }).join("");
-  } else drop("media");
+    html += '<div class="mgroup"><h3>' + esc(SHOWS) + "<small>" + total + (L === "en" ? "" : " 集") + "</small></h3><ul>" + lines + "</ul></div>";
+  }
+  if (showOrder.length && full) {
+    html += showOrder.map(function (k) {
+      return '<div class="mgroup"><h3>' + esc(k) + "<small>" + shows[k].length + (L === "en" ? "" : " 集") + "</small></h3><ul>" +
+        shows[k].slice().sort(byDate).map(function (m) { return row(m); }).join("") + "</ul></div>";
+    }).join("");
+  }
+  if (html) $("mediaGroups").innerHTML = html;
+  else if (!feat.length) drop("media");
 
   $("contactName").textContent = S.name.zh + "　" + S.name.en;
   $("updated").textContent = (L === "en" ? "Last updated " : "最後更新 ") + (S.updated || "");

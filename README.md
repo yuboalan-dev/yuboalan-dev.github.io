@@ -34,6 +34,7 @@
 - **網站有、CV 不放**：加 `cv: false,`；反過來用 `web: false,`。
 - **加一筆媒體**：在 `media` 複製一行，改 `date`、`title`，`id` 填 YouTube 網址 `watch?v=` 後面那 11 碼；非 YouTube 的改用 `url: "..."`。
   `featured: true` 會放進網站最上面的精選影片（建議維持 3～4 支）。CV 會自動統計每個節目的集數和年份，不用另外改。
+- **媒體清單的列法**：`mediaList: "summary"` 時，政論節目只列節目名、集數、年份；改成 `"full"` 會逐集列出。逐集資料一律保留在 `media`，CV 的集數統計照算。
 - **經歷卡片**在 `groups`：每組是首頁一張卡片，也是 CV 的一段。CV 段落順序在 `cv.html` 的 `CV_ORDER`。
 - **首頁定位句**在 `tagline`，留空就不顯示。
 - **改完整頁空白**：多半是少了逗號或引號。到 `content.js` 的 **History** 找上一版，或把檔案貼給 AI 問「哪裡語法錯了」。

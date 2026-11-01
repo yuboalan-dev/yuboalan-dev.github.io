@@ -64,7 +64,9 @@ window.SITE = {
     { type: "facebook",  label: "Facebook",  url: "" },
     { type: "threads",   label: "Threads",   url: "" },
     { type: "linkedin",  label: "LinkedIn",  url: "" },
-    { type: "youtube",   label: "YouTube",   url: "https://www.youtube.com/playlist?list=PLLqs_xDeTEg37zm0b7fS2qQ03WcbV-ucn" }
+    /* 「通告」播放清單含 TVBS 與侯友宜片段，精簡後先不公開連結；要放回就把網址填回來：
+       https://www.youtube.com/playlist?list=PLLqs_xDeTEg37zm0b7fS2qQ03WcbV-ucn */
+    { type: "youtube",   label: "YouTube",   url: "" }
   ],
 
   /* 只放 CV 的聯絡資料。⚠️ 這個檔案是公開的，電話不要寫在這裡上傳。 */
@@ -195,6 +197,9 @@ window.SITE = {
      featured: true 會出現在網站最上面、可以直接點開播放
      YouTube 影片只要填 id（網址 watch?v= 後面那 11 碼）
      date 不確定日的只寫年份或年月                                    */
+  /* 網站下方媒體清單的列法："summary" 政論節目只列節目名與集數；"full" 逐集列出 */
+  mediaList: "summary",
+
   media: [
     { kind: "news", featured: true, outlet: "ABC News", date: "2024",
       title: { zh: "台灣選民：沒有人想要戰爭", en: "Taiwan’s voters: ‘Nobody wants war’" }, id: "lfQg3_ChrEM" },
@@ -203,7 +208,7 @@ window.SITE = {
     { kind: "news", featured: true, outlet: { zh: "華視新聞", en: "CTS News" }, date: "2025-05-05",
       title: { zh: "政大行穿道人車爭道　學生自發導護爭經費", en: "NCCU students volunteer as crossing guards" }, id: "9rRAOUwd23w" },
 
-    { kind: "show", featured: true, program: { zh: "三立《54陪審團》", en: "SET News “54 Jury”" }, date: "2026-10-04",
+    { kind: "show", program: { zh: "三立《54陪審團》", en: "SET News “54 Jury”" }, date: "2026-10-04",
       title: { zh: "2026 大熱戰", en: "2026 local elections" }, id: "s5CmK5--VxU" },
     { kind: "show", program: { zh: "三立《54陪審團》", en: "SET News “54 Jury”" }, date: "2026-09-12", title: { zh: "沈伯洋專訪破圈、北市營養午餐", en: "" }, id: "bPsPOraUK_0" },
     { kind: "show", program: { zh: "三立《54陪審團》", en: "SET News “54 Jury”" }, date: "2026-08-01", title: { zh: "北市市政爭議", en: "" }, id: "2Jy7kpLOogo" },
@@ -226,6 +231,6 @@ window.SITE = {
     { kind: "show", program: { zh: "華視《呂氏戰國BATTLE》", en: "CTS “Lu’s Battle”" }, date: "2024-07-21", title: { zh: "職場態度與年輕世代", en: "" }, id: "dO7GxKr4-a4" },
     { kind: "show", program: { zh: "華視《呂氏戰國BATTLE》", en: "CTS “Lu’s Battle”" }, date: "2024-07-20", title: { zh: "台灣半導體與日本失落三十年", en: "" }, id: "Qilbemvt7p8" },
     { kind: "show", program: { zh: "華視《呂氏戰國BATTLE》", en: "CTS “Lu’s Battle”" }, date: "2024-05-12", title: { zh: "台灣青年海外就職", en: "" }, id: "F4xKsLn3Uxk" },
-    { kind: "show", program: { zh: "華視《呂氏戰國BATTLE》", en: "CTS “Lu’s Battle”" }, date: "2024-03-31", title: { zh: "美國禁 TikTok 令", en: "" }, id: "A7rCde51fr4" }
+    { kind: "show", featured: true, program: { zh: "華視《呂氏戰國BATTLE》", en: "CTS “Lu’s Battle”" }, date: "2024-03-31", title: { zh: "美國禁 TikTok 令，青年怎麼看", en: "Young people on the US TikTok ban" }, id: "A7rCde51fr4" }
   ]
 };
