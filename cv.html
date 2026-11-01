@@ -239,7 +239,7 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
     var site = location.href.indexOf("http") === 0 && location.hostname !== "localhost"
       ? location.origin + location.pathname.replace(/cv\.html$/, "") : "";
     if (site) contact.push("<span>" + U.icon("website") + '<a href="' + esc(site) + '">' + esc(site.replace(/^https?:\/\//, "").replace(/\/$/, "")) + "</a></span>");
-    links.filter(function (l) { return l.type !== "email" && l.type !== "youtube"; }).forEach(function (l) {
+    links.filter(function (l) { return l.type !== "email" && l.type !== "youtube" && l.cv !== false; }).forEach(function (l) {
       contact.push("<span>" + U.icon(l.type) + '<a href="' + esc(l.url) + '">' + esc(U.prettyUrl(l)) + "</a></span>");
     });
 

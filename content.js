@@ -57,13 +57,15 @@ window.SITE = {
 
   /* ---------- 2. 聯絡與社群 ----------
      url 留空就不顯示。type 可用：email, instagram, facebook, threads,
-     linkedin, github, x, youtube, medium, website                    */
+     linkedin, line, github, x, youtube, medium, website
+     cv: false 的只放網站、不印在正式 CV 上                    */
   links: [
     { type: "email",     label: "Email",     url: "yuboalan@gmail.com" },
-    { type: "instagram", label: "Instagram", url: "" },
-    { type: "facebook",  label: "Facebook",  url: "" },
-    { type: "threads",   label: "Threads",   url: "" },
-    { type: "linkedin",  label: "LinkedIn",  url: "" },
+    { type: "instagram", label: "Instagram", url: "https://www.instagram.com/ckfc_yu/", cv: false },
+    { type: "facebook",  label: "Facebook",  url: "https://www.facebook.com/yuboalan/", cv: false },
+    { type: "threads",   label: "Threads",   url: "https://www.threads.com/@ckfc_yu", cv: false },
+    { type: "linkedin",  label: "LinkedIn",  url: "https://www.linkedin.com/in/yuboalan/" },
+    { type: "line",      label: "LINE",      url: "https://line.me/ti/p/OHQbYFXC-N", cv: false },
     /* 「通告」播放清單含 TVBS 與侯友宜片段，精簡後先不公開連結；要放回就把網址填回來：
        https://www.youtube.com/playlist?list=PLLqs_xDeTEg37zm0b7fS2qQ03WcbV-ucn */
     { type: "youtube",   label: "YouTube",   url: "" }
