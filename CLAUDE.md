@@ -20,9 +20,12 @@
 - **進行中的工作與待辦記在 GitHub Issue**，不寫在本檔。開工前先看開著的 Issue。
 - 使用者已經做過的決定記在下面「已決定的事」；要推翻先問。
 
-## 工作流程（2026-11-02 使用者同意）
+## 工作流程（2026-11-02 使用者同意；確認的重點是看前後差異，不是按合併）
 
-- **AI 一律開分支、發 PR，不直接推 `main`**；合併由使用者本人按。PR 會自動跑建置當檢查（頁面程式出錯或預設 CV 超過一頁就失敗），檢查沒過不要請使用者合併。
+- **AI 一律開分支、發 PR，不直接推 `main`**。PR 會自動跑兩件事：
+  - 建置檢查：頁面程式出錯或預設 CV 超過一頁就失敗；沒過就先修，不要請使用者確認。
+  - **前後對照**（`tools/preview.mjs`）：自動在 PR 貼一則留言，列出 `content.js` 的文字差異、CV 頁數、有變的畫面（各分頁桌機／手機、中英文 CV）新舊並排。截圖存在 `previews` 分支（不進 `main`、不發布），PR 關閉後自動刪除。新增分頁時，`tools/preview.mjs` 的 `PAGES` 要一起改；`content.js` 新增頂層欄位時，順便補 `KEY_NAMES` 的中文名稱。
+- **使用者看過前後對照、表示同意才合併**。使用者在對話裡明確說可以時，AI 可以代為合併（`gh api -X PUT repos/yuboalan-dev/yuboalan-dev.github.io/pulls/<編號>/merge`）；使用者也可以自己按 Merge。請使用者確認時，附上 PR 連結並用一兩句話說明對照裡最該看的地方。
 - **使用者自己在 GitHub 網頁上小改 `content.js`，照舊直接改 `main`**，不用走 PR。
 - **一個 commit 只做一件事**（改內容、改動畫、改 CV 版面分開），方便日後單獨退回。PR 也盡量一個主題一個。
 - **同一時間只讓一個 AI 動手**（Claude、ChatGPT／Codex 擇一）；開工前先 `git fetch` 看 `main` 和開著的 PR，有別人的 PR 還沒合併就先問使用者。
@@ -72,6 +75,6 @@
 1. 本機：`python3 -m http.server` 開起來，用 Playwright 看桌機（1280）與手機（390）寬度，確認沒有 console 錯誤、沒有水平捲軸。
 2. CV：中英文各輸出一次 PDF，確認一頁。
 3. 本機試跑建置：`npm install --no-save playwright@1.48.2 && npx playwright install chromium && node tools/build.mjs`（Playwright 版本要和 `.github/workflows/pages.yml` 一致，否則排版有細微差異、CV 頁數可能對不上），確認 `_site/` 各頁只有一份頁首頁尾、CV PDF 都是一頁。`_site/` 不要提交。
-4. 發 PR 後等 PR 上的建置檢查通過，再請使用者合併；合併後等「建置並發布網站」workflow 跑完（`gh api repos/yuboalan-dev/yuboalan-dev.github.io/actions/runs`）。
+4. 發 PR 後等建置檢查通過、前後對照留言出來，自己先看過對照（確認改到的就是要改的、沒有誤傷別頁），再請使用者確認；合併後等「建置並發布網站」workflow 跑完（`gh api repos/yuboalan-dev/yuboalan-dev.github.io/actions/runs`）。
 5. 用瀏覽器開正式網址確認。GitHub Pages 會快取約 10 分鐘，要強制重新載入（`fetch(url, {cache:'reload'})` 後再 reload）。
 6. **沒在瀏覽器實際看過正式網址，就寫「未驗證」**，不要寫「已上線」。

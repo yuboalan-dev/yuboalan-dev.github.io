@@ -20,7 +20,7 @@
 
 網站已經上線，平常不用動。萬一要重設：repo 的 **Settings → Pages → Source** 必須選 **GitHub Actions**（不是 *Deploy from a branch*），否則 CV PDF 和預先產生的網頁不會出現。每次 `main` 有更新，Actions 會自動建置並發布，約 2～3 分鐘。
 
-AI 的改動會開成 PR（Pull request），等 PR 上的檢查打勾、你看過後再按 **Merge** 才會上線；你自己改 `content.js` 直接 Commit 到 `main` 就好。
+AI 的改動會開成 PR（Pull request），PR 裡會自動出現一則「前後對照」留言：改了哪些字、CV 幾頁、哪些畫面變了（新舊並排）。看完沒問題，跟 AI 說「可以」由它合併，或自己按 **Merge**，才會上線。你自己改 `content.js` 直接 Commit 到 `main` 就好。
 
 ## 之後要更新
 

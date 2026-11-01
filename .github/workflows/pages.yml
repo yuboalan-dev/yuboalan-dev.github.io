@@ -1,6 +1,8 @@
 # 建置網站（產生 CV PDF、預先產生網頁內容），依觸發方式決定要不要發布：
 # - 推上 main（或手動執行）：建置並發布；CV 超過一頁照樣發布，但自動開 Issue 提醒，回到一頁就自動關掉
 # - 對 main 開的 PR：只建置當檢查、不發布；頁面程式出錯或 CV 超過一頁，檢查就失敗，修好再合併
+#   另外產生「前後對照」（tools/preview.mjs）：文字差異、CV 頁數、有變的畫面新舊並排，貼成 PR 留言；
+#   截圖存在 previews 分支的 pr-編號/ 資料夾（不進 main、不發布），PR 關閉後自動刪掉
 # 前提：repo 的 Settings → Pages → Source 要選「GitHub Actions」
 name: 建置並發布網站
 
@@ -9,6 +11,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+    types: [opened, synchronize, reopened, closed]
   workflow_dispatch:
 
 # 發布的那條線（main）新的推上來就取消舊的；每個 PR 各自一條，不會互相取消、也不會取消發布
@@ -18,6 +21,7 @@ concurrency:
 
 jobs:
   build:
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -63,6 +67,78 @@ jobs:
         if: github.event_name != 'pull_request'
         with:
           path: _site
+
+  # ---------- PR 的前後對照 ----------
+  preview:
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # 把截圖推到 previews 分支
+      pull-requests: write   # 貼／更新 PR 留言
+    concurrency:
+      group: preview-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PR: ${{ github.event.pull_request.number }}
+      SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - name: 取出改之後（PR）
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: head
+      - name: 取出改之前（main）
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: 安裝中文字型與瀏覽器
+        working-directory: head
+        run: |
+          sudo apt-get update -q && sudo apt-get install -y -q fonts-noto-cjk
+          npm install --no-save playwright@1.48.2 pngjs@7 && npx playwright install --with-deps chromium
+      - name: 拍照比較
+        run: node head/tools/preview.mjs base head out
+      - name: 截圖推到 previews 分支
+        run: |
+          shopt -s nullglob
+          files=(out/*.png)
+          [ ${#files[@]} -eq 0 ] && exit 0
+          url="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone -q --depth 1 --branch previews "$url" pv 2>/dev/null || { git init -q -b previews pv && git -C pv remote add origin "$url"; }
+          rm -rf "pv/pr-$PR" && mkdir -p "pv/pr-$PR/${SHA:0:7}" && cp "${files[@]}" "pv/pr-$PR/${SHA:0:7}/"
+          cd pv
+          git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A && git commit -q -m "PR #$PR 前後對照截圖（${SHA:0:7}）"
+          for i in 1 2 3; do git push -q origin previews && break; git pull -q --rebase origin previews; done
+      - name: 貼／更新 PR 留言
+        run: |
+          img="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/previews/pr-$PR/${SHA:0:7}"
+          { echo "<!-- preview -->"; sed "s#{{IMG}}#$img#g" out/comment.md; echo; echo "<sub>對照的版本：${SHA:0:7}（每次推新的 commit 會自動更新這則留言）</sub>"; } > body.md
+          id=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate --jq '.[] | select(.body | startswith("<!-- preview -->")) | .id' | head -1)
+          if [ -n "$id" ]; then gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$id" -F body=@body.md >/dev/null
+          else gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" -F body=@body.md >/dev/null; fi
+
+  preview-cleanup:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: 刪掉這個 PR 的截圖
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          url="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone -q --depth 1 --branch previews "$url" pv 2>/dev/null || exit 0
+          cd pv && [ -d "pr-$PR" ] || exit 0
+          git config user.name "github-actions[bot]" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm -rq "pr-$PR" && git commit -q -m "PR #$PR 已關閉，刪除前後對照截圖" && git push -q origin previews
 
   deploy:
     if: github.event_name != 'pull_request'
