@@ -59,7 +59,7 @@ window.SITE = {
      url 留空就不顯示。type 可用：email, instagram, facebook, threads,
      linkedin, github, x, youtube, medium, website                    */
   links: [
-    { type: "email",     label: "Email",     url: "" },
+    { type: "email",     label: "Email",     url: "yuboalan@gmail.com" },
     { type: "instagram", label: "Instagram", url: "" },
     { type: "facebook",  label: "Facebook",  url: "" },
     { type: "threads",   label: "Threads",   url: "" },
