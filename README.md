@@ -30,7 +30,7 @@
 
 - **改文字**：在 repo 點 `content.js` → 右上角鉛筆 → 改完 **Commit changes**。1～2 分鐘後生效。
   看起來沒變就強制重新整理（Windows `Ctrl+Shift+R`／Mac `Cmd+Shift+R`）。
-- **加一筆經歷**：複製同一區裡的一整筆 `{ ... },`，貼在下面再改字。
+- **加一筆經歷**：複製同一區裡的一整筆 `{ ... },`，貼在下面再改字。同一個組織有新職務，在那一筆的 `roles` 最上面加一行就好。
 - **先藏起來不刪**：在那一筆加 `show: false,`。
 - **網站有、CV 不放**：加 `cv: false,`；反過來用 `web: false,`。
 - **加一筆媒體**：在 `media` 複製一行，改 `date`、`title`，`id` 填 YouTube 網址 `watch?v=` 後面那 11 碼；非 YouTube 的改用 `url: "..."`。

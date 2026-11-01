@@ -14,7 +14,7 @@
    正式 CV 版面（平常不用改；文字請改 content.js）
    A4 直式。螢幕上看起來是一張紙，列印時就是那張紙。
    ========================================================= */
-@page { size: A4; margin: 11mm 14mm; }
+@page { size: A4; margin: 10mm 13mm; }
 
 body { background: #e9e9ee; }
 
@@ -49,7 +49,7 @@ body { background: #e9e9ee; }
     width: 210mm; min-height: 297mm; margin: 28px auto 60px;
     background: #fff; padding: 14mm 15mm;
     box-shadow: 0 10px 40px rgba(0,0,36,.15);
-    font-size: 9.4pt; line-height: 1.42; color: var(--text);
+    font-size: 9pt; line-height: 1.38; color: var(--text);
 }
 @media (max-width: 860px) {
     /* 手機上縮成螢幕寬度預覽，列印時仍是 A4 */
@@ -72,7 +72,7 @@ body { background: #e9e9ee; }
 .cv-rule::after { content: ""; position: absolute; left: 0; top: -2.5pt; width: 22mm; border-top: 2.5pt solid var(--accent); }
 
 /* --- 區段 --- */
-.cv-sec { margin-top: 8pt; }
+.cv-sec { margin-top: 6.5pt; }
 .cv-sec h2 {
     font-size: 11.5pt; font-weight: 900; color: var(--navy);
     letter-spacing: 1.5pt; text-transform: uppercase;
@@ -102,7 +102,10 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
 .cv-media li::marker { color: var(--accent); }
 .cv-media b { color: var(--navy); }
 
-.cv-foot { margin-top: 10pt; padding-top: 4pt; border-top: 1px solid var(--line); font-size: 8.5pt; color: var(--muted); display: flex; justify-content: space-between; gap: 10pt; }
+.cv-sub { padding-left: 12pt; padding-top: 0; }
+.cv-sub .cv-role::before { content: ""; display: inline-block; width: 4pt; height: 4pt; border-radius: 50%; background: var(--navy); margin-right: 6pt; vertical-align: 2pt; }
+
+.cv-foot { margin-top: 6pt; padding-top: 3pt; border-top: 1px solid var(--line); font-size: 8.5pt; color: var(--muted); display: flex; justify-content: space-between; gap: 10pt; }
 
 /* --- 列印 --- */
 @media print {
@@ -189,16 +192,27 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
     };
   });
 
+  /* 一個組織一筆；同組織多個職務時，組織名一行、各職務縮排列在下面 */
   function entries(list) {
     return U.visible(list, "cv").map(function (it) {
-      var role = t(it.role, L);
-      var pts = (it.points || []).filter(function (p) { return p.show !== false && p.cv !== false; })
-        .map(function (p) { return "<li>" + esc(t(p, L)) + "</li>"; }).join("");
-      return '<div class="cv-entry inline"><div>' +
-        '<span class="cv-org">' + esc(t(it.org, L)) + "</span>" +
-        (role ? ' <span class="cv-role">' + esc(role) + "</span>" : "") + "</div>" +
-        '<div class="cv-period">' + esc(U.period(it.period, L)) + "</div>" +
-        (pts ? '<ul class="cv-points">' + pts + "</ul>" : "") + "</div>";
+      var roles = it.roles ? U.visible(it.roles, "cv") : [{ role: it.role, period: it.period, points: it.points }];
+      if (!roles.length) return "";
+      function pts(r) {
+        var li = (r.points || []).filter(function (p) { return p.show !== false && p.cv !== false; })
+          .map(function (p) { return "<li>" + esc(t(p, L)) + "</li>"; }).join("");
+        return li ? '<ul class="cv-points">' + li + "</ul>" : "";
+      }
+      if (roles.length === 1) {
+        var r = roles[0], role = t(r.role, L);
+        return '<div class="cv-entry inline"><div><span class="cv-org">' + esc(t(it.org, L)) + "</span>" +
+          (role ? ' <span class="cv-role">' + esc(role) + "</span>" : "") + "</div>" +
+          '<div class="cv-period">' + esc(U.period(r.period, L)) + "</div>" + pts(r) + "</div>";
+      }
+      return '<div class="cv-entry"><div><span class="cv-org">' + esc(t(it.org, L)) + "</span></div><div></div></div>" +
+        roles.map(function (r) {
+          return '<div class="cv-entry cv-sub"><div><span class="cv-role">' + esc(t(r.role, L)) + "</span></div>" +
+            '<div class="cv-period">' + esc(U.period(r.period, L)) + "</div>" + pts(r) + "</div>";
+        }).join("");
     }).join("");
   }
   function section(title, body) {

@@ -153,7 +153,7 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 .photo-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 96px; color: var(--line); }
 
 /* 職涯路線圖：一條線、依年份排列的站點 */
-.route { margin-top: clamp(36px, 5vw, 56px); }
+.route { margin-top: 4px; }
 .route-legend { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13.5px; color: var(--muted); margin-bottom: 18px; }
 .route-legend span { display: inline-flex; align-items: center; gap: 8px; }
 .route-legend span::before { content: ""; width: 18px; height: var(--track); border-radius: 2px; background: var(--c); }
@@ -163,7 +163,9 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 /* 通往這一站的那一段線，用這一站的路線色（分段上色，像捷運圖） */
 .station .seg {
     position: absolute; top: 9px; right: calc(100% - 11px); width: 100%; height: var(--track); border-radius: 2px;
-    background: var(--c); transform-origin: left center;
+    /* 虛線：一段一段的水滴，會往「現在」的方向流 */
+    background: repeating-linear-gradient(90deg, var(--c) 0 9px, transparent 9px 16px);
+    background-size: 16px 100%; transform-origin: left center;
 }
 /* 最後一站之後：虛線，往還沒走到的地方 */
 .station.is-here::after {
@@ -185,7 +187,8 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 @media (max-width: 640px) {
     .route-track { flex-direction: column; }
     .station { flex: none; height: 40px; padding: 0; }
-    .station .seg { right: auto; left: 9px; top: -29px; width: var(--track); height: 40px; transform-origin: center top; }
+    .station .seg { right: auto; left: 9px; top: -29px; width: var(--track); height: 40px; transform-origin: center top;
+        background: repeating-linear-gradient(180deg, var(--c) 0 7px, transparent 7px 12px); background-size: 100% 12px; }
     .station.is-here::after { display: none; }
     .station a { flex-direction: row; align-items: center; gap: 12px; }
     .station .y { margin: 0; min-width: 3em; }
@@ -210,7 +213,8 @@ main > .block:first-child { border-top: 0; }
 .exp-group { break-inside: avoid; margin-bottom: 44px; }
 .exp-title { font-size: 19px; font-weight: 900; color: var(--navy); margin-bottom: 14px; }
 .exp-list { list-style: none; padding: 0; position: relative; }
-.exp-list::before { content: ""; position: absolute; left: 21px; top: 24px; bottom: 24px; width: 2px; background: var(--line); border-radius: 1px; }
+.exp-list::before { content: ""; position: absolute; left: 21px; top: 24px; bottom: 24px; width: 2px;
+    background: repeating-linear-gradient(180deg, var(--line) 0 6px, transparent 6px 12px); background-size: 2px 12px; }
 .exp-item { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 0 16px; padding: 12px 0; border-radius: 18px; }
 /* 組織圓章：外圈是路線色；有標誌就放標誌，沒有就放簡稱 */
 .org-mark {
@@ -220,6 +224,7 @@ main > .block:first-child { border-top: 0; }
     font-size: 13px; font-weight: 900; color: var(--c, var(--line-none)); letter-spacing: -.02em; line-height: 1;
 }
 .org-mark.has-logo { padding: 5px; }
+.org-mark.is-long { font-size: 10px; letter-spacing: -.06em; }
 .org-mark img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
 .org-mark.is-now { background: var(--c); color: #fff; }
 .org-mark.is-now.has-logo { background: #fff; box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--c); }
@@ -229,7 +234,24 @@ main > .block:first-child { border-top: 0; }
 }
 .line-tag { color: var(--c); border: 1.5px solid var(--c); }
 .now-tag { color: #fff; background: var(--accent); }
-.exp-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 14px; flex-wrap: wrap; }
+.exp-head { display: flex; justify-content: space-between; align-items: center; gap: 4px 12px; flex-wrap: wrap; min-height: 44px; }
+.tags { display: flex; gap: 6px; }
+.tags .line-tag, .tags .now-tag { margin-left: 0; }
+/* 同一組織的各個職務：小圓點用虛線串起來 */
+.exp-roles { list-style: none; padding: 0; margin-top: 2px; position: relative; }
+.exp-role { position: relative; padding: 4px 0 6px; }
+.exp-roles.is-multi .exp-role { padding-left: 18px; }
+.exp-roles.is-multi::before {
+    content: ""; position: absolute; left: 3px; top: 14px; bottom: 14px; width: 2px;
+    background: repeating-linear-gradient(180deg, var(--c, var(--line-none)) 0 4px, transparent 4px 8px); opacity: .55;
+}
+.exp-roles.is-multi .exp-role::before {
+    content: ""; position: absolute; left: 0; top: .78em; width: 8px; height: 8px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--c, var(--line-none));
+}
+.exp-roles.is-multi .exp-role.is-now::before { background: var(--c, var(--line-none)); }
+.exp-role-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 14px; flex-wrap: wrap; }
+.role-name { font-size: 15px; color: var(--text); font-weight: 500; }
 .item-main { font-weight: 700; color: var(--navy); font-size: 16.5px; line-height: 1.5; }
 .item-sub { font-size: 14.5px; color: var(--muted); white-space: pre-line; margin-top: 2px; }
 .exp-period { font-size: 13px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
@@ -255,7 +277,8 @@ main > .block:first-child { border-top: 0; }
    5. 近況
    ========================================= */
 .news { list-style: none; padding: 0; position: relative; max-width: 760px; }
-.news::before { content: ""; position: absolute; left: 6px; top: 14px; bottom: 14px; width: 2px; background: var(--line); }
+.news::before { content: ""; position: absolute; left: 6px; top: 14px; bottom: 14px; width: 2px;
+    background: repeating-linear-gradient(180deg, var(--line) 0 6px, transparent 6px 12px); }
 .news li { position: relative; display: grid; grid-template-columns: var(--dot) 6em minmax(0, 1fr); gap: 0 16px; padding: 8px 0; align-items: baseline; }
 .news .dot { position: relative; top: 2px; z-index: 1; }
 .news li:first-child .dot { --c: var(--accent); background: var(--accent); }
@@ -270,7 +293,8 @@ main > .block:first-child { border-top: 0; }
    ========================================= */
 .focus { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 36px clamp(24px, 3vw, 44px); }
 .focus-item { position: relative; padding-top: 30px; }
-.focus-item::before { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: var(--track); border-radius: 2px; background: var(--c); }
+.focus-item::before { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: var(--track); border-radius: 2px;
+    background: repeating-linear-gradient(90deg, var(--c) 0 10px, transparent 10px 17px); background-size: 17px 100%; }
 .focus-item::after { content: ""; position: absolute; left: 0; top: 0; width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 4px solid var(--c); }
 .focus-item h3 { font-size: 21px; font-weight: 900; color: var(--navy); margin-bottom: 10px; }
 .focus-item p { font-size: 15px; line-height: 1.9; }
@@ -296,7 +320,8 @@ main > .block:first-child { border-top: 0; }
 .proof a:hover { border-color: var(--c, var(--navy)); }
 /* 時間軸：先後順序的站點 */
 .steps { list-style: none; padding: 0; position: relative; }
-.steps::before { content: ""; position: absolute; left: 10px; top: 12px; bottom: 12px; width: var(--track); border-radius: 2px; background: var(--c, var(--navy)); }
+.steps::before { content: ""; position: absolute; left: 10px; top: 12px; bottom: 12px; width: var(--track); border-radius: 2px;
+    background: repeating-linear-gradient(180deg, var(--c, var(--navy)) 0 7px, transparent 7px 12px); background-size: 100% 12px; }
 .steps li { position: relative; padding: 0 0 18px 40px; font-size: 15px; line-height: 1.65; }
 .steps li:last-child { padding-bottom: 0; }
 .steps li::before {
@@ -432,6 +457,53 @@ main > .block:first-child { border-top: 0; }
 .exp-item.flash { animation: flash 1.8s ease-out .3s; }
 @keyframes flash { 0%, 30% { background: rgba(230, 0, 18, .08); box-shadow: 0 0 0 10px rgba(230, 0, 18, .08); } 100% { background: transparent; box-shadow: 0 0 0 10px transparent; } }
 
+
+/* -----------------------------------------
+   10-2. 讓它活起來：呼吸、流動、漂浮
+   全部是慢速循環，幅度很小；「減少動態效果」時停止。
+   ----------------------------------------- */
+/* 虛線往「現在」流：路線、關注領域、步驟、經歷與近況的虛線 */
+.anim .station .seg { animation: draw .35s ease-out both, flow-x 1.1s linear infinite; animation-delay: calc(var(--i) * var(--stagger) + 120ms), 0s; }
+.anim .focus-item.is-in::before { animation: draw .7s ease-out .35s both, flow-x 1.4s linear infinite; }
+.anim .steps::before, .anim .exp-roles.is-multi::before { animation: flow-y 1.6s linear infinite reverse; }
+.anim .exp-list::before, .anim .news::before { animation: flow-y 2.4s linear infinite reverse; }
+@media (max-width: 640px) { .anim .station .seg { animation: draw-y .35s ease-out both, flow-y 1.1s linear infinite; animation-delay: calc(var(--i) * var(--stagger) + 120ms), 0s; } }
+@keyframes flow-x { from { background-position: 0 0; } to { background-position: 16px 0; } }
+@keyframes flow-y { from { background-position: 0 0; } to { background-position: 0 12px; } }
+.station.is-here::after { background-size: 14px 100%; }
+.anim .station.is-here::after { animation: flow-x 2s linear infinite; }
+
+/* 呼吸：進行中的站點、圓章、職務點，像水滴在呼吸 */
+@keyframes breathe-dot { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.14); } }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c, var(--accent)) 45%, transparent); } 80%, 100% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--c, var(--accent)) 0%, transparent); } }
+.anim .station .dot.is-now { animation: drop var(--drop-dur) cubic-bezier(.33, 0, .2, 1) both, breathe-dot 3.2s ease-in-out infinite;
+    animation-delay: calc(var(--i) * var(--stagger) + 200ms), calc(var(--i) * 260ms + 1.6s); }
+.anim .station.is-here .dot::after { animation: ripple 1s ease-out both, here-wave 2.6s ease-out infinite;
+    animation-delay: calc(var(--i) * var(--stagger) + 200ms + var(--drop-dur) * .55), 2.4s; border-color: var(--accent); }
+@keyframes here-wave { 0% { opacity: .9; transform: scale(.8); } 100% { opacity: 0; transform: scale(3.2); } }
+.anim .exp-item.is-in .org-mark.is-now { animation: drop var(--drop-dur) cubic-bezier(.33, 0, .2, 1) both, pulse-ring 2.8s ease-out infinite;
+    animation-delay: calc(var(--i, 0) * 70ms + 80ms), calc(var(--i, 0) * 300ms + 1.2s); }
+.anim .exp-roles.is-multi .exp-role.is-now::before, .anim .roles .dot, .anim .news li:first-child .dot { animation: breathe-dot 2.8s ease-in-out infinite; }
+.anim .roles li:nth-child(2) .dot { animation-delay: .5s; }
+.anim .roles li:nth-child(3) .dot { animation-delay: 1s; }
+.anim .brand::before, .anim .navlink.is-current::before, .anim .block-head.is-in::before { animation: breathe-dot 3.4s ease-in-out infinite; }
+.anim .block-head[data-reveal].is-in::before { animation: drop var(--drop-dur) cubic-bezier(.33, 0, .2, 1) both, breathe-dot 3.4s ease-in-out 1.2s infinite; }
+.anim .ep-dots.is-in i:last-child { animation: drop .55s cubic-bezier(.33, 0, .2, 1) both, breathe-dot 2.6s ease-in-out infinite; animation-delay: calc(var(--k) * 55ms), calc(var(--k) * 55ms + .8s); }
+
+/* 漂浮：照片緩緩上下浮、點陣底紋慢慢漂移 */
+.anim .photo { animation: ring-in 1.1s cubic-bezier(.2, .7, .2, 1) .1s both, float 7s ease-in-out 1.3s infinite; }
+@keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+.anim .hero { animation: grid-drift 40s linear infinite; }
+@keyframes grid-drift { from { background-position: 0 0; } to { background-position: 22px 44px; } }
+
+/* 逐行淡入：簡介從微微模糊變清楚 */
+.anim .hero .summary { animation: soft-in 1.2s ease-out .3s both; }
+@keyframes soft-in { from { opacity: 0; filter: blur(6px); } to { opacity: 1; filter: none; } }
+
+/* 連結底線從左邊長出來 */
+.news a, .footnote a, .nf-links a { text-decoration: none; background: linear-gradient(currentColor, currentColor) left bottom / 0 1.5px no-repeat; transition: background-size .35s ease; }
+.news a, .nf-links a { background-size: 100% 1.5px; }
+.news a:hover, .footnote a:hover, .nf-links a:hover { background-size: 100% 1.5px; }
 
 /* 列印時一律直接顯示，不等動畫 */
 @media print { .anim [data-reveal], .anim .ep-dots i { opacity: 1 !important; transform: none !important; animation: none !important; } }

@@ -72,13 +72,18 @@
   function setTitle(title) { document.title = (title ? title + "｜" : "") + S.name.zh + " " + S.name.en; }
   /* 路線與站點：line 決定顏色；期間有「今」＝實心（現在進行中） */
   function lineOf(x) { return (x && x.line) || "none"; }
-  function isNow(x) { return /今/.test((x && x.period) || ""); }
+  /* 一筆經歷可以有多個職務（roles）；舊格式（直接寫 role/period）也照樣能用 */
+  function rolesOf(it) { return it.roles ? U.visible(it.roles, "web") : [{ role: it.role, period: it.period, points: it.points, station: it.station }]; }
+  function isNow(x) {
+    if (x && x.roles) return x.roles.some(function (r) { return r.show !== false && /今/.test(r.period || ""); });
+    return /今/.test((x && x.period) || "");
+  }
   function dot(x, now) { return '<span class="dot' + (now ? " is-now" : "") + '" data-line="' + lineOf(x) + '" aria-hidden="true"></span>'; }
   /* 期間開頭的年月，用來排序：「2023.09 – 2026.01」→ 202309 */
   function startKey(p) { var m = String(p || "").match(/(\d{4})(?:\.(\d{1,2}))?/); return m ? (+m[1]) * 100 + (+(m[2] || 0)) : 0; }
-  /* 每筆經歷的錨點 id（路線圖站點連過去用）：依組織中文名＋期間產生，內容不變 id 就不變 */
+  /* 每筆經歷的錨點 id（路線圖站點連過去用）：依組織中文名產生，名字不變 id 就不變 */
   function idOf(it) {
-    var str = t(it.org, "zh") + "|" + (it.period || ""), h = 0;
+    var str = t(it.org, "zh"), h = 0;
     for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
     return "e" + h.toString(36);
   }
@@ -92,7 +97,8 @@
     var inner = it.logo
       ? '<img src="/' + esc(String(it.logo).replace(/^\//, "")) + '" alt="" loading="lazy">'
       : '<span>' + esc(it.mark || t(it.org, "zh").charAt(0)) + "</span>";
-    return '<span class="org-mark' + (isNow(it) ? " is-now" : "") + (it.logo ? " has-logo" : "") + '" data-line="' + lineOf(it) + '" aria-hidden="true">' + inner + "</span>";
+    var long = !it.logo && String(it.mark || "").length > 2;
+    return '<span class="org-mark' + (isNow(it) ? " is-now" : "") + (it.logo ? " has-logo" : "") + (long ? " is-long" : "") + '" data-line="' + lineOf(it) + '" aria-hidden="true">' + inner + "</span>";
   }
 
   /* 圖例：三條路線的名稱取自 content.js 的 focus */
@@ -115,21 +121,26 @@
     var tl = t(S.tagline, L);
 
     /* 職涯路線圖：經歷裡有 station 的條目，依開始年月排列；最後一站是「現在位置」 */
+    /* 站點：每個職務上有 station 的，都是一站（用那個職務的期間） */
     var stations = [];
     (S.groups || []).forEach(function (g) {
       if (g.show === false || g.web === false) return;
-      U.visible(g.items, "web").forEach(function (it) { if (it.station) stations.push(it); });
+      U.visible(g.items, "web").forEach(function (it) {
+        rolesOf(it).forEach(function (r) {
+          if (r.station) stations.push({ org: it.org, line: it.line, item: it, station: r.station, period: r.period });
+        });
+      });
     });
     stations.sort(function (a, b) { return startKey(a.period) - startKey(b.period); });
     /* 路線分段上色：通往某一站的那一段，用那一站的路線色（像捷運圖）。
        每一站都連到經歷頁的那一筆。 */
-    var route = stations.length ? '<div class="route" aria-label="' + tx("經歷路線圖", "Career route") + '">' + legend("route-legend") +
+    var route = stations.length ? '<div class="route" data-reveal aria-label="' + tx("經歷路線圖", "Career route") + '">' + legend("route-legend") +
       '<ol class="route-track">' + stations.map(function (it, i) {
         var here = i === stations.length - 1;
         return '<li class="station' + (here ? " is-here" : "") + '" style="--i:' + i + '">' +
           (i ? '<span class="seg" data-line="' + lineOf(it) + '"></span>' : "") +
-          '<a href="/experience.html#' + idOf(it) + '" title="' + esc(t(it.org, L) + (lineName(it.line) ? "（" + lineName(it.line) + "）" : "")) + '">' +
-          dot(it, isNow(it)) + '<span class="y">' + String(startKey(it.period)).slice(0, 4) + '</span><span class="n">' + esc(t(it.station, L)) + "</span></a></li>";
+          '<a href="/experience.html#' + idOf(it.item) + '" title="' + esc(t(it.org, L) + (lineName(it.line) ? "（" + lineName(it.line) + "）" : "")) + '">' +
+          dot(it, /今/.test(it.period || "")) + '<span class="y">' + String(startKey(it.period)).slice(0, 4) + '</span><span class="n">' + esc(t(it.station, L)) + "</span></a></li>";
       }).join("") + "</ol></div>" : "";
 
     var html =
@@ -142,25 +153,28 @@
             (roles ? '<ul class="roles">' + roles + "</ul>" : "") +
           "</div></div>" +
           '<div class="photo" id="photoWrap"></div>' +
-        "</div>" + route +
+        "</div>" +
       "</div></section>";
 
-    /* 關注領域：三條路線 */
-    var focus = U.visible(S.focus, "web");
-    if (focus.length) html += block("focus", t(S.focusHeading, L), '<div class="focus">' + focus.map(function (i) {
-      return '<div class="focus-item" data-reveal data-line="' + lineOf(i) + '"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
-    }).join("") + "</div>", true);
+    /* 路線圖放在近況上面：一段是走過的路，一段是最近的動態 */
+    if (route) html += block("route", tx("一路走來", "The route so far"), route);
 
     /* 近況：先顯示 5 筆；最新一筆是紅點 */
     var news = U.visible(S.news, "web").slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
     if (news.length) {
-      html += block("news", tx("近況", "Latest"), '<ul class="news" id="newsBody">' + news.map(function (n, i) {
+      html += '<section class="block washed" id="news"><div class="wrap"><div class="block-head" data-reveal><h2 class="block-title">' + tx("近況", "Latest") + '</h2></div><ul class="news" id="newsBody">' + news.map(function (n, i) {
         var txt = esc(t(n.text, L));
         if (n.url) txt = '<a href="' + esc(n.url) + '" target="_blank" rel="noopener">' + txt + "</a>";
         return "<li data-reveal" + (i >= 5 ? ' class="is-more"' : "") + ' style="--i:' + i + '">' + dot(n, false) + '<span class="d">' + esc(n.date || "") + "</span><span>" + txt + "</span></li>";
       }).join("") + "</ul>" +
-      (news.length > 5 ? '<button class="more-btn" type="button" id="newsMore">' + tx("顯示全部", "Show all") + "</button>" : ""));
+      (news.length > 5 ? '<button class="more-btn" type="button" id="newsMore">' + tx("顯示全部", "Show all") + "</button>" : "") + "</div></section>";
     }
+    /* 關注領域：三條路線 */
+    var focus = U.visible(S.focus, "web");
+    if (focus.length) html += block("focus", t(S.focusHeading, L), '<div class="focus">' + focus.map(function (i) {
+      return '<div class="focus-item" data-reveal data-line="' + lineOf(i) + '"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
+    }).join("") + "</div>", false);
+
     main.innerHTML = html;
 
     var nm = document.getElementById("newsMore");
@@ -184,15 +198,19 @@
     var inner = legend("legend") + '<div class="exp-grid">' + groups.map(function (g, gi) {
       var items = U.visible(g.items, "web");
       return '<div class="exp-group" id="g' + gi + '"><h3 class="exp-title">' + esc(t(g.title, L)) + '</h3><ul class="exp-list">' + items.map(function (it, i) {
-        var p = U.period(it.period, L), role = t(it.role, L);
-        var pts = (it.points || []).filter(function (x) { return x.show !== false && x.web !== false; })
-          .map(function (x) { return "<li>" + esc(t(x, L)) + "</li>"; }).join("");
-        var ln = lineName(it.line);
+        var ln = lineName(it.line), rs = rolesOf(it);
+        var rolesHtml = rs.map(function (r) {
+          var p = U.period(r.period, L), now = /今/.test(r.period || "");
+          var pts = (r.points || []).filter(function (x) { return x.show !== false && x.web !== false; })
+            .map(function (x) { return "<li>" + esc(t(x, L)) + "</li>"; }).join("");
+          return '<li class="exp-role' + (now ? " is-now" : "") + '"><div class="exp-role-head"><span class="role-name">' + esc(t(r.role, L)) + "</span>" +
+            (p ? '<span class="exp-period">' + esc(p) + "</span>" : "") + "</div>" +
+            (pts ? '<ul class="item-points">' + pts + "</ul>" : "") + "</li>";
+        }).join("");
         return '<li class="exp-item' + (g.collapsed && i >= SHOW_FIRST ? " is-more" : "") + '" id="' + idOf(it) + '" data-reveal data-line="' + lineOf(it) + '" style="--i:' + i + '">' + orgMark(it) +
-          '<div><div class="exp-head"><div><div class="item-main">' + esc(t(it.org, L)) + "</div>" +
-          '<div class="item-sub">' + (role ? esc(role) : "") + (ln ? '<span class="line-tag">' + esc(ln) + "</span>" : "") + (isNow(it) ? '<span class="now-tag">' + tx("現職", "Current") + "</span>" : "") + "</div></div>" +
-          (p ? '<div class="exp-period">' + esc(p) + "</div>" : "") + "</div>" +
-          (pts ? '<ul class="item-points">' + pts + "</ul>" : "") + "</div></li>";
+          '<div><div class="exp-head"><div class="item-main">' + esc(t(it.org, L)) + "</div>" +
+          '<div class="tags">' + (ln ? '<span class="line-tag">' + esc(ln) + "</span>" : "") + (isNow(it) ? '<span class="now-tag">' + tx("現職", "Current") + "</span>" : "") + "</div></div>" +
+          '<ul class="exp-roles' + (rs.length > 1 ? " is-multi" : "") + '">' + rolesHtml + "</ul></div></li>";
       }).join("") + "</ul>" +
       (g.collapsed && items.length > SHOW_FIRST
         ? '<button class="more-btn" type="button" data-g="g' + gi + '">' + tx("顯示全部 " + items.length + " 筆", "Show all " + items.length) + "</button>" : "") +
