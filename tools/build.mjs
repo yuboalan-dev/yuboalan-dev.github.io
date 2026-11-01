@@ -59,6 +59,9 @@ for (const f of PAGES) {
   if (errors.length) { console.log(`::error file=${f}::頁面程式錯誤：${errors.join(" / ")}`); failed = true; }
   const html = await page.evaluate(() => {
     document.body.setAttribute("data-prerendered", "zh");
+    /* 動畫狀態不要存進檔案：沒有 JavaScript 的讀者（搜尋引擎、社群預覽）要直接看到內容 */
+    document.documentElement.classList.remove("anim");
+    document.querySelectorAll(".is-in, .flash").forEach(el => el.classList.remove("is-in", "flash"));
     /* 頁尾原本被加在 <script> 後面；移到 <main> 後面，site.js 執行時才找得到並清掉 */
     const f = document.querySelector("footer.contact"), m = document.getElementById("main");
     if (f && m) m.after(f);

@@ -159,18 +159,23 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 .route-legend span::before { content: ""; width: 18px; height: var(--track); border-radius: 2px; background: var(--c); }
 .route-legend .now::before { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
 .route-track { list-style: none; padding: 0; display: flex; position: relative; }
-.route-track::before {
-    content: ""; position: absolute; left: 0; right: 0; top: 9px; height: var(--track); border-radius: 2px;
-    background: var(--navy);
+.station { flex: 1; position: relative; min-width: 0; padding-right: 8px; }
+/* 通往這一站的那一段線，用這一站的路線色（分段上色，像捷運圖） */
+.station .seg {
+    position: absolute; top: 9px; right: calc(100% - 11px); width: 100%; height: var(--track); border-radius: 2px;
+    background: var(--c); transform-origin: left center;
 }
-.station { flex: 1; position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; padding-right: 8px; }
-.station .dot { --dot: 22px; border-width: 4px; position: relative; z-index: 1; }
+/* 最後一站之後：虛線，往還沒走到的地方 */
+.station.is-here::after {
+    content: ""; position: absolute; top: 9px; left: 22px; right: 0; height: var(--track);
+    background: repeating-linear-gradient(90deg, var(--line) 0 8px, transparent 8px 14px);
+}
+.station a { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; text-decoration: none; border-radius: 12px; }
+.station .dot { --dot: 22px; border-width: 4px; position: relative; }
 .station .y { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; margin-top: 4px; }
-.station .n { font-size: 14.5px; font-weight: 700; color: var(--navy); line-height: 1.35; }
+.station .n { font-size: 14.5px; font-weight: 700; color: var(--navy); line-height: 1.35; transition: color .2s ease; }
+.station a:hover .n { color: var(--accent); }
 .station.is-here .dot { box-shadow: 0 0 0 4px #fff, 0 0 0 7px var(--accent); }
-/* 唯一的載入動畫：站點依序亮起 */
-.station { animation: stop-in .5s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--i) * 90ms + 150ms); }
-@keyframes stop-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
 @media (max-width: 860px) {
     .hero-grid { grid-template-columns: 1fr; }
@@ -178,11 +183,12 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 }
 /* 窄螢幕：路線改直的 */
 @media (max-width: 640px) {
-    .route-track { flex-direction: column; gap: 14px; }
-    .route-track::before { left: 9px; right: auto; top: 6px; bottom: 6px; width: var(--track); height: auto; }
-    .station { flex-direction: row; align-items: center; gap: 12px; }
-    .station .y { margin: 0; min-width: 3em; order: 2; }
-    .station .n { order: 3; }
+    .route-track { flex-direction: column; }
+    .station { flex: none; height: 40px; padding: 0; }
+    .station .seg { right: auto; left: 9px; top: -29px; width: var(--track); height: 40px; transform-origin: center top; }
+    .station.is-here::after { display: none; }
+    .station a { flex-direction: row; align-items: center; gap: 12px; }
+    .station .y { margin: 0; min-width: 3em; }
 }
 
 
@@ -204,12 +210,28 @@ main > .block:first-child { border-top: 0; }
 .exp-group { break-inside: avoid; margin-bottom: 44px; }
 .exp-title { font-size: 19px; font-weight: 900; color: var(--navy); margin-bottom: 14px; }
 .exp-list { list-style: none; padding: 0; position: relative; }
-.exp-list::before { content: ""; position: absolute; left: 6px; top: 12px; bottom: 12px; width: 2px; background: var(--line); border-radius: 1px; }
-.exp-item { position: relative; display: grid; grid-template-columns: var(--dot) minmax(0, 1fr); gap: 0 16px; padding: 10px 0; }
-.exp-item > .dot { margin-top: 6px; position: relative; z-index: 1; }
+.exp-list::before { content: ""; position: absolute; left: 21px; top: 24px; bottom: 24px; width: 2px; background: var(--line); border-radius: 1px; }
+.exp-item { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 0 16px; padding: 12px 0; border-radius: 18px; }
+/* 組織圓章：外圈是路線色；有標誌就放標誌，沒有就放簡稱 */
+.org-mark {
+    position: relative; z-index: 1; width: 44px; height: 44px; border-radius: 50%;
+    border: 3px solid var(--c, var(--line-none)); background: #fff;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+    font-size: 13px; font-weight: 900; color: var(--c, var(--line-none)); letter-spacing: -.02em; line-height: 1;
+}
+.org-mark.has-logo { padding: 5px; }
+.org-mark img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+.org-mark.is-now { background: var(--c); color: #fff; }
+.org-mark.is-now.has-logo { background: #fff; box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--c); }
+.line-tag, .now-tag {
+    display: inline-block; font-size: 11.5px; font-weight: 700; line-height: 1; vertical-align: 2px;
+    border-radius: 999px; padding: 4px 8px; margin-left: 8px; white-space: nowrap;
+}
+.line-tag { color: var(--c); border: 1.5px solid var(--c); }
+.now-tag { color: #fff; background: var(--accent); }
 .exp-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 14px; flex-wrap: wrap; }
 .item-main { font-weight: 700; color: var(--navy); font-size: 16.5px; line-height: 1.5; }
-.item-sub { font-size: 14.5px; color: var(--muted); white-space: pre-line; }
+.item-sub { font-size: 14.5px; color: var(--muted); white-space: pre-line; margin-top: 2px; }
 .exp-period { font-size: 13px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .item-points { list-style: none; padding: 0; margin-top: 6px; font-size: 14.5px; line-height: 1.75; }
 .item-points li { position: relative; padding-left: 14px; }
@@ -219,7 +241,7 @@ main > .block:first-child { border-top: 0; }
 
 .more-btn {
     font: inherit; font-size: 14px; font-weight: 700; color: var(--navy); cursor: pointer;
-    background: #fff; border: 2px solid var(--line); border-radius: 999px; padding: 5px 16px; margin: 10px 0 0 30px;
+    background: #fff; border: 2px solid var(--line); border-radius: 999px; padding: 5px 16px; margin: 10px 0 0 60px;
     transition: border-color .2s ease;
 }
 .more-btn:hover { border-color: var(--navy); }
@@ -344,10 +366,78 @@ main > .block:first-child { border-top: 0; }
 
 
 /* =========================================
-   10. 減少動態
+   10. 水滴動畫
+   -----------------------------------------
+   圓點＝水滴。所有「先藏起來」的樣式都以 html.anim 為前提：
+   site.js 只在使用者沒有開「減少動態效果」時才掛上 .anim，
+   所以關掉動畫或沒有 JavaScript 時，內容一律直接顯示。
+   速度只改這裡的兩個數字。
+   ========================================= */
+:root { --drop-dur: .75s; --stagger: 110ms; }
+
+/* 首屏站點：水滴落下 → 壓扁 → 彈回成圓點 → 盪出漣漪；路線一段一段畫出來 */
+.anim .station a  { animation: fade-in .3s ease both; animation-delay: calc(var(--i) * var(--stagger) + 200ms); }
+.anim .station .dot { animation: drop var(--drop-dur) cubic-bezier(.33, 0, .2, 1) both; animation-delay: calc(var(--i) * var(--stagger) + 200ms); }
+.anim .station .seg { animation: draw .35s ease-out both; animation-delay: calc(var(--i) * var(--stagger) + 120ms); }
+.station .dot::after {
+    content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--c, var(--accent));
+    opacity: 0; pointer-events: none;
+}
+.anim .station .dot::after { animation: ripple 1s ease-out both; animation-delay: calc(var(--i) * var(--stagger) + 200ms + var(--drop-dur) * .55); }
+/* 滑過站點：再盪一圈 */
+.anim .station a:hover .dot::after { animation: ripple .9s ease-out; }
+
+@keyframes drop {
+    0%   { transform: translateY(-46px) scale(.7, 1.35); opacity: 0; }
+    55%  { transform: translateY(0) scale(1.35, .7); opacity: 1; }
+    75%  { transform: scale(.9, 1.1); }
+    100% { transform: none; opacity: 1; }
+}
+@keyframes ripple { 0% { opacity: .8; transform: scale(.7); } 100% { opacity: 0; transform: scale(2.6); } }
+@keyframes draw   { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes draw-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 640px) { .anim .station .seg { animation-name: draw-y; } }
+
+/* 名字後的紅點：每隔幾秒輕輕泛一圈 */
+.anim .hero-name h1::after { animation: breathe 3.6s ease-out 1.8s infinite; }
+@keyframes breathe { 0% { box-shadow: 0 0 0 0 rgba(230, 0, 18, .45); } 70%, 100% { box-shadow: 0 0 0 .32em rgba(230, 0, 18, 0); } }
+
+/* 照片紅環：載入時像水面一樣擴開 */
+.anim .photo { animation: ring-in 1.1s cubic-bezier(.2, .7, .2, 1) .1s both; }
+@keyframes ring-in { from { box-shadow: 0 0 0 0 #fff, 0 0 0 0 var(--accent); transform: scale(.94); } to { box-shadow: 0 0 0 6px #fff, 0 0 0 9px var(--accent); transform: none; } }
+
+/* 捲動到才浮現：整塊輕輕升起 */
+.anim [data-reveal] { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(var(--i, 0) * 70ms); }
+.anim [data-reveal].is-in { opacity: 1; transform: none; }
+/* 區塊標題的紅點、經歷圓章、關注領域的站點：滴下來 */
+.anim .block-head[data-reveal].is-in::before,
+.anim .exp-item.is-in .org-mark,
+.anim .focus-item.is-in::after { animation: drop var(--drop-dur) cubic-bezier(.33, 0, .2, 1) both; animation-delay: calc(var(--i, 0) * 70ms + 80ms); }
+.anim .focus-item.is-in::before { transform-origin: left center; animation: draw .7s ease-out .35s both; }
+/* 媒體：一集一顆，依序滴出來 */
+.anim .ep-dots[data-reveal] { transform: none; }
+.anim .ep-dots i { opacity: 0; }
+.anim .ep-dots.is-in i { animation: drop .55s cubic-bezier(.33, 0, .2, 1) both; animation-delay: calc(var(--k) * 55ms); }
+
+/* 點按鈕：從點的位置盪開水波 */
+.btn, .lang-btn, .more-btn, .proof a, .contact .social a { position: relative; overflow: hidden; }
+.tap-ripple {
+    position: absolute; border-radius: 50%; background: currentColor; opacity: .22; pointer-events: none;
+    transform: scale(0); animation: tap .65s ease-out forwards;
+}
+@keyframes tap { to { transform: scale(1); opacity: 0; } }
+
+/* 從首頁路線圖點過來的那一筆：閃一下 */
+.exp-item.flash { animation: flash 1.8s ease-out .3s; }
+@keyframes flash { 0%, 30% { background: rgba(230, 0, 18, .08); box-shadow: 0 0 0 10px rgba(230, 0, 18, .08); } 100% { background: transparent; box-shadow: 0 0 0 10px transparent; } }
+
+
+/* =========================================
+   11. 減少動態：全部關掉（.anim 不會掛上，這裡再保險一次）
    ========================================= */
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .station { animation: none; }
-    .vid .thumb img { transition: none; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    [data-reveal] { opacity: 1 !important; transform: none !important; }
 }

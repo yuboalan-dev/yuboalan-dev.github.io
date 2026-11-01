@@ -19,6 +19,9 @@
      points        條列說明（網站卡片不顯示，CV 和代表作會用）
      line          路線（決定圓點顏色）："gov" 議事與治理（藍）、"china" 兩岸與中國政治（金）、
                    "transport" 人本交通與地方提案（綠）；不寫就是灰色
+     mark          經歷旁圓章裡的簡稱（一兩個字），沒有標誌圖檔時顯示
+     logo          組織標誌圖檔，例如 "assets/logos/nccusc.png"（建議正方形、去背 PNG，
+                   放進 assets/logos/ 資料夾）；有填就用標誌、不顯示 mark
      station       放上首頁「路線圖」的站名（短短兩三個字）；不寫就不上路線圖
                    站點依期間的開始年份排列；期間有「今」的會畫成實心點
 
@@ -97,6 +100,7 @@ window.SITE = {
 
     { key: "current", title: { zh: "現職", en: "Current Positions" }, items: [
       { line: "gov", station: { zh: "議長", en: "Speaker" },
+        mark: "議會", logo: "",
         org: { zh: "國立政治大學學生議會", en: "NCCU Student Congress" },
         role: { zh: "議長", en: "Speaker" }, period: "2026.02 – 今",
         points: [
@@ -108,12 +112,15 @@ window.SITE = {
             en: "Formerly student legislator and Convener of the Budget Committee" }
         ] },
       { line: "transport", station: { zh: "人本交通", en: "Transport NGO" },
+        mark: "人本", logo: "",
         org: { zh: "社團法人下一代人本交通促進會", en: "Next Generation People-Oriented Transport Association" },
         role: { zh: "副秘書長、北部分會會長", en: "Deputy Secretary-General; Chair, Northern Chapter" }, period: "2026.02 – 今" },
       { line: "gov", station: { zh: "學聯理事", en: "Student Union board" },
+        mark: "學聯", logo: "",
         org: { zh: "社團法人臺灣學生聯合會", en: "National Students' Union of Taiwan" },
         role: { zh: "第七屆理事", en: "Board Member (7th term)" }, period: "2026.11 – 今" },
       { line: "transport", station: { zh: "指南路", en: "Zhinan Road" },
+        mark: "指南", logo: "",
         org: { zh: "指南路交通改善小組", en: "Zhinan Road Traffic Improvement Task Force" },
         role: { zh: "召集人", en: "Convener" }, period: "2025 – 今",
         points: [
@@ -126,6 +133,7 @@ window.SITE = {
 
     { key: "research", title: { zh: "研究與教學", en: "Research & Teaching" }, items: [
       { line: "china", station: { zh: "國關中心", en: "IIR research" },
+        mark: "國關", logo: "",
         org: { zh: "國立政治大學國際關係研究中心", en: "Institute of International Relations, NCCU" },
         role: { zh: "研究計畫助理", en: "Research Assistant" }, period: "2023.09 – 2026.01",
         points: [
@@ -135,12 +143,14 @@ window.SITE = {
             en: "NSTC project on CCP elite recruitment after the 20th Party Congress" }
         ] },
       { line: "china",
+        mark: "助教", logo: "",
         org: { zh: "地政學系、傳播學院、國際關係研究中心", en: "NCCU (Land Economics, Communication, IIR)" },
         role: { zh: "課程教學助理", en: "Teaching Assistant" }, period: "2024 – 2026" }
     ] },
 
     { key: "education", title: { zh: "學歷", en: "Education" }, items: [
       { station: { zh: "政大", en: "NCCU" },
+        mark: "政大", logo: "",
         org: { zh: "國立政治大學", en: "National Chengchi University" },
         role: { zh: "政治學系學士班", en: "B.A. in Political Science" },
         period: "2022.09 – 2027（預計）",
@@ -153,26 +163,33 @@ window.SITE = {
       /* 建中：網站顯示、CV 不放 */
       { cv: false,
         station: { zh: "建中", en: "Jianguo HS" },
+        mark: "建中", logo: "",
         org: { zh: "臺北市立建國高級中學", en: "Taipei Municipal Jianguo High School" },
         role: { zh: "畢業", en: "Graduated" }, period: "2019 – 2022" }
     ] },
 
     { key: "experience", collapsed: true, title: { zh: "其他經歷", en: "Other Experience" }, items: [
       { line: "gov",
+        mark: "學聯", logo: "",
         org: { zh: "臺灣學生聯合會", en: "National Students' Union of Taiwan" },
         role: { zh: "第六屆公關副祕書長", en: "Deputy Secretary-General, PR (6th term)" }, period: "2025.11 – 2026.10" },
-      { org: { zh: "政治學系馮麗華傑出系友獎學金", en: "Feng Li-hua Distinguished Alumni Scholarship" },
+      { mark: "獎", logo: "",
+        org: { zh: "政治學系馮麗華傑出系友獎學金", en: "Feng Li-hua Distinguished Alumni Scholarship" },
         role: { zh: "獲獎", en: "Recipient" }, period: "2025" },
       { line: "gov",
+        mark: "市府", logo: "",
         org: { zh: "臺北市政府", en: "Taipei City Government" },
         role: { zh: "大專青年學生公部門暑期工讀", en: "Public Sector Summer Intern" }, period: "2025" },
       { line: "transport",
+        mark: "中正", logo: "",
         org: { zh: "臺北市中正區參與式預算", en: "Zhongzheng District Participatory Budgeting, Taipei" },
         role: { zh: "「您行我也行」提案人", en: "Proposer" }, period: "2024" },
       { line: "gov", station: { zh: "野火", en: "Wildfire Front" },
+        mark: "野火", logo: "",
         org: { zh: "政大野火陣線社", en: "NCCU Wildfire Front Club" },
         role: { zh: "副社長", en: "Vice President" }, period: "2023.02 – 2024.07" },
       { line: "gov",
+        mark: "權益", logo: "",
         org: { zh: "政大學生會權益部", en: "Student Rights Department, NCCU Student Association" },
         role: { zh: "部員", en: "Member" }, period: "" }
     ] }

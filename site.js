@@ -30,6 +30,12 @@
   function tx(zh, en) { return EN ? en : zh; }
   document.documentElement.lang = EN ? "en" : "zh-Hant";
 
+  /* 動畫：系統設定「減少動態效果」的人不播。
+     .anim 掛在 <html> 上，所有「先藏起來、進畫面才浮現」的樣式都以它為前提，
+     沒有 JavaScript 或關掉動畫時內容一律直接顯示。 */
+  var ANIM = !(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  document.documentElement.classList.toggle("anim", ANIM);
+
   var PAGES = [
     { id: "experience", href: "/experience.html", zh: "經歷",     en: "Experience" },
     { id: "work",       href: "/work.html",       zh: "代表作",   en: "Work" },
@@ -61,7 +67,7 @@
   /* ---------- 小工具 ---------- */
   function block(id, title, inner, washed) {
     return '<section class="block' + (washed ? " washed" : "") + '" id="' + id + '"><div class="wrap">' +
-      '<div class="block-head"><h2 class="block-title">' + esc(title) + "</h2></div>" + inner + "</div></section>";
+      '<div class="block-head" data-reveal><h2 class="block-title">' + esc(title) + "</h2></div>" + inner + "</div></section>";
   }
   function setTitle(title) { document.title = (title ? title + "｜" : "") + S.name.zh + " " + S.name.en; }
   /* 路線與站點：line 決定顏色；期間有「今」＝實心（現在進行中） */
@@ -70,6 +76,25 @@
   function dot(x, now) { return '<span class="dot' + (now ? " is-now" : "") + '" data-line="' + lineOf(x) + '" aria-hidden="true"></span>'; }
   /* 期間開頭的年月，用來排序：「2023.09 – 2026.01」→ 202309 */
   function startKey(p) { var m = String(p || "").match(/(\d{4})(?:\.(\d{1,2}))?/); return m ? (+m[1]) * 100 + (+(m[2] || 0)) : 0; }
+  /* 每筆經歷的錨點 id（路線圖站點連過去用）：依組織中文名＋期間產生，內容不變 id 就不變 */
+  function idOf(it) {
+    var str = t(it.org, "zh") + "|" + (it.period || ""), h = 0;
+    for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+    return "e" + h.toString(36);
+  }
+  /* 路線名稱（色弱也看得懂：顏色之外一定有文字） */
+  function lineName(line) {
+    var f = U.visible(S.focus, "web").filter(function (x) { return x.line === line; })[0];
+    return f ? t(f.title, L) : "";
+  }
+  /* 組織圓章：有 logo 用標誌圖檔，沒有就顯示 mark 簡稱 */
+  function orgMark(it) {
+    var inner = it.logo
+      ? '<img src="/' + esc(String(it.logo).replace(/^\//, "")) + '" alt="" loading="lazy">'
+      : '<span>' + esc(it.mark || t(it.org, "zh").charAt(0)) + "</span>";
+    return '<span class="org-mark' + (isNow(it) ? " is-now" : "") + (it.logo ? " has-logo" : "") + '" data-line="' + lineOf(it) + '" aria-hidden="true">' + inner + "</span>";
+  }
+
   /* 圖例：三條路線的名稱取自 content.js 的 focus */
   function legend(cls) {
     var items = U.visible(S.focus, "web").filter(function (f) { return f.line; }).map(function (f) {
@@ -96,11 +121,15 @@
       U.visible(g.items, "web").forEach(function (it) { if (it.station) stations.push(it); });
     });
     stations.sort(function (a, b) { return startKey(a.period) - startKey(b.period); });
+    /* 路線分段上色：通往某一站的那一段，用那一站的路線色（像捷運圖）。
+       每一站都連到經歷頁的那一筆。 */
     var route = stations.length ? '<div class="route" aria-label="' + tx("經歷路線圖", "Career route") + '">' + legend("route-legend") +
       '<ol class="route-track">' + stations.map(function (it, i) {
         var here = i === stations.length - 1;
-        return '<li class="station' + (here ? " is-here" : "") + '" style="--i:' + i + '">' + dot(it, isNow(it)) +
-          '<span class="y">' + String(startKey(it.period)).slice(0, 4) + '</span><span class="n">' + esc(t(it.station, L)) + "</span></li>";
+        return '<li class="station' + (here ? " is-here" : "") + '" style="--i:' + i + '">' +
+          (i ? '<span class="seg" data-line="' + lineOf(it) + '"></span>' : "") +
+          '<a href="/experience.html#' + idOf(it) + '" title="' + esc(t(it.org, L) + (lineName(it.line) ? "（" + lineName(it.line) + "）" : "")) + '">' +
+          dot(it, isNow(it)) + '<span class="y">' + String(startKey(it.period)).slice(0, 4) + '</span><span class="n">' + esc(t(it.station, L)) + "</span></a></li>";
       }).join("") + "</ol></div>" : "";
 
     var html =
@@ -119,7 +148,7 @@
     /* 關注領域：三條路線 */
     var focus = U.visible(S.focus, "web");
     if (focus.length) html += block("focus", t(S.focusHeading, L), '<div class="focus">' + focus.map(function (i) {
-      return '<div class="focus-item" data-line="' + lineOf(i) + '"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
+      return '<div class="focus-item" data-reveal data-line="' + lineOf(i) + '"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
     }).join("") + "</div>", true);
 
     /* 近況：先顯示 5 筆；最新一筆是紅點 */
@@ -128,7 +157,7 @@
       html += block("news", tx("近況", "Latest"), '<ul class="news" id="newsBody">' + news.map(function (n, i) {
         var txt = esc(t(n.text, L));
         if (n.url) txt = '<a href="' + esc(n.url) + '" target="_blank" rel="noopener">' + txt + "</a>";
-        return "<li" + (i >= 5 ? ' class="is-more"' : "") + ">" + dot(n, false) + '<span class="d">' + esc(n.date || "") + "</span><span>" + txt + "</span></li>";
+        return "<li data-reveal" + (i >= 5 ? ' class="is-more"' : "") + ' style="--i:' + i + '">' + dot(n, false) + '<span class="d">' + esc(n.date || "") + "</span><span>" + txt + "</span></li>";
       }).join("") + "</ul>" +
       (news.length > 5 ? '<button class="more-btn" type="button" id="newsMore">' + tx("顯示全部", "Show all") + "</button>" : ""));
     }
@@ -158,9 +187,10 @@
         var p = U.period(it.period, L), role = t(it.role, L);
         var pts = (it.points || []).filter(function (x) { return x.show !== false && x.web !== false; })
           .map(function (x) { return "<li>" + esc(t(x, L)) + "</li>"; }).join("");
-        return '<li class="exp-item' + (g.collapsed && i >= SHOW_FIRST ? " is-more" : "") + '" data-line="' + lineOf(it) + '">' + dot(it, isNow(it)) +
+        var ln = lineName(it.line);
+        return '<li class="exp-item' + (g.collapsed && i >= SHOW_FIRST ? " is-more" : "") + '" id="' + idOf(it) + '" data-reveal data-line="' + lineOf(it) + '" style="--i:' + i + '">' + orgMark(it) +
           '<div><div class="exp-head"><div><div class="item-main">' + esc(t(it.org, L)) + "</div>" +
-          (role ? '<div class="item-sub">' + esc(role) + "</div>" : "") + "</div>" +
+          '<div class="item-sub">' + (role ? esc(role) : "") + (ln ? '<span class="line-tag">' + esc(ln) + "</span>" : "") + (isNow(it) ? '<span class="now-tag">' + tx("現職", "Current") + "</span>" : "") + "</div></div>" +
           (p ? '<div class="exp-period">' + esc(p) + "</div>" : "") + "</div>" +
           (pts ? '<ul class="item-points">' + pts + "</ul>" : "") + "</div></li>";
       }).join("") + "</ul>" +
@@ -183,7 +213,7 @@
         return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(t(l.label, L)) + "</a>";
       }).join("");
       var steps = (w.steps || []).map(function (s) { return "<li>" + esc(t(s, L)) + "</li>"; }).join("");
-      return '<article class="work" data-line="' + lineOf(w) + '"><div><h3>' + dot(w, true) + esc(t(w.title, L)) + '</h3><p class="desc">' + esc(t(w.text, L)) + "</p>" +
+      return '<article class="work" data-reveal data-line="' + lineOf(w) + '"><div><h3>' + dot(w, true) + esc(t(w.title, L)) + '</h3><p class="desc">' + esc(t(w.text, L)) + "</p>" +
         (links ? '<div class="proof">' + links + "</div>" : "") + "</div>" +
         (steps ? '<ol class="steps">' + steps + "</ol>" : "") + "</article>";
     }).join("") + "</div>";
@@ -208,7 +238,7 @@
     var feat = media.filter(function (m) { return m.featured; });
     var html = feat.length ? '<div class="media-feat">' + feat.map(function (m) {
       var thumb = m.id ? '<img loading="lazy" alt="" onerror="this.remove()" src="https://i.ytimg.com/vi/' + esc(m.id) + '/hqdefault.jpg">' : "";
-      return '<a class="vid" href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><div class="thumb">' + thumb + "</div>" +
+      return '<a class="vid" data-reveal href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><div class="thumb">' + thumb + "</div>" +
         '<div class="src">' + esc(src(m)) + '</div><div class="vt">' + esc(t(m.title, L)) + '</div><div class="vd">' + esc(m.date || "") + "</div></a>";
     }).join("") + "</div>" : "";
 
@@ -225,7 +255,7 @@
         var span = ys.length ? (ys[0] === ys[ys.length - 1] ? ys[0] : ys[0] + "–" + ys[ys.length - 1]) : "";
         total += shows[k].length;
         return '<li class="show"><div class="show-top"><span class="show-name">' + esc(k) + '</span><span class="show-meta">' + esc(span) + "　" +
-          shows[k].length + tx(" 集", " episodes") + '</span></div><div class="ep-dots" aria-hidden="true">' + new Array(shows[k].length + 1).join("<i></i>") + "</div></li>";
+          shows[k].length + tx(" 集", " episodes") + '</span></div><div class="ep-dots" data-reveal aria-hidden="true">' + shows[k].map(function (m, n) { return '<i style="--k:' + n + '"></i>'; }).join("") + "</div></li>";
       }).join("") + "</ul></div>";
       groups = groups.replace("__TOTAL__", total + tx(" 集", " episodes"));
     }
@@ -288,4 +318,35 @@
 
   ({ home: renderHome, experience: renderExperience, work: renderWork, media: renderMedia, notfound: renderNotFound }[page] || renderHome)();
   renderFooter();
+
+  /* ---------- 動畫：進畫面才浮現（像水滴落下） ---------- */
+  var targets = document.querySelectorAll("[data-reveal]");
+  if (ANIM && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -8% 0px" });
+    targets.forEach(function (el) { io.observe(el); });
+  } else targets.forEach(function (el) { el.classList.add("is-in"); });
+
+  /* ---------- 動畫：點按鈕時，從點的位置盪開一圈水波 ---------- */
+  if (ANIM) document.addEventListener("pointerdown", function (ev) {
+    var el = ev.target.closest && ev.target.closest(".btn, .lang-btn, .more-btn, .proof a, .contact .social a");
+    if (!el) return;
+    var r = el.getBoundingClientRect(), d = Math.max(r.width, r.height) * 2;
+    var w = document.createElement("span");
+    w.className = "tap-ripple";
+    w.style.cssText = "width:" + d + "px;height:" + d + "px;left:" + (ev.clientX - r.left - d / 2) + "px;top:" + (ev.clientY - r.top - d / 2) + "px";
+    el.appendChild(w);
+    setTimeout(function () { w.remove(); }, 700);
+  });
+
+  /* ---------- 從首頁路線圖點過來：捲到那一筆並閃一下 ---------- */
+  if (location.hash.length > 1) {
+    var hit = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (hit) {
+      hit.classList.add("is-in");
+      var grp = hit.closest(".exp-group"); if (grp) grp.classList.add("show-all");
+      setTimeout(function () { hit.scrollIntoView({ block: "center", behavior: ANIM ? "smooth" : "auto" }); hit.classList.add("flash"); }, 60);
+    }
+  }
 })();
