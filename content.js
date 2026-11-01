@@ -17,6 +17,10 @@
      show: false   整筆藏起來（網站和 CV 都不顯示），資料留著
      cv: false     網站顯示、CV 不放        web: false   CV 放、網站不顯示
      points        條列說明（網站卡片不顯示，CV 和代表作會用）
+     line          路線（決定圓點顏色）："gov" 議事與治理（藍）、"china" 兩岸與中國政治（金）、
+                   "transport" 人本交通與地方提案（綠）；不寫就是灰色
+     station       放上首頁「路線圖」的站名（短短兩三個字）；不寫就不上路線圖
+                   站點依期間的開始年份排列；期間有「今」的會畫成實心點
 
    ★ 標了【待確認】的是 Claude 依現有資料起的草稿，請改成你要的說法。
    ========================================================= */
@@ -33,9 +37,9 @@ window.SITE = {
 
   /* 首頁姓名下方的三個身分（對應議長頁的 roles-area） */
   roles: [
-    { zh: "國立政治大學學生議會　議長",       en: "Speaker, NCCU Student Congress" },
-    { zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" },
-    { zh: "臺灣學生聯合會　理事",             en: "Board Member, National Students' Union of Taiwan" }
+    { line: "gov", zh: "國立政治大學學生議會　議長",       en: "Speaker, NCCU Student Congress" },
+    { line: "transport", zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" },
+    { line: "gov", zh: "臺灣學生聯合會　理事",             en: "Board Member, National Students' Union of Taiwan" }
   ],
 
   /* 照片：命名 photo.jpg 放進 assets 資料夾。沒放時顯示姓氏字樣。 */
@@ -92,7 +96,8 @@ window.SITE = {
   groups: [
 
     { key: "current", title: { zh: "現職", en: "Current Positions" }, items: [
-      { org: { zh: "國立政治大學學生議會", en: "NCCU Student Congress" },
+      { line: "gov", station: { zh: "議長", en: "Speaker" },
+        org: { zh: "國立政治大學學生議會", en: "NCCU Student Congress" },
         role: { zh: "議長", en: "Speaker" }, period: "2026.02 – 今",
         points: [
           { zh: "兼任學生會校務諮詢委員會總召集人",
@@ -102,11 +107,14 @@ window.SITE = {
           { zh: "歷任學生議員、預算委員會召集委員",
             en: "Formerly student legislator and Convener of the Budget Committee" }
         ] },
-      { org: { zh: "社團法人下一代人本交通促進會", en: "Next Generation People-Oriented Transport Association" },
+      { line: "transport", station: { zh: "人本交通", en: "Transport NGO" },
+        org: { zh: "社團法人下一代人本交通促進會", en: "Next Generation People-Oriented Transport Association" },
         role: { zh: "副秘書長、北部分會會長", en: "Deputy Secretary-General; Chair, Northern Chapter" }, period: "2026.02 – 今" },
-      { org: { zh: "社團法人臺灣學生聯合會", en: "National Students' Union of Taiwan" },
+      { line: "gov", station: { zh: "學聯理事", en: "Student Union board" },
+        org: { zh: "社團法人臺灣學生聯合會", en: "National Students' Union of Taiwan" },
         role: { zh: "第七屆理事", en: "Board Member (7th term)" }, period: "2026.11 – 今" },
-      { org: { zh: "指南路交通改善小組", en: "Zhinan Road Traffic Improvement Task Force" },
+      { line: "transport", station: { zh: "指南路", en: "Zhinan Road" },
+        org: { zh: "指南路交通改善小組", en: "Zhinan Road Traffic Improvement Task Force" },
         role: { zh: "召集人", en: "Convener" }, period: "2025 – 今",
         points: [
           { zh: "文山區參與式預算「指南路二段周遭道路改善計畫」提案人代表（通過）",
@@ -117,7 +125,8 @@ window.SITE = {
     ] },
 
     { key: "research", title: { zh: "研究與教學", en: "Research & Teaching" }, items: [
-      { org: { zh: "國立政治大學國際關係研究中心", en: "Institute of International Relations, NCCU" },
+      { line: "china", station: { zh: "國關中心", en: "IIR research" },
+        org: { zh: "國立政治大學國際關係研究中心", en: "Institute of International Relations, NCCU" },
         role: { zh: "研究計畫助理", en: "Research Assistant" }, period: "2023.09 – 2026.01",
         points: [
           { zh: "大陸委員會委託研究「習近平反貪腐鬥爭之策略、成效與影響」",
@@ -125,12 +134,14 @@ window.SITE = {
           { zh: "國科會研究「中共二十大後政治菁英甄補：趨勢、預測與結構變遷」",
             en: "NSTC project on CCP elite recruitment after the 20th Party Congress" }
         ] },
-      { org: { zh: "地政學系、傳播學院、國際關係研究中心", en: "NCCU (Land Economics, Communication, IIR)" },
+      { line: "china",
+        org: { zh: "地政學系、傳播學院、國際關係研究中心", en: "NCCU (Land Economics, Communication, IIR)" },
         role: { zh: "課程教學助理", en: "Teaching Assistant" }, period: "2024 – 2026" }
     ] },
 
     { key: "education", title: { zh: "學歷", en: "Education" }, items: [
-      { org: { zh: "國立政治大學", en: "National Chengchi University" },
+      { station: { zh: "政大", en: "NCCU" },
+        org: { zh: "國立政治大學", en: "National Chengchi University" },
         role: { zh: "政治學系學士班", en: "B.A. in Political Science" },
         period: "2022.09 – 2027（預計）",
         points: [
@@ -141,22 +152,28 @@ window.SITE = {
         ] },
       /* 建中：網站顯示、CV 不放 */
       { cv: false,
+        station: { zh: "建中", en: "Jianguo HS" },
         org: { zh: "臺北市立建國高級中學", en: "Taipei Municipal Jianguo High School" },
         role: { zh: "畢業", en: "Graduated" }, period: "2019 – 2022" }
     ] },
 
     { key: "experience", collapsed: true, title: { zh: "其他經歷", en: "Other Experience" }, items: [
-      { org: { zh: "臺灣學生聯合會", en: "National Students' Union of Taiwan" },
+      { line: "gov",
+        org: { zh: "臺灣學生聯合會", en: "National Students' Union of Taiwan" },
         role: { zh: "第六屆公關副祕書長", en: "Deputy Secretary-General, PR (6th term)" }, period: "2025.11 – 2026.10" },
       { org: { zh: "政治學系馮麗華傑出系友獎學金", en: "Feng Li-hua Distinguished Alumni Scholarship" },
         role: { zh: "獲獎", en: "Recipient" }, period: "2025" },
-      { org: { zh: "臺北市政府", en: "Taipei City Government" },
+      { line: "gov",
+        org: { zh: "臺北市政府", en: "Taipei City Government" },
         role: { zh: "大專青年學生公部門暑期工讀", en: "Public Sector Summer Intern" }, period: "2025" },
-      { org: { zh: "臺北市中正區參與式預算", en: "Zhongzheng District Participatory Budgeting, Taipei" },
+      { line: "transport",
+        org: { zh: "臺北市中正區參與式預算", en: "Zhongzheng District Participatory Budgeting, Taipei" },
         role: { zh: "「您行我也行」提案人", en: "Proposer" }, period: "2024" },
-      { org: { zh: "政大野火陣線社", en: "NCCU Wildfire Front Club" },
+      { line: "gov", station: { zh: "野火", en: "Wildfire Front" },
+        org: { zh: "政大野火陣線社", en: "NCCU Wildfire Front Club" },
         role: { zh: "副社長", en: "Vice President" }, period: "2023.02 – 2024.07" },
-      { org: { zh: "政大學生會權益部", en: "Student Rights Department, NCCU Student Association" },
+      { line: "gov",
+        org: { zh: "政大學生會權益部", en: "Student Rights Department, NCCU Student Association" },
         role: { zh: "部員", en: "Member" }, period: "" }
     ] }
   ],
@@ -164,13 +181,16 @@ window.SITE = {
   /* ---------- 4. 關注領域（取代原本的「理念白皮書」）【待確認】 ---------- */
   focusHeading: { zh: "關注領域", en: "Focus Areas" },
   focus: [
-    { title: { zh: "議事與治理", en: "Legislatures & Governance" },
+    { line: "gov",
+      title: { zh: "議事與治理", en: "Legislatures & Governance" },
       text:  { zh: "擔任學生議會議長與四大校務會議學生代表，處理議事、預算與校務協商；推動議事影音紀錄與直播，讓學生自治更透明。",
                en: "As Speaker and student representative on four university councils, I work on procedure, budgets and negotiation, and pushed for recorded and live-streamed sessions." } },
-    { title: { zh: "兩岸與中國政治", en: "China & Cross-Strait Politics" },
+    { line: "china",
+      title: { zh: "兩岸與中國政治", en: "China & Cross-Strait Politics" },
       text:  { zh: "在國關中心參與陸委會與國科會研究，關注中共菁英政治、反貪腐與兩岸關係，並修讀中國大陸與兩岸關係研究學程。",
                en: "Research on CCP elite politics and anti-corruption for the Mainland Affairs Council and NSTC at the Institute of International Relations." } },
-    { title: { zh: "人本交通與地方提案", en: "Transport & Local Policy" },
+    { line: "transport",
+      title: { zh: "人本交通與地方提案", en: "Transport & Local Policy" },
       text:  { zh: "從政大校門口的行人穿越道出發，透過參與式預算讓指南路的人行環境改善進入市府工程；現任下一代人本交通促進會北部分會會長。",
                en: "Starting from a crosswalk at the campus gate, used participatory budgeting to get pedestrian improvements on Zhinan Road into city works." } }
   ],
@@ -178,7 +198,8 @@ window.SITE = {
   /* ---------- 5. 代表作 ----------
      steps 是時間軸（一步一行）；links 是佐證連結。 */
   works: [
-    { title: { zh: "指南路人本交通改善", en: "Making Zhinan Road Walkable" },
+    { line: "transport",
+      title: { zh: "指南路人本交通改善", en: "Making Zhinan Road Walkable" },
       text:  { zh: "從學生自發導護、媒體報導，到參與式預算提案通過、市府辦理人行道改善工程。",
                en: "From student volunteers directing traffic to adopted participatory-budget proposals and city pedestrian works." },
       steps: [
@@ -192,14 +213,16 @@ window.SITE = {
         { label: { zh: "參與式預算提案頁", en: "Proposal page" }, url: "https://taipei.join.gov.tw/pb/proposal/detail/976fc32f-0556-45b2-bf56-fd3e64851789" },
         { label: { zh: "工程地區說明會", en: "Public works briefing" }, url: "https://nco.gov.taipei/News_Content.aspx?n=F36AA8E9D896DF42&sms=59AD6E6606F6002F&s=EEC0122512A38BD8" }
       ] },
-    { title: { zh: "學生議會官網改版與透明議會", en: "Student Congress Website & Transparency" },
+    { line: "gov",
+      title: { zh: "學生議會官網改版與透明議會", en: "Student Congress Website & Transparency" },
       text:  { zh: "主導議會官網從 Google 協作平台遷移到學校平台，建立法規資料庫、歷史沿革與會議資訊，讓議事資料可查、可追溯。",
                en: "Led the migration of the Congress website to the university CMS, with a regulations database, history and meeting records." },
       links: [
         { label: { zh: "學生議會官網", en: "Website" }, url: "https://sc.video.nccu.edu.tw/" },
         { label: { zh: "議長介紹頁", en: "Speaker profile" }, url: "https://sc.video.nccu.edu.tw/p/speaker-now" }
       ] },
-    { title: { zh: "中共菁英政治研究", en: "Research on CCP Elite Politics" },
+    { line: "china",
+      title: { zh: "中共菁英政治研究", en: "Research on CCP Elite Politics" },
       text:  { zh: "在國關中心擔任研究計畫助理三年，參與陸委會委託研究與國科會計畫。",
                en: "Three years as research assistant on a Mainland Affairs Council study and an NSTC project." } }
   ],
