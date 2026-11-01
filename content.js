@@ -77,8 +77,31 @@ window.SITE = {
     location: { zh: "臺北市", en: "Taipei, Taiwan" }
   },
 
-  /* ---------- 3. 經歷卡片（首頁可展開卡片 + CV 各段） ----------
-     每一組是一張卡片、也是 CV 的一個段落。順序就是畫面順序。 */
+  /* ---------- 2-2. 數字證據列（首頁照片下方） ----------
+     每個數字都要查得到：href 指到網站上有佐證的段落。
+     value 寫 "auto:shows" 會自動算媒體清單裡的政論節目集數。 */
+  stats: [
+    { value: "2",          unit: { zh: "案", en: "" },
+      label: { zh: "參與式預算提案通過，促成指南路人行道改善", en: "participatory-budget proposals adopted" }, href: "#works" },
+    { value: "3",          unit: { zh: "年", en: " yrs" },
+      label: { zh: "陸委會、國科會中國政治研究計畫助理", en: "research assistant on MAC & NSTC China studies" }, href: "#experience" },
+    { value: "auto:shows", unit: { zh: "集", en: "" },
+      label: { zh: "政論節目來賓，另受 ABC News、美國之音訪問", en: "TV talk-show appearances; interviewed by ABC News and VOA" }, href: "#media" },
+    { value: "4",          unit: { zh: "個", en: "" },
+      label: { zh: "校務會議學生代表（校務、教務、學務、總務）", en: "university councils as student representative" }, href: "#experience" }
+  ],
+
+  /* ---------- 2-3. 近況（新的寫在最上面，網站自動照日期排） ----------
+     url 可以留空。建議每月補一行，網站看起來才是活的。 */
+  news: [
+    { date: "2026-11", text: { zh: "接任臺灣學生聯合會第七屆理事", en: "Joined the board of the National Students' Union of Taiwan (7th term)" } },
+    { date: "2026-11", text: { zh: "卸任臺灣學生聯合會第六屆公關副祕書長", en: "Completed term as Deputy Secretary-General for PR, National Students' Union of Taiwan" } },
+    { date: "2026-11", text: { zh: "個人網站上線", en: "Launched this website" } }
+  ],
+
+  /* ---------- 3. 經歷（首頁經歷區 + CV 各段） ----------
+     每一組是首頁一張卡、也是 CV 的一個段落。順序就是畫面順序。
+     collapsed: true 的組，首頁只先顯示前 3 筆。 */
   groups: [
 
     { key: "current", title: { zh: "現職", en: "Current Positions" }, items: [
@@ -119,21 +142,6 @@ window.SITE = {
         role: { zh: "課程教學助理", en: "Teaching Assistant" }, period: "2024 – 2026" }
     ] },
 
-    { key: "experience", title: { zh: "其他經歷", en: "Other Experience" }, items: [
-      { org: { zh: "臺灣學生聯合會", en: "National Students' Union of Taiwan" },
-        role: { zh: "第六屆公關副祕書長", en: "Deputy Secretary-General, PR (6th term)" }, period: "2025.11 – 2026.10" },
-      { org: { zh: "政治學系馮麗華傑出系友獎學金", en: "Feng Li-hua Distinguished Alumni Scholarship" },
-        role: { zh: "獲獎", en: "Recipient" }, period: "2025" },
-      { org: { zh: "臺北市政府", en: "Taipei City Government" },
-        role: { zh: "大專青年學生公部門暑期工讀", en: "Public Sector Summer Intern" }, period: "2025" },
-      { org: { zh: "臺北市中正區參與式預算", en: "Zhongzheng District Participatory Budgeting, Taipei" },
-        role: { zh: "「您行我也行」提案人", en: "Proposer" }, period: "2024" },
-      { org: { zh: "政大野火陣線社", en: "NCCU Wildfire Front Club" },
-        role: { zh: "副社長", en: "Vice President" }, period: "2023 – 2024" },
-      { org: { zh: "政大學生會權益部", en: "Student Rights Department, NCCU Student Association" },
-        role: { zh: "部員", en: "Member" }, period: "" }
-    ] },
-
     { key: "education", title: { zh: "學歷", en: "Education" }, items: [
       { org: { zh: "國立政治大學", en: "National Chengchi University" },
         role: { zh: "政治學系學士班", en: "B.A. in Political Science" },
@@ -148,6 +156,21 @@ window.SITE = {
       { cv: false,
         org: { zh: "臺北市立建國高級中學", en: "Taipei Municipal Jianguo High School" },
         role: { zh: "畢業", en: "Graduated" }, period: "" }
+    ] },
+
+    { key: "experience", collapsed: true, title: { zh: "其他經歷", en: "Other Experience" }, items: [
+      { org: { zh: "臺灣學生聯合會", en: "National Students' Union of Taiwan" },
+        role: { zh: "第六屆公關副祕書長", en: "Deputy Secretary-General, PR (6th term)" }, period: "2025.11 – 2026.10" },
+      { org: { zh: "政治學系馮麗華傑出系友獎學金", en: "Feng Li-hua Distinguished Alumni Scholarship" },
+        role: { zh: "獲獎", en: "Recipient" }, period: "2025" },
+      { org: { zh: "臺北市政府", en: "Taipei City Government" },
+        role: { zh: "大專青年學生公部門暑期工讀", en: "Public Sector Summer Intern" }, period: "2025" },
+      { org: { zh: "臺北市中正區參與式預算", en: "Zhongzheng District Participatory Budgeting, Taipei" },
+        role: { zh: "「您行我也行」提案人", en: "Proposer" }, period: "2024" },
+      { org: { zh: "政大野火陣線社", en: "NCCU Wildfire Front Club" },
+        role: { zh: "副社長", en: "Vice President" }, period: "2023 – 2024" },
+      { org: { zh: "政大學生會權益部", en: "Student Rights Department, NCCU Student Association" },
+        role: { zh: "部員", en: "Member" }, period: "" }
     ] }
   ],
 

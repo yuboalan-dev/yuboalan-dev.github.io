@@ -189,53 +189,63 @@ html[lang="en"] .name-en, html[lang="en"] .name-ch { font-family: Arial, sans-se
 
 
 /* =========================================
-   4. 收合卡片（現職／經歷／學歷）
+   4. 經歷（v3：改成直接展開，不再用收合卡片）
+   -----------------------------------------
+   為什麼不用議長頁的收合卡片：招募的人通常不會一張張點開，
+   最重要的經歷藏起來等於沒寫。外框、圓角、配色沿用議長頁。
    ========================================= */
-.interactive-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: clamp(16px, 2.4vw, 25px);
-    align-items: start;   /* ⚠️ 不能刪：不然展開一張，旁邊的會一起被拉高 */
-}
-.foldable-card {
-    display: grid; grid-template-rows: auto 0fr; align-content: start;
+.exp-grid { columns: 2 420px; column-gap: clamp(16px, 2.4vw, 25px); }
+.exp-group {
+    break-inside: avoid; margin-bottom: clamp(16px, 2.4vw, 25px);
     background: #fff; border: 3px solid var(--navy); border-radius: var(--radius-lg);
-    padding: var(--card-pad); cursor: pointer;
-    transition:
-        grid-template-rows var(--fold-speed) var(--fold-ease),
-        border-color .35s ease, box-shadow .35s ease, transform .35s ease;
+    padding: var(--card-pad);
 }
-.card-body { overflow: hidden; min-height: 0; }   /* ⚠️ 兩行都不能刪 */
-.foldable-card.active {
-    grid-template-rows: auto 1fr; border-color: var(--accent);
-    box-shadow: 0 15px 35px rgba(230, 0, 18, .14); transform: translateY(-5px);
+.exp-title {
+    font-size: var(--card-title); font-weight: 900; color: var(--navy); line-height: 1.3;
+    padding-bottom: 12px; margin-bottom: 4px; border-bottom: 3px solid var(--accent);
+    display: inline-block;
 }
-@media (hover: hover) and (pointer: fine) {
-    .foldable-card:hover {
-        grid-template-rows: auto 1fr; border-color: var(--accent);
-        box-shadow: 0 15px 35px rgba(230, 0, 18, .14); transform: translateY(-5px);
-    }
-    .foldable-card:hover .card-header::after { transform: rotate(135deg); color: var(--accent); }
+.exp-item { padding: 16px 0; border-top: 1px solid var(--line); }
+.exp-title + .exp-item { border-top: 0; }
+.exp-head { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
+.exp-period { font-size: 13px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 600; }
+.exp-group .is-more { display: none; }
+.exp-group.show-all .is-more { display: block; }
+.item-main { font-weight: 800; color: var(--navy); font-size: clamp(16px, 1.8vw, 18px); }
+.item-sub  { font-size: clamp(14px, 1.5vw, 15px); color: var(--muted); font-weight: 600; margin-top: 3px; white-space: pre-line; }
+.more-btn {
+    font: inherit; font-size: 14px; font-weight: 800; color: var(--navy); background: none;
+    border: 2px solid var(--navy); border-radius: 999px; padding: 6px 16px; margin-top: 8px; cursor: pointer;
+    transition: color .25s ease, border-color .25s ease;
 }
-.card-header {
-    font-size: var(--card-title); line-height: 1.3; font-weight: 900; color: var(--navy);
-    display: flex; justify-content: space-between; align-items: center; gap: 12px;
-    background: none; border: 0; padding: 0; width: 100%; text-align: left;
-    font-family: inherit; cursor: pointer;
+.more-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+/* 數字證據列 */
+.stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+    border: 3px solid var(--navy); border-radius: var(--radius-lg); overflow: hidden; background: var(--navy); gap: 3px;
 }
-.card-header::after {
-    content: ""; flex-shrink: 0;
-    width: clamp(20px, 2.2vw, 24px); height: clamp(20px, 2.2vw, 24px);
-    background-image: linear-gradient(currentColor 0 0), linear-gradient(currentColor 0 0);
-    background-repeat: no-repeat; background-position: center;
-    background-size: 100% 2.5px, 2.5px 100%;
-    color: var(--navy);
-    transition: transform var(--fold-speed) var(--fold-ease), color .35s ease;
+.stat {
+    background: #fff; padding: clamp(18px, 2.4vw, 26px); text-decoration: none; color: inherit;
+    display: flex; flex-direction: column; gap: 6px; transition: background .25s ease;
 }
-.foldable-card.active .card-header::after { transform: rotate(135deg); color: var(--accent); }
-.item-box  { margin-top: 30px; margin-bottom: 20px; }
-.item-main { font-weight: 800; color: var(--navy); font-size: clamp(17px, 1.9vw, 19px); }
-.item-sub  { font-size: clamp(14px, 1.5vw, 15px); color: var(--muted); font-weight: 600; margin-top: 4px; white-space: pre-line; }
-.item-period { font-size: 13px; color: var(--muted); margin-top: 2px; }
+a.stat:hover { background: #fff5f5; }
+.stat-num { font-size: clamp(38px, 4.6vw, 54px); font-weight: 900; color: var(--navy); line-height: 1; font-variant-numeric: tabular-nums; }
+.stat-num small { font-size: .38em; margin-left: 4px; color: var(--accent); font-weight: 900; }
+.stat-label { font-size: 14px; color: var(--muted); font-weight: 600; line-height: 1.5; }
+
+/* 近況 */
+.news { list-style: none; margin: 0; padding: 0; border-left: 3px solid var(--line); }
+.news li { position: relative; display: flex; gap: 16px; padding: 8px 0 8px 22px; font-size: 16px; line-height: 1.6; }
+.news li::before {
+    content: ""; position: absolute; left: -7.5px; top: 16px; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--accent); border: 2px solid #fff;
+}
+.news .d { min-width: 5.5em; color: var(--muted); font-size: 14px; font-weight: 700; padding-top: 2px; font-variant-numeric: tabular-nums; }
+.news a { color: var(--navy); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+.news .is-more { display: none; }
+.news.show-all .is-more { display: flex; }
+#news .more-btn { align-self: flex-start; }
 
 
 /* =========================================
@@ -408,7 +418,6 @@ a.work-item h3::after { content: "↗"; color: var(--accent); }
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .foldable-card, .card-header::after { transition: none; }
     .profile-section { animation: none; opacity: 1; }
 }
 
@@ -423,6 +432,7 @@ a.work-item h3::after { content: "↗"; color: var(--accent); }
     }
     .profile-left { align-items: center; }
     .name-title-grid { justify-content: center; column-gap: 20px; }
+    .exp-head { flex-direction: column; gap: 2px; }
     .profile-right { margin-left: 0; width: min(280px, 80%); align-self: center; }
     .photo-main-wrap { transform: translate(-12px, -12px); }
     .photo-frame-decoration { width: 95%; height: 92%; }

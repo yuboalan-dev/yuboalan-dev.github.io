@@ -37,6 +37,15 @@
 - **媒體清單的列法**：`mediaList: "summary"` 時，政論節目只列節目名、集數、年份；改成 `"full"` 會逐集列出。逐集資料一律保留在 `media`，CV 的集數統計照算。
 - **經歷卡片**在 `groups`：每組是首頁一張卡片，也是 CV 的一段。CV 段落順序在 `cv.html` 的 `CV_ORDER`。
 - **首頁定位句**在 `tagline`，留空就不顯示。
+- **數字證據列**在 `stats`：每個數字的 `href` 指到網站上有佐證的段落。`value: "auto:shows"` 會自動算政論節目集數。
+- **近況**在 `news`：一行一件事，網站自動照日期排、先顯示 5 筆。建議每月補一行。
+- **其他經歷**標了 `collapsed: true`，首頁只先顯示前 3 筆；拿掉就全部展開。
+
+## 讓 Google 搜得到
+
+- 網站已經有 `sitemap.xml`、`robots.txt`，首頁會自動產生 schema.org 的個人資料（取自 `content.js`）。
+- 到 [Google Search Console](https://search.google.com/search-console) 新增資源 → 網址前置字元填 `https://yuboalan-dev.github.io/` → 驗證方式選「HTML 標記」，把那行 `<meta name="google-site-verification" ...>` 給 Claude 放進 `index.html`，驗證後在「Sitemap」提交 `sitemap.xml`。
+- 換網域時，`sitemap.xml`、`robots.txt`、`index.html` 開頭的 canonical／og:url／og:image 要一起改。
 - **改完整頁空白**：多半是少了逗號或引號。到 `content.js` 的 **History** 找上一版，或把檔案貼給 AI 問「哪裡語法錯了」。
 
 ## 產生正式 CV

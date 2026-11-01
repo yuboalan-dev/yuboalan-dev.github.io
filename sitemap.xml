@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 換網域時，這個檔案、robots.txt、index.html 的 canonical／og:url／og:image 要一起改 -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://yuboalan-dev.github.io/</loc></url>
+  <url><loc>https://yuboalan-dev.github.io/cv.html</loc></url>
+</urlset>

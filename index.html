@@ -14,6 +14,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://yuboalan-dev.github.io/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23000024'/><text x='32' y='45' font-size='36' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='900'>游</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,8 +57,20 @@
       </div>
     </section>
 
-    <!-- 2. 經歷卡片 -->
-    <section class="interactive-grid" id="experience"></section>
+    <!-- 1-2. 數字證據列（content.js 的 stats） -->
+    <section class="stats" id="stats" aria-label="重點數字"></section>
+
+    <!-- 2. 經歷（直接展開；content.js 裡標 collapsed: true 的組只先顯示前幾筆） -->
+    <section class="sec" id="experience">
+      <h2 class="sec-title" data-zh="經歷" data-en="Experience"></h2>
+      <div class="exp-grid" id="expBody"></div>
+    </section>
+
+    <!-- 2-2. 近況（content.js 的 news，新到舊，先顯示 5 筆） -->
+    <section class="sec" id="news">
+      <h2 class="sec-title" data-zh="近況" data-en="Latest"></h2>
+      <ul class="news" id="newsBody"></ul>
+    </section>
 
     <!-- 3. 關注領域 -->
     <section class="panel" id="focus">
@@ -92,6 +105,10 @@
     <p class="footnote" id="updated"></p>
   </div>
 </footer>
+
+<noscript>
+  <p style="padding:24px">游博安（Alan Yu），國立政治大學政治學系，現任國立政治大學學生議會議長。這個網站需要開啟 JavaScript 才能顯示完整內容。</p>
+</noscript>
 
 <script src="content.js"></script>
 <script src="common.js"></script>
@@ -144,26 +161,62 @@
   }).join("");
   ["socialTop", "socialBottom"].forEach(function (id) { if (socialHTML) $(id).innerHTML = socialHTML; else drop(id); });
 
-  /* 經歷卡片 */
+  /* 數字證據列：value 寫 "auto:shows" 時，自動算媒體清單裡政論節目的集數 */
+  var stats = U.visible(S.stats, "web");
+  if (stats.length) {
+    var nShows = U.visible(S.media, "web").filter(function (m) { return m.kind === "show"; }).length;
+    $("stats").innerHTML = stats.map(function (s) {
+      var v = s.value === "auto:shows" ? nShows : s.value;
+      var inner = '<span class="stat-num">' + esc(v) + '<small>' + esc(t(s.unit, L)) + "</small></span>" +
+                  '<span class="stat-label">' + esc(t(s.label, L)) + "</span>";
+      return s.href ? '<a class="stat" href="' + esc(s.href) + '">' + inner + "</a>" : '<div class="stat">' + inner + "</div>";
+    }).join("");
+  } else drop("stats");
+
+  /* 經歷：每組一張卡，條目和說明直接顯示。
+     組上標 collapsed: true 的，只先顯示前 3 筆，其餘按「顯示全部」展開 */
+  var SHOW_FIRST = 3;
   (S.groups || []).forEach(function (g) {
     var items = U.visible(g.items, "web");
-    if (!items.length || g.web === false) return;
-    var card = document.createElement("div");
-    card.className = "foldable-card";
-    card.innerHTML =
-      '<button class="card-header" type="button" aria-expanded="false">' + esc(t(g.title, L)) + "</button>" +
-      '<div class="card-body">' + items.map(function (it) {
-        var p = U.period(it.period, L), role = t(it.role, L);
-        return '<div class="item-box"><div class="item-main">' + esc(t(it.org, L)) + "</div>" +
-               (role ? '<div class="item-sub">' + esc(role) + "</div>" : "") +
-               (p ? '<div class="item-period">' + esc(p) + "</div>" : "") + "</div>";
-      }).join("") + "</div>";
-    card.addEventListener("click", function () {
-      var on = card.classList.toggle("active");
-      card.querySelector(".card-header").setAttribute("aria-expanded", on);
-    });
-    $("experience").appendChild(card);
+    if (!items.length || g.web === false || g.show === false) return;
+    var box = document.createElement("div");
+    box.className = "exp-group";
+    box.innerHTML = '<h3 class="exp-title">' + esc(t(g.title, L)) + "</h3>" + items.map(function (it, i) {
+      var p = U.period(it.period, L), role = t(it.role, L);
+      var pts = (it.points || []).filter(function (x) { return x.show !== false && x.web !== false; })
+        .map(function (x) { return "<li>" + esc(t(x, L)) + "</li>"; }).join("");
+      var hide = g.collapsed && i >= SHOW_FIRST ? " is-more" : "";
+      return '<div class="exp-item' + hide + '"><div class="exp-head"><div><div class="item-main">' + esc(t(it.org, L)) + "</div>" +
+        (role ? '<div class="item-sub">' + esc(role) + "</div>" : "") + "</div>" +
+        (p ? '<div class="exp-period">' + esc(p) + "</div>" : "") + "</div>" +
+        (pts ? '<ul class="item-points">' + pts + "</ul>" : "") + "</div>";
+    }).join("");
+    if (g.collapsed && items.length > SHOW_FIRST) {
+      var more = document.createElement("button");
+      more.type = "button"; more.className = "more-btn";
+      more.textContent = (L === "en" ? "Show all " : "顯示全部 ") + items.length + (L === "en" ? "" : " 筆");
+      more.onclick = function () { box.classList.add("show-all"); more.remove(); };
+      box.appendChild(more);
+    }
+    $("expBody").appendChild(box);
   });
+
+  /* 近況：新到舊，先顯示 5 筆 */
+  var news = U.visible(S.news, "web").slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
+  if (news.length) {
+    $("newsBody").innerHTML = news.map(function (n, i) {
+      var txt = esc(t(n.text, L));
+      if (n.url) txt = '<a href="' + esc(n.url) + '" target="_blank" rel="noopener">' + txt + "</a>";
+      return '<li' + (i >= 5 ? ' class="is-more"' : "") + '><span class="d">' + esc(n.date || "") + "</span><span>" + txt + "</span></li>";
+    }).join("");
+    if (news.length > 5) {
+      var nb = document.createElement("button");
+      nb.type = "button"; nb.className = "more-btn";
+      nb.textContent = L === "en" ? "Show all" : "顯示全部";
+      nb.onclick = function () { $("newsBody").classList.add("show-all"); nb.remove(); };
+      $("news").appendChild(nb);
+    }
+  } else drop("news");
 
   /* 關注領域 */
   var focus = U.visible(S.focus, "web");
@@ -245,6 +298,26 @@
   }
   if (html) $("mediaGroups").innerHTML = html;
   else if (!feat.length) drop("media");
+
+  /* 結構化資料（schema.org Person）：Google 用來辨識「游博安」這個人，
+     內容全部取自 content.js，不用另外維護 */
+  try {
+    var site = "https://yuboalan-dev.github.io/";
+    var ld = {
+      "@context": "https://schema.org", "@type": "Person",
+      name: S.name.zh, alternateName: S.name.en, url: site,
+      image: site + (S.photo || ""), description: t(S.summary, "zh"),
+      jobTitle: t((U.visible(S.roles, "web")[0]) || "", "zh"),
+      alumniOf: { "@type": "CollegeOrUniversity", name: "國立政治大學", alternateName: "National Chengchi University" },
+      knowsAbout: U.visible(S.expertise, "web").map(function (e) { return e.zh; }),
+      sameAs: U.activeLinks().filter(function (l) { return l.type !== "email"; }).map(function (l) { return l.url; })
+    };
+    var em = U.activeLinks().filter(function (l) { return l.type === "email"; })[0];
+    if (em) ld.email = "mailto:" + em.url.replace(/^mailto:/, "");
+    var sc = document.createElement("script");
+    sc.type = "application/ld+json"; sc.textContent = JSON.stringify(ld);
+    document.head.appendChild(sc);
+  } catch (e) {}
 
   $("contactName").textContent = S.name.zh + "　" + S.name.en;
   $("updated").textContent = (L === "en" ? "Last updated " : "最後更新 ") + (S.updated || "");
