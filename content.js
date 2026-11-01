@@ -58,6 +58,7 @@ window.SITE = {
   /* ---------- 2. 聯絡與社群 ----------
      url 留空就不顯示。type 可用：email, instagram, facebook, threads,
      linkedin, line, github, x, youtube, medium, website
+     （圖示來自開源的 Bootstrap Icons，在 common.js）
      cv: false 的只放網站、不印在正式 CV 上                    */
   links: [
     { type: "email",     label: "Email",     url: "yuboalan@gmail.com" },
@@ -76,20 +77,6 @@ window.SITE = {
     phone: "",
     location: { zh: "臺北市", en: "Taipei, Taiwan" }
   },
-
-  /* ---------- 2-2. 數字證據列（首頁照片下方） ----------
-     每個數字都要查得到：href 指到網站上有佐證的段落。
-     value 寫 "auto:shows" 會自動算媒體清單裡的政論節目集數。 */
-  stats: [
-    { value: "2",          unit: { zh: "案", en: "" },
-      label: { zh: "參與式預算提案通過，促成指南路人行道改善", en: "participatory-budget proposals adopted" }, href: "#works" },
-    { value: "3",          unit: { zh: "年", en: " yrs" },
-      label: { zh: "陸委會、國科會中國政治研究計畫助理", en: "research assistant on MAC & NSTC China studies" }, href: "#experience" },
-    { value: "auto:shows", unit: { zh: "集", en: "" },
-      label: { zh: "政論節目來賓，另受 ABC News、美國之音訪問", en: "TV talk-show appearances; interviewed by ABC News and VOA" }, href: "#media" },
-    { value: "4",          unit: { zh: "個", en: "" },
-      label: { zh: "校務會議學生代表（校務、教務、學務、總務）", en: "university councils as student representative" }, href: "#experience" }
-  ],
 
   /* ---------- 2-3. 近況（新的寫在最上面，網站自動照日期排） ----------
      url 可以留空。建議每月補一行，網站看起來才是活的。 */

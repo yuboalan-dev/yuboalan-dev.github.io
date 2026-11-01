@@ -161,7 +161,7 @@ html[lang="en"] .name-en, html[lang="en"] .name-ch { font-family: Arial, sans-se
     transition: background .25s ease, color .25s ease, border-color .25s ease, transform .25s ease;
 }
 .social a:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-3px); }
-.social svg { width: 20px; height: 20px; }
+.social svg { width: 18px; height: 18px; }
 
 /* 相片破格構造 */
 .profile-right {
@@ -219,20 +219,6 @@ html[lang="en"] .name-en, html[lang="en"] .name-ch { font-family: Arial, sans-se
     transition: color .25s ease, border-color .25s ease;
 }
 .more-btn:hover { color: var(--accent); border-color: var(--accent); }
-
-/* 數字證據列 */
-.stats {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
-    border: 3px solid var(--navy); border-radius: var(--radius-lg); overflow: hidden; background: var(--navy); gap: 3px;
-}
-.stat {
-    background: #fff; padding: clamp(18px, 2.4vw, 26px); text-decoration: none; color: inherit;
-    display: flex; flex-direction: column; gap: 6px; transition: background .25s ease;
-}
-a.stat:hover { background: #fff5f5; }
-.stat-num { font-size: clamp(38px, 4.6vw, 54px); font-weight: 900; color: var(--navy); line-height: 1; font-variant-numeric: tabular-nums; }
-.stat-num small { font-size: .38em; margin-left: 4px; color: var(--accent); font-weight: 900; }
-.stat-label { font-size: 14px; color: var(--muted); font-weight: 600; line-height: 1.5; }
 
 /* 近況 */
 .news { list-style: none; margin: 0; padding: 0; border-left: 3px solid var(--line); }

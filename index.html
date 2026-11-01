@@ -57,9 +57,6 @@
       </div>
     </section>
 
-    <!-- 1-2. 數字證據列（content.js 的 stats） -->
-    <section class="stats" id="stats" aria-label="重點數字"></section>
-
     <!-- 2. 經歷（直接展開；content.js 裡標 collapsed: true 的組只先顯示前幾筆） -->
     <section class="sec" id="experience">
       <h2 class="sec-title" data-zh="經歷" data-en="Experience"></h2>
@@ -160,18 +157,6 @@
     return '<a href="' + esc(U.href(l)) + '"' + ext + ' aria-label="' + esc(l.label) + '" title="' + esc(l.label) + '">' + U.icon(l.type) + "</a>";
   }).join("");
   ["socialTop", "socialBottom"].forEach(function (id) { if (socialHTML) $(id).innerHTML = socialHTML; else drop(id); });
-
-  /* 數字證據列：value 寫 "auto:shows" 時，自動算媒體清單裡政論節目的集數 */
-  var stats = U.visible(S.stats, "web");
-  if (stats.length) {
-    var nShows = U.visible(S.media, "web").filter(function (m) { return m.kind === "show"; }).length;
-    $("stats").innerHTML = stats.map(function (s) {
-      var v = s.value === "auto:shows" ? nShows : s.value;
-      var inner = '<span class="stat-num">' + esc(v) + '<small>' + esc(t(s.unit, L)) + "</small></span>" +
-                  '<span class="stat-label">' + esc(t(s.label, L)) + "</span>";
-      return s.href ? '<a class="stat" href="' + esc(s.href) + '">' + inner + "</a>" : '<div class="stat">' + inner + "</div>";
-    }).join("");
-  } else drop("stats");
 
   /* 經歷：每組一張卡，條目和說明直接顯示。
      組上標 collapsed: true 的，只先顯示前 3 筆，其餘按「顯示全部」展開 */
