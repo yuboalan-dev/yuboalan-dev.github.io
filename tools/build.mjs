@@ -6,7 +6,8 @@
    2. 用瀏覽器把各分頁畫好，存成「內容已經在裡面」的 HTML
       → 搜尋引擎、LINE／FB／LinkedIn 預覽不用跑程式也看得到內容
    3. 產生正式 CV 的 PDF：cv/yuboan-cv-zh.pdf、cv/alan-yu-cv-en.pdf
-      → 頁首「下載 CV」直接下載這兩個檔
+      → 頁首「下載 CV」直接下載這兩個檔；另有完整版 *-full.pdf（頁尾連結）
+   4. 產生分享預覽圖 assets/og.jpg（版型在 tools/og.html，資料讀 content.js）
    CV 超過一頁時不會擋住發布，但會在 GitHub Actions 紀錄裡出現警告。
 
    本機要試跑：npm install --no-save playwright && node tools/build.mjs
@@ -19,11 +20,15 @@ import { chromium } from "playwright";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const OUT = path.join(ROOT, "_site");
-const SKIP = new Set([".git", ".github", "tools", "node_modules", "_site", "package.json", "package-lock.json"]);
+const SKIP = new Set([".git", ".github", "tools", "node_modules", "_site", "package.json", "package-lock.json",
+                     "CLAUDE.md", "AGENTS.md", "README.md"]  /* 給維護者看的文件不發布 */);
 const PAGES = ["index.html", "experience.html", "work.html", "media.html", "404.html"];
 const CVS = [
   { lang: "zh", file: "cv/yuboan-cv-zh.pdf" },
-  { lang: "en", file: "cv/alan-yu-cv-en.pdf" }
+  { lang: "en", file: "cv/alan-yu-cv-en.pdf" },
+  /* 完整版：列出 cv: false 的次要經歷，不檢查頁數 */
+  { lang: "zh", file: "cv/yuboan-cv-zh-full.pdf", full: true },
+  { lang: "en", file: "cv/alan-yu-cv-en-full.pdf", full: true }
 ];
 
 /* 1. 複製檔案 */
@@ -71,7 +76,7 @@ for (const f of PAGES) {
     document.body.setAttribute("data-prerendered", "zh");
     /* 動畫狀態不要存進檔案：沒有 JavaScript 的讀者（搜尋引擎、社群預覽）要直接看到內容 */
     document.documentElement.classList.remove("anim");
-    document.querySelectorAll(".is-in, .flash").forEach(el => el.classList.remove("is-in", "flash"));
+    document.querySelectorAll(".is-in, .flash, .is-off").forEach(el => el.classList.remove("is-in", "flash", "is-off"));
     /* 頁尾原本被加在 <script> 後面；移到 <main> 後面，site.js 執行時才找得到並清掉 */
     const f = document.querySelector("footer.contact"), m = document.getElementById("main");
     if (f && m) m.after(f);
@@ -86,16 +91,27 @@ fs.writeFileSync(path.join(OUT, "cv.html"), bust(fs.readFileSync(path.join(ROOT,
 
 /* 3. 產生 CV PDF，並檢查是不是一頁 */
 fs.mkdirSync(path.join(OUT, "cv"), { recursive: true });
-for (const { lang, file } of CVS) {
+for (const { lang, file, full } of CVS) {
   const ctx = await browser.newContext();
   const page = await ctx.newPage();
-  await page.goto(`${BASE}/cv.html?lang=${lang}`, { waitUntil: "networkidle" });
+  await page.goto(`${BASE}/cv.html?lang=${lang}${full ? "&full=1" : ""}`, { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
   const pdf = await page.pdf({ printBackground: true, preferCSSPageSize: true });
   fs.writeFileSync(path.join(OUT, file), pdf);
   const pages = (pdf.toString("latin1").match(/\/Type\s*\/Page(?!s)/g) || []).length;
   console.log(`已產生 ${file}（${pages} 頁）`);
-  if (pages !== 1) console.log(`::warning file=content.js::${lang === "zh" ? "中文" : "英文"} CV 變成 ${pages} 頁，請精簡 content.js 的文字（CLAUDE.md 規定預設一頁）`);
+  if (pages !== 1 && !full) console.log(`::warning file=content.js::${lang === "zh" ? "中文" : "英文"} CV 變成 ${pages} 頁，請精簡 content.js 的文字（CLAUDE.md 規定預設一頁）`);
+  await ctx.close();
+}
+
+/* 4. 分享預覽圖：照 content.js 的路線站點畫，經歷一改圖就跟著變 */
+{
+  const ctx = await browser.newContext({ viewport: { width: 1200, height: 630 } });
+  const page = await ctx.newPage();
+  await page.goto(`${BASE}/tools/og.html`, { waitUntil: "networkidle" });
+  await page.evaluate(() => document.fonts.ready);
+  await page.screenshot({ path: path.join(OUT, "assets/og.jpg"), type: "jpeg", quality: 88 });
+  console.log("已產生 assets/og.jpg");
   await ctx.close();
 }
 

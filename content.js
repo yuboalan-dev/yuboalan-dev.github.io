@@ -31,7 +31,7 @@
 
 window.SITE = {
 
-  updated: "2026-11-01",
+  updated: "2026-11-02",
 
   /* ---------- 1. 基本資料 ---------- */
   name: { zh: "游博安", en: "Alan Yu" },
@@ -51,8 +51,8 @@ window.SITE = {
 
   /* 自我介紹（網站上方與 CV 簡介共用）【待確認】 */
   summary: {
-    zh: "政大政治系學生，主修之外修讀哲學、政治學與經濟學專長。現任學生議會議長，曾在政大國際關係研究中心參與陸委會與國科會的中共政治研究；也從校門口的行人穿越道開始，以參與式預算推動指南路的人本交通改善。",
-    en: "Political science (PPE) student at NCCU and Speaker of its Student Congress; former research assistant on CCP elite politics; won participatory-budget funding for safer streets on Zhinan Road."
+    zh: "國立政治大學政治學系學生，修讀哲學、政治學與經濟學專長。現任學生議會議長、臺灣學生聯合會理事與下一代人本交通促進會副秘書長；曾任國關中心研究計畫助理，參與陸委會與國科會的中共政治研究，並以參與式預算推動指南路的人本交通改善。",
+    en: "Political science (PPE) student at NCCU; Speaker of its Student Congress; board member, National Students' Union of Taiwan; former research assistant on CCP elite politics; won participatory-budget funding for safer streets."
   },
 
   /* 專長（首頁小標籤 + CV） */
@@ -122,6 +122,7 @@ window.SITE = {
           { role: { zh: "校務會議學生代表", en: "Student Representative, University Council" }, period: "2023.08 – 今" },
           { role: { zh: "學生會校務諮詢委員會總召集人", en: "Chief Convener, Student Advisory Committee on University Affairs" }, period: "" },
           { role: { zh: "校園規劃與建設委員會委員", en: "Member, Campus Planning & Construction Committee" }, period: "", cv: false },
+          { role: { zh: "學務會議、總務會議學生代表", en: "Student Representative, Student Affairs & General Affairs Councils" }, period: "", cv: false },
           { role: { zh: "教務會議學院學生代表（社會科學學院）", en: "College Student Representative, Academic Affairs Council" }, period: "2025.02 – 2025.07", cv: false },
           { role: { zh: "校務考核委員會委員", en: "Member, University Evaluation Committee" }, period: "2024.09 – 2025.07" }
         ] },

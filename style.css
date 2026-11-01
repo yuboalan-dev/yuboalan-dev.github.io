@@ -522,6 +522,11 @@ main > .block:first-child { border-top: 0; }
 @media print { .anim [data-reveal], .anim .ep-dots i { opacity: 1 !important; transform: none !important; animation: none !important; } }
 
 /* =========================================
+   10-3. 畫面外暫停：site.js 會在看不到的區塊加 .is-off，捲回來就繼續（省電、捲動順）
+   ========================================= */
+.anim .is-off, .anim .is-off *, .anim .is-off *::before, .anim .is-off *::after { animation-play-state: paused !important; }
+
+/* =========================================
    11. 減少動態：全部關掉（.anim 不會掛上，這裡再保險一次）
    ========================================= */
 @media (prefers-reduced-motion: reduce) {

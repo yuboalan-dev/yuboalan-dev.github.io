@@ -46,6 +46,8 @@
      download 是對方存檔時看到的檔名。 */
   var CV_PDF = EN ? { href: "/cv/alan-yu-cv-en.pdf", name: "Alan_Yu_CV.pdf" }
                   : { href: "/cv/yuboan-cv-zh.pdf", name: "游博安_CV.pdf" };
+  /* 完整版 CV（含 content.js 標 cv: false 的次要經歷，可能超過一頁）只從頁尾連結 */
+  var CV_FULL = EN ? "/cv/alan-yu-cv-en-full.pdf" : "/cv/yuboan-cv-zh-full.pdf";
 
   /* ---------- 頁首 ---------- */
   var nav = PAGES.map(function (p) {
@@ -314,7 +316,8 @@
       (mail ? '<a class="contact-mail" href="' + esc(U.href(mail)) + '">' + esc(mail.url.replace(/^mailto:/, "")) + "</a>" : "") +
       (social ? '<div class="social">' + social + "</div>" : "") +
       '<p class="footnote">' + esc(S.name.zh + " " + S.name.en) + "　" + tx("最後更新 ", "Last updated ") + esc(S.updated || "") +
-      '　<a href="/cv.html?lang=' + L + '">' + tx("CV 網頁版（可選附照片等）", "CV builder") + "</a></p></div>";
+      '　<a href="/cv.html?lang=' + L + '">' + tx("CV 網頁版（可選附照片等）", "CV builder") + "</a>" +
+      '　<a href="' + CV_FULL + '" download>' + tx("完整版 CV", "Full CV") + "</a></p></div>";
     document.body.appendChild(f);
   }
 
@@ -351,6 +354,15 @@
     }, { rootMargin: "0px 0px -8% 0px" });
     targets.forEach(function (el) { io.observe(el); });
   } else targets.forEach(function (el) { el.classList.add("is-in"); });
+
+  /* ---------- 動畫：畫面外的區塊暫停循環動畫（省電、捲動順） ----------
+     看不到的區塊加 is-off，style.css 第 10-3 段把裡面的動畫暫停；捲回來就繼續 */
+  if (ANIM && "IntersectionObserver" in window) {
+    var off = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.classList.toggle("is-off", !e.isIntersecting); });
+    }, { rootMargin: "120px 0px" });
+    document.querySelectorAll("#main > section, footer.contact").forEach(function (el) { off.observe(el); });
+  }
 
   /* ---------- 動畫：點按鈕時，從點的位置盪開一圈水波 ---------- */
   if (ANIM) document.addEventListener("pointerdown", function (ev) {

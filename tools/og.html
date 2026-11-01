@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<!-- 分享預覽圖的版型（1200×630）。tools/build.mjs 建置時用瀏覽器開這頁、截圖成 assets/og.jpg。
+     內容讀 content.js：姓名、照片、路線圖站點都跟網站同一份資料，改經歷分享圖會自動跟著變。
+     顏色與網站 style.css 第 0 段相同；改那邊的路線色時，這裡的 LINE 也要一起改。 -->
+<link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; }
+body {
+  width: 1200px; height: 630px; overflow: hidden; position: relative;
+  font-family: "Chiron GoRound TC", "Noto Sans CJK TC", sans-serif; color: #000024; background: #fff;
+  background-image: radial-gradient(circle, #dcdce2 1.6px, transparent 1.8px); background-size: 26px 26px;
+}
+.name { position: absolute; left: 80px; top: 110px; font-size: 150px; font-weight: 900; letter-spacing: .04em; line-height: 1; }
+.name::after { content: ""; display: inline-block; width: 30px; height: 30px; border-radius: 50%; background: #e60012; margin-left: 12px; }
+.en { position: absolute; left: 86px; top: 290px; font-size: 40px; font-weight: 700; color: #5a5a70; }
+.photo { position: absolute; right: 80px; top: 85px; width: 330px; height: 330px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 8px #fff, 0 0 0 13px #e60012; }
+.photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+.route { position: absolute; left: 80px; right: 80px; top: 500px; height: 30px; }
+.seg { position: absolute; top: 11px; height: 6px; border-radius: 3px; }
+.dot { position: absolute; top: 0; width: 28px; height: 28px; border-radius: 50%; border: 5px solid; background: #fff; }
+.dot.now { background: currentColor; }
+.here { box-shadow: 0 0 0 5px #fff, 0 0 0 9px #e60012; }
+.lbl { position: absolute; top: 44px; font-size: 21px; font-weight: 700; white-space: nowrap; transform: translateX(-2px); }
+</style>
+</head>
+<body>
+<div class="name" id="name"></div>
+<div class="en" id="en"></div>
+<div class="photo"><img id="photo" alt=""></div>
+<div class="route" id="route"></div>
+<script src="/content.js"></script>
+<script>
+(function () {
+  var S = window.SITE;
+  var LINE = { gov: "#2b3a8c", china: "#c98a0b", transport: "#12925a" }, NONE = "#a3a3b5";
+  document.getElementById("name").textContent = S.name.zh;
+  document.getElementById("en").textContent = S.name.en;
+  document.getElementById("photo").src = "/" + String(S.photo || "").replace(/^\//, "");
+  function key(p) { var m = String(p || "").match(/(\d{4})(?:\.(\d{1,2}))?/); return m ? (+m[1]) * 100 + (+(m[2] || 0)) : 0; }
+  function vis(x) { return x && x.show !== false && x.web !== false; }
+  /* 站點：與 site.js 相同規則——職務上有 station 的，依開始年月排列 */
+  var st = [];
+  (S.groups || []).filter(vis).forEach(function (g) {
+    (g.items || []).filter(vis).forEach(function (it) {
+      var roles = it.roles ? it.roles.filter(vis) : [{ period: it.period, station: it.station }];
+      roles.forEach(function (r) { if (r.station) st.push({ n: r.station.zh, c: LINE[it.line] || NONE, now: /今/.test(r.period || ""), k: key(r.period) }); });
+    });
+  });
+  st.sort(function (a, b) { return a.k - b.k; });
+  var W = 1040, step = st.length > 1 ? (W - 28) / (st.length - 1) : 0, h = "";
+  st.forEach(function (s, i) {
+    if (i) h += '<div class="seg" style="left:' + ((i - 1) * step + 14) + 'px;width:' + step + 'px;background:repeating-linear-gradient(90deg,' + s.c + ' 0 12px,transparent 12px 20px)"></div>';
+  });
+  st.forEach(function (s, i) {
+    h += '<div class="dot' + (s.now ? " now" : "") + (i === st.length - 1 ? " here" : "") + '" style="left:' + (i * step) + 'px;color:' + s.c + ';border-color:' + s.c + '"></div>' +
+         '<div class="lbl" style="left:' + (i * step) + 'px">' + s.n + "</div>";
+  });
+  document.getElementById("route").innerHTML = h;
+})();
+</script>
+</body>
+</html>
