@@ -8,9 +8,11 @@
    3. 產生正式 CV 的 PDF：cv/yuboan-cv-zh.pdf、cv/alan-yu-cv-en.pdf
       → 頁首「下載 CV」直接下載這兩個檔；另有完整版 *-full.pdf（頁尾連結）
    4. 產生分享預覽圖 assets/og.jpg（版型在 tools/og.html，資料讀 content.js）
-   CV 超過一頁時不會擋住發布，但會在 GitHub Actions 紀錄裡出現警告。
+   CV 超過一頁時：推上 main 照樣發布，但會自動開一個 Issue 提醒；
+   在 PR 裡則讓檢查失敗，修好再合併（見 .github/workflows/pages.yml）。
 
-   本機要試跑：npm install --no-save playwright && node tools/build.mjs
+   本機要試跑：npm install --no-save playwright@1.48.2 && npx playwright install chromium && node tools/build.mjs
+   （版本要跟 .github/workflows/pages.yml 一致，不然排版可能有細微差異，CV 頁數會對不上）
    ========================================================= */
 import http from "node:http";
 import fs from "node:fs";
@@ -54,6 +56,7 @@ const BASE = `http://127.0.0.1:${server.address().port}`;
 
 const browser = await chromium.launch();
 let failed = false;
+const overflow = [];  /* 超過一頁的 CV，例：「中文 2 頁」 */
 
 /* 資源網址加上內容雜湊（例：/site.js?v=3f9a1c2d），檔案一改網址就變，
    讀者的瀏覽器就不會拿暫存的舊版（GitHub Pages 預設暫存約 10 分鐘） */
@@ -100,7 +103,11 @@ for (const { lang, file, full } of CVS) {
   fs.writeFileSync(path.join(OUT, file), pdf);
   const pages = (pdf.toString("latin1").match(/\/Type\s*\/Page(?!s)/g) || []).length;
   console.log(`已產生 ${file}（${pages} 頁）`);
-  if (pages !== 1 && !full) console.log(`::warning file=content.js::${lang === "zh" ? "中文" : "英文"} CV 變成 ${pages} 頁，請精簡 content.js 的文字（CLAUDE.md 規定預設一頁）`);
+  if (pages !== 1 && !full) {
+    const name = lang === "zh" ? "中文" : "英文";
+    overflow.push(`${name} ${pages} 頁`);
+    console.log(`::warning file=content.js::${name} CV 變成 ${pages} 頁，請精簡 content.js 的文字（CLAUDE.md 規定預設一頁）`);
+  }
   await ctx.close();
 }
 
@@ -117,4 +124,6 @@ for (const { lang, file, full } of CVS) {
 
 await browser.close();
 server.close();
+/* 把超頁結果交給 workflow 的下一步（開 Issue 或讓 PR 檢查失敗）；本機跑時沒有這個變數，就略過 */
+if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `cv_overflow=${overflow.join("、")}\n`);
 if (failed) process.exit(1);
