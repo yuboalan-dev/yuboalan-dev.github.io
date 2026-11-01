@@ -16,15 +16,11 @@
 
 網站和 CV 讀的是同一份 `content.js`，改一次兩邊一起更新。
 
-## 第一次上線（全程用瀏覽器）
+## 發布設定
 
-1. GitHub 右上角 **+ → New repository**。
-   - 名稱取 **`你的帳號.github.io`**，網址就是 `https://你的帳號.github.io/`（最短）。
-   - 取別的名字（例如 `profile`），網址會是 `https://你的帳號.github.io/profile/`。
-   - 選 **Public**，勾 **Add a README file**，按 Create。
-2. **Add file → Upload files**，把這個資料夾**裡面的東西**（不是資料夾本身）全部拖進去，按 **Commit changes**。
-3. **Settings → Pages**：Source 選 *Deploy from a branch*，Branch 選 `main`、`/ (root)`，Save。
-4. 等 1～3 分鐘，重新整理就會看到網址。
+網站已經上線，平常不用動。萬一要重設：repo 的 **Settings → Pages → Source** 必須選 **GitHub Actions**（不是 *Deploy from a branch*），否則 CV PDF 和預先產生的網頁不會出現。每次 `main` 有更新，Actions 會自動建置並發布，約 2～3 分鐘。
+
+AI 的改動會開成 PR（Pull request），等 PR 上的檢查打勾、你看過後再按 **Merge** 才會上線；你自己改 `content.js` 直接 Commit 到 `main` 就好。
 
 ## 之後要更新
 
@@ -55,7 +51,7 @@
 ## 正式 CV
 
 - 頁首「下載 CV」直接下載 PDF。PDF 是 GitHub 每次更新網站時自動產生的，改完 `content.js` 不用另外做什麼。
-- CV 如果因為文字變多而超過一頁，網站照樣會更新，但 repo 的 **Actions** 分頁裡會出現黃色警告。
+- CV 如果因為文字變多而超過一頁，網站照樣會更新，但 repo 會自動開一個 Issue「CV 超過一頁」提醒你；精簡到一頁後會自動關掉。
 
 ## 自己客製 CV（附照片、代表作等）
 
