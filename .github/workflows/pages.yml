@@ -1,24 +1,27 @@
-# 每次 main 有更新，就建置並發布網站（產生 CV PDF、預先產生網頁內容）
+# 建置網站（產生 CV PDF、預先產生網頁內容），依觸發方式決定要不要發布：
+# - 推上 main（或手動執行）：建置並發布；CV 超過一頁照樣發布，但自動開 Issue 提醒，回到一頁就自動關掉
+# - 對 main 開的 PR：只建置當檢查、不發布；頁面程式出錯或 CV 超過一頁，檢查就失敗，修好再合併
 # 前提：repo 的 Settings → Pages → Source 要選「GitHub Actions」
 name: 建置並發布網站
 
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
+# 發布的那條線（main）新的推上來就取消舊的；每個 PR 各自一條，不會互相取消、也不會取消發布
 concurrency:
-  group: pages
+  group: pages-${{ github.event_name == 'pull_request' && github.ref || 'main' }}
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,16 +30,47 @@ jobs:
       - name: 安裝中文字型（PDF 的備用字型）
         run: sudo apt-get update -q && sudo apt-get install -y -q fonts-noto-cjk
       - name: 安裝瀏覽器
+        # 版本改這裡時，CLAUDE.md「改完怎麼驗收」和 tools/build.mjs 檔頭的本機指令要一起改
         run: npm install --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
       - name: 建置
+        id: build
         run: node tools/build.mjs
+
+      - name: PR 裡 CV 超過一頁就讓檢查失敗
+        if: github.event_name == 'pull_request' && steps.build.outputs.cv_overflow != ''
+        run: |
+          echo "::error file=content.js::CV 超過一頁（${{ steps.build.outputs.cv_overflow }}），請精簡後再合併"
+          exit 1
+
+      - name: CV 超過一頁就開 Issue，回到一頁就關掉
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OVERFLOW: ${{ steps.build.outputs.cv_overflow }}
+          TITLE: CV 超過一頁
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          open=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$OVERFLOW" ]; then
+            body="預設 CV 應該剛好一頁 A4，這次建置變成：$OVERFLOW。網站已照樣發布，請精簡 content.js 的文字。建置紀錄：$RUN_URL"
+            if [ -n "$open" ]; then gh issue comment "$open" --repo "$GITHUB_REPOSITORY" --body "$body"
+            else gh issue create --repo "$GITHUB_REPOSITORY" --title "$TITLE" --body "$body"; fi
+          elif [ -n "$open" ]; then
+            gh issue close "$open" --repo "$GITHUB_REPOSITORY" --comment "已回到一頁（$RUN_URL），自動關閉。"
+          fi
+
       - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
         with:
           path: _site
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
