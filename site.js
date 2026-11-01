@@ -6,25 +6,40 @@
      experience  經歷
      work        代表作
      media       媒體與評論
+     notfound    找不到頁面（404.html）
    頁首（導覽、語言、CV）與頁尾（聯絡）所有分頁共用，只寫在這裡一份。
 
    ★ 分頁清單只維護在下面的 PAGES。新增分頁時：
      1. 在 PAGES 加一行
      2. 複製一個 *.html，改 <title>、description、canonical 和 data-page
      3. sitemap.xml 加一行
+
+   ★ 預先產生的頁面（tools/build.mjs 在 GitHub 上建置時，把畫好的內容直接寫進 HTML，
+     讓搜尋引擎和社群預覽不用跑程式也看得到）：這裡一開始會把那份內容清掉、
+     再照目前語言重畫一次，所以結果一樣，只是英文模式會換成英文。
+
+   ★ 站內連結一律用「/」開頭，404 頁在任何網址下才不會壞。
    ========================================================= */
 (function () {
   var U = window.UTIL, S = U.S, L = U.getLang(), t = U.t, esc = U.esc;
   var page = document.body.getAttribute("data-page") || "home";
+
+  /* 清掉預先產生的內容，避免重畫後出現兩份頁首頁尾 */
+  document.querySelectorAll("header.topbar, footer.contact, script[type='application/ld+json']").forEach(function (el) { el.remove(); });
   var EN = L === "en";
   function tx(zh, en) { return EN ? en : zh; }
   document.documentElement.lang = EN ? "en" : "zh-Hant";
 
   var PAGES = [
-    { id: "experience", href: "experience.html", zh: "經歷",     en: "Experience" },
-    { id: "work",       href: "work.html",       zh: "代表作",   en: "Work" },
-    { id: "media",      href: "media.html",      zh: "媒體",     en: "Media" }
+    { id: "experience", href: "/experience.html", zh: "經歷",     en: "Experience" },
+    { id: "work",       href: "/work.html",       zh: "代表作",   en: "Work" },
+    { id: "media",      href: "/media.html",      zh: "媒體",     en: "Media" }
   ];
+
+  /* 正式 CV 的 PDF：GitHub 每次建置時自動產生（tools/build.mjs）。
+     download 是對方存檔時看到的檔名。 */
+  var CV_PDF = EN ? { href: "/cv/alan-yu-cv-en.pdf", name: "Alan_Yu_CV.pdf" }
+                  : { href: "/cv/yuboan-cv-zh.pdf", name: "游博安_CV.pdf" };
 
   /* ---------- 頁首 ---------- */
   var nav = PAGES.map(function (p) {
@@ -34,10 +49,10 @@
   var header = document.createElement("header");
   header.className = "topbar";
   header.innerHTML =
-    '<div class="wrap"><a class="brand" href="index.html">' + esc(S.name.zh) + "<span>" + esc(S.name.en) + "</span></a>" +
+    '<div class="wrap"><a class="brand" href="/">' + esc(S.name.zh) + "<span>" + esc(S.name.en) + "</span></a>" +
     '<nav class="topnav" aria-label="' + tx("主選單", "Main") + '">' + nav +
     '<button class="lang-btn" type="button" id="langBtn">' + (EN ? "中文" : "EN") + "</button>" +
-    '<a class="btn" href="cv.html?lang=' + L + '">' + tx("正式 CV", "CV") + "</a></nav></div>";
+    '<a class="btn" href="' + CV_PDF.href + '" download="' + esc(CV_PDF.name) + '">' + tx("下載 CV", "Download CV") + "</a></nav></div>";
   document.body.insertBefore(header, document.body.firstChild);
   document.getElementById("langBtn").onclick = function () { U.setLang(EN ? "zh" : "en"); };
 
@@ -195,6 +210,14 @@
     main.innerHTML = block("media", title, html);
   }
 
+  /* ---------- 404 ---------- */
+  function renderNotFound() {
+    document.title = tx("找不到這個頁面", "Page not found") + "｜" + S.name.zh + " " + S.name.en;
+    main.innerHTML = block("notfound", tx("找不到這個頁面", "Page not found"),
+      '<p class="summary">' + tx("網址可能打錯了，或這個頁面已經移除。", "The address may be mistyped, or the page has moved.") + "</p>" +
+      '<p class="nf-links"><a href="/">' + tx("回首頁", "Go to the homepage") + "</a></p>");
+  }
+
   /* ---------- 頁尾：聯絡（所有分頁共用） ---------- */
   function renderFooter() {
     var links = U.activeLinks();
@@ -207,7 +230,8 @@
     f.innerHTML = '<div class="wrap"><div class="contact-grid"><h2 class="block-title">' + tx("聯絡", "Contact") + "</h2><div>" +
       (mail ? '<a class="contact-mail" href="' + esc(U.href(mail)) + '">' + esc(mail.url.replace(/^mailto:/, "")) + "</a>" : "") +
       (social ? '<div class="social">' + social + "</div>" : "") + "</div></div>" +
-      '<p class="footnote">' + esc(S.name.zh + " " + S.name.en) + "　" + tx("最後更新 ", "Last updated ") + esc(S.updated || "") + "</p></div>";
+      '<p class="footnote">' + esc(S.name.zh + " " + S.name.en) + "　" + tx("最後更新 ", "Last updated ") + esc(S.updated || "") +
+      '　<a href="/cv.html?lang=' + L + '">' + tx("CV 網頁版（可選附照片等）", "CV builder") + "</a></p></div>";
     document.body.appendChild(f);
   }
 
@@ -233,6 +257,6 @@
     } catch (e) {}
   }
 
-  ({ home: renderHome, experience: renderExperience, work: renderWork, media: renderMedia }[page] || renderHome)();
+  ({ home: renderHome, experience: renderExperience, work: renderWork, media: renderMedia, notfound: renderNotFound }[page] || renderHome)();
   renderFooter();
 })();

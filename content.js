@@ -82,8 +82,6 @@ window.SITE = {
      url 可以留空。建議每月補一行，網站看起來才是活的。 */
   news: [
     { date: "2026-11", text: { zh: "接任臺灣學生聯合會第七屆理事", en: "Joined the board of the National Students' Union of Taiwan (7th term)" } },
-    { date: "2026-11", text: { zh: "卸任臺灣學生聯合會第六屆公關副祕書長", en: "Completed term as Deputy Secretary-General for PR, National Students' Union of Taiwan" } },
-    { date: "2026-11", text: { zh: "個人網站上線", en: "Launched this website" } },
     { date: "2026-02", text: { zh: "擔任下一代人本交通促進會副秘書長", en: "Became Deputy Secretary-General, Next Generation People-Oriented Transport Association" } },
     { date: "2026-02", text: { zh: "就任國立政治大學學生議會議長", en: "Took office as Speaker of the NCCU Student Congress" } }
   ],
