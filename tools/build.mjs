@@ -14,6 +14,7 @@
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 import { chromium } from "playwright";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
@@ -49,6 +50,15 @@ const BASE = `http://127.0.0.1:${server.address().port}`;
 const browser = await chromium.launch();
 let failed = false;
 
+/* 資源網址加上內容雜湊（例：/site.js?v=3f9a1c2d），檔案一改網址就變，
+   讀者的瀏覽器就不會拿暫存的舊版（GitHub Pages 預設暫存約 10 分鐘） */
+const ASSETS = ["style.css", "content.js", "common.js", "site.js"];
+const VER = Object.fromEntries(ASSETS.map(a => [a, crypto.createHash("sha1").update(fs.readFileSync(path.join(ROOT, a))).digest("hex").slice(0, 8)]));
+function bust(html) {
+  for (const a of ASSETS) html = html.split(`"/${a}"`).join(`"/${a}?v=${VER[a]}"`).split(`"${a}"`).join(`"${a}?v=${VER[a]}"`);
+  return html;
+}
+
 /* 2. 預先產生各分頁（一律用中文版；英文版由瀏覽器即時切換） */
 for (const f of PAGES) {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
@@ -67,10 +77,12 @@ for (const f of PAGES) {
     if (f && m) m.after(f);
     return "<!doctype html>\n" + document.documentElement.outerHTML;
   });
-  fs.writeFileSync(path.join(OUT, f), html);
+  fs.writeFileSync(path.join(OUT, f), bust(html));
   console.log(`已產生 ${f}`);
   await ctx.close();
 }
+
+fs.writeFileSync(path.join(OUT, "cv.html"), bust(fs.readFileSync(path.join(ROOT, "cv.html"), "utf8")));
 
 /* 3. 產生 CV PDF，並檢查是不是一頁 */
 fs.mkdirSync(path.join(OUT, "cv"), { recursive: true });

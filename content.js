@@ -42,8 +42,8 @@ window.SITE = {
   /* 首頁姓名下方的三個身分（對應議長頁的 roles-area） */
   roles: [
     { line: "gov", zh: "國立政治大學學生議會　議長",       en: "Speaker, NCCU Student Congress" },
-    { line: "transport", zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" },
-    { line: "gov", zh: "臺灣學生聯合會　理事",             en: "Board Member, National Students' Union of Taiwan" }
+    { line: "transport", zh: "社團法人下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" },
+    { line: "gov", zh: "社團法人臺灣學生聯合會　第七屆理事", en: "Board Member (7th term), National Students' Union of Taiwan" }
   ],
 
   /* 照片：命名 photo.jpg 放進 assets 資料夾。沒放時顯示姓氏字樣。 */
@@ -89,8 +89,8 @@ window.SITE = {
   /* ---------- 2-3. 近況（新的寫在最上面，網站自動照日期排） ----------
      url 可以留空。建議每月補一行，網站看起來才是活的。 */
   news: [
-    { date: "2026-11", text: { zh: "接任臺灣學生聯合會第七屆理事", en: "Joined the board of the National Students' Union of Taiwan (7th term)" } },
-    { date: "2026-02", text: { zh: "擔任下一代人本交通促進會副秘書長", en: "Became Deputy Secretary-General, Next Generation People-Oriented Transport Association" } },
+    { date: "2026-11", text: { zh: "接任社團法人臺灣學生聯合會第七屆理事", en: "Joined the board of the National Students' Union of Taiwan (7th term)" } },
+    { date: "2026-02", text: { zh: "擔任社團法人下一代人本交通促進會副秘書長", en: "Became Deputy Secretary-General, Next Generation People-Oriented Transport Association" } },
     { date: "2026-02", text: { zh: "就任國立政治大學學生議會議長", en: "Took office as Speaker of the NCCU Student Congress" } }
   ],
 
@@ -117,7 +117,7 @@ window.SITE = {
             station: { zh: "議員", en: "Legislator" } }
         ] },
       { line: "gov", mark: "校務", logo: "",
-        org: { zh: "國立政治大學 校務會議與委員會", en: "NCCU University Council & Committees" },
+        org: { zh: "國立政治大學校務會議與委員會", en: "NCCU University Council & Committees" },
         roles: [
           { role: { zh: "校務會議學生代表", en: "Student Representative, University Council" }, period: "2023.08 – 今" },
           { role: { zh: "學生會校務諮詢委員會總召集人", en: "Chief Convener, Student Advisory Committee on University Affairs" }, period: "" },
@@ -139,7 +139,7 @@ window.SITE = {
             station: { zh: "人本交通", en: "Transport NGO" } }
         ] },
       { line: "transport", mark: "指南", logo: "",
-        org: { zh: "指南路交通改善小組", en: "Zhinan Road Traffic Improvement Task Force" },
+        org: { zh: "政大指南路交通改善小組", en: "NCCU Zhinan Road Traffic Improvement Task Force" },
         roles: [
           { role: { zh: "召集人", en: "Convener" }, period: "2025 – 今",
             station: { zh: "指南路", en: "Zhinan Rd." },
@@ -170,18 +170,18 @@ window.SITE = {
               { zh: "大陸委員會委託研究「習近平反貪腐鬥爭之策略、成效與影響」", en: "Mainland Affairs Council study on Xi Jinping’s anti-corruption campaign" },
               { zh: "國科會研究「中共二十大後政治菁英甄補：趨勢、預測與結構變遷」", en: "NSTC project on CCP elite recruitment after the 20th Party Congress" }
             ] },
-          { role: { zh: "教學助理：經濟全球化與台商大陸投資", en: "Teaching Assistant: Economic Globalisation & Taiwanese Investment in China" }, period: "", cv: false },
+          { role: { zh: "教學助理：「經濟全球化與台商大陸投資」（陳德昇教授）", en: "Teaching Assistant: Economic Globalisation & Taiwanese Investment in China (Prof. Chen Te-sheng)" }, period: "", cv: false },
           { role: { zh: "2024 政治大學夏令研習營副召集人", en: "Deputy Convener, 2024 NCCU Summer Institute" }, period: "2024.08", cv: false }
         ] },
       { line: "transport", mark: "地政", logo: "",
         org: { zh: "國立政治大學地政學系", en: "Department of Land Economics, NCCU" },
         roles: [
-          { role: { zh: "教學助理：人本交通與永續校園規劃", en: "Teaching Assistant: People-Oriented Transport & Sustainable Campus Planning" }, period: "2026 – 今" }
+          { role: { zh: "教學助理：「人本交通與永續校園規劃」", en: "Teaching Assistant: People-Oriented Transport & Sustainable Campus Planning" }, period: "2026 – 今" }
         ] },
       { line: "", mark: "傳院", logo: "", cv: false,
         org: { zh: "國立政治大學傳播學院", en: "College of Communication, NCCU" },
         roles: [
-          { role: { zh: "教學助理：社會創新與未來創造", en: "Teaching Assistant: Social Innovation & Future-Making" }, period: "2024 – 2025" }
+          { role: { zh: "教學助理：「社會創新與未來創造」", en: "Teaching Assistant: Social Innovation & Future-Making" }, period: "2024 – 2025" }
         ] }
     ] },
 
@@ -209,7 +209,7 @@ window.SITE = {
 
     { key: "experience", collapsed: true, title: { zh: "其他經歷與研習", en: "Other Experience & Training" }, items: [
       { line: "gov", mark: "野火", logo: "", cv: false,
-        org: { zh: "政大野火陣線社", en: "NCCU Wildfire Front Club" },
+        org: { zh: "國立政治大學野火陣線社", en: "NCCU Wildfire Front Club" },
         roles: [
           { role: { zh: "總務", en: "Treasurer" }, period: "2024.08 – 2025.07", cv: false },
           { role: { zh: "副社長", en: "Vice President" }, period: "2023.02 – 2024.07", station: { zh: "野火", en: "Wildfire Front" } }
@@ -220,7 +220,7 @@ window.SITE = {
           { role: { zh: "大專青年學生公部門暑期工讀", en: "Public Sector Summer Intern" }, period: "2025" }
         ] },
       { line: "gov", mark: "教育部", logo: "", cv: false,
-        org: { zh: "教育部 高級中等以下學校課程審議會", en: "Curriculum Review Council, Ministry of Education" },
+        org: { zh: "教育部高級中等以下學校課程審議會", en: "Curriculum Review Council, Ministry of Education" },
         roles: [
           { role: { zh: "學生代表遴選委員", en: "Member, Student Representative Selection Committee" }, period: "" }
         ] },

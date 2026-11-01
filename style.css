@@ -268,6 +268,19 @@ main > .block:first-child { border-top: 0; }
 }
 .more-btn:hover { border-color: var(--navy); }
 
+/* 頁面內連結按鈕：膠囊＋會呼吸的小圓點 */
+.go { margin-top: clamp(28px, 4vw, 40px); }
+.go-btn {
+    display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+    font-size: 15px; font-weight: 700; color: var(--navy); background: #fff;
+    border: 2px solid var(--navy); border-radius: 999px; padding: 9px 20px 9px 16px;
+    position: relative; overflow: hidden; transition: background-color .25s ease, color .25s ease, border-color .25s ease;
+}
+.go-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); flex-shrink: 0; transition: transform .25s ease, background-color .25s ease; }
+.go-btn:hover { background: var(--navy); color: #fff; }
+.go-btn:hover .go-dot { transform: scale(1.4); background: #fff; }
+.anim .go-dot { animation: breathe-dot 2.8s ease-in-out infinite; }
+
 /* 路線圖例 */
 .legend { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--muted); margin-bottom: 36px; }
 .legend span { display: inline-flex; align-items: center; gap: 8px; }

@@ -156,24 +156,30 @@
         "</div>" +
       "</div></section>";
 
-    /* 路線圖放在近況上面：一段是走過的路，一段是最近的動態 */
-    if (route) html += block("route", tx("一路走來", "The route so far"), route);
+    /* 頁面內的連結按鈕：每一區看完，接到對應的分頁 */
+    function goto(href, zh, en) {
+      return '<p class="go" data-reveal><a class="go-btn" href="' + href + '"><span class="go-dot" aria-hidden="true"></span>' + esc(tx(zh, en)) + "</a></p>";
+    }
+
+    /* 首頁順序：關注領域 → 一路走來（路線圖）→ 近況 */
+    var focus = U.visible(S.focus, "web");
+    if (focus.length) html += block("focus", t(S.focusHeading, L), '<div class="focus">' + focus.map(function (i) {
+      return '<div class="focus-item" data-reveal data-line="' + lineOf(i) + '"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
+    }).join("") + "</div>" + goto("/work.html", "看代表作", "See selected work"), true);
+
+    if (route) html += block("route", tx("一路走來", "The route so far"), route + goto("/experience.html", "看完整經歷", "See full experience"));
 
     /* 近況：先顯示 5 筆；最新一筆是紅點 */
     var news = U.visible(S.news, "web").slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
     if (news.length) {
-      html += '<section class="block washed" id="news"><div class="wrap"><div class="block-head" data-reveal><h2 class="block-title">' + tx("近況", "Latest") + '</h2></div><ul class="news" id="newsBody">' + news.map(function (n, i) {
+      html += '<section class="block" id="news"><div class="wrap"><div class="block-head" data-reveal><h2 class="block-title">' + tx("近況", "Latest") + '</h2></div><ul class="news" id="newsBody">' + news.map(function (n, i) {
         var txt = esc(t(n.text, L));
         if (n.url) txt = '<a href="' + esc(n.url) + '" target="_blank" rel="noopener">' + txt + "</a>";
         return "<li data-reveal" + (i >= 5 ? ' class="is-more"' : "") + ' style="--i:' + i + '">' + dot(n, false) + '<span class="d">' + esc(n.date || "") + "</span><span>" + txt + "</span></li>";
       }).join("") + "</ul>" +
-      (news.length > 5 ? '<button class="more-btn" type="button" id="newsMore">' + tx("顯示全部", "Show all") + "</button>" : "") + "</div></section>";
+      (news.length > 5 ? '<button class="more-btn" type="button" id="newsMore">' + tx("顯示全部", "Show all") + "</button>" : "") +
+      goto("/media.html", "看媒體與評論", "See media appearances") + "</div></section>";
     }
-    /* 關注領域：三條路線 */
-    var focus = U.visible(S.focus, "web");
-    if (focus.length) html += block("focus", t(S.focusHeading, L), '<div class="focus">' + focus.map(function (i) {
-      return '<div class="focus-item" data-reveal data-line="' + lineOf(i) + '"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
-    }).join("") + "</div>", false);
 
     main.innerHTML = html;
 
