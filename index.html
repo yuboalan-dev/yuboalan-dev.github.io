@@ -18,7 +18,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23000024'/><text x='32' y='45' font-size='36' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='900'>游</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -38,67 +38,86 @@
   </div>
 </header>
 
-<main class="wrap" id="top">
-  <div class="dashboard-container">
+<main id="top">
 
-    <!-- 1. 姓名 + 相片 -->
-    <section class="profile-section">
-      <div class="profile-left">
-        <div class="name-title-grid" id="nameGrid"></div>
+  <!-- 1. 首屏：桌牌（直排姓名）＋照片＋介紹 -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-visual">
+        <div class="plate-wrap">
+          <h1 class="nameplate" id="plate"></h1>
+          <span class="plate-en" id="plateEn" aria-hidden="true"></span>
+        </div>
+        <div class="photo" id="photoWrap"></div>
+      </div>
+      <div class="intro">
+        <p class="intro-name" id="introName"></p>
         <p class="tagline" id="tagline"></p>
         <p class="summary" id="summary"></p>
-        <div class="chips" id="chips"></div>
-        <div class="social" id="socialTop"></div>
-        <div class="roles-area" id="roles"></div>
+        <ul class="roles" id="roles"></ul>
+        <div class="intro-actions">
+          <div class="social" id="socialTop"></div>
+          <a class="btn" id="cvBtn3" href="cv.html" data-zh="下載正式 CV" data-en="Download CV"></a>
+        </div>
       </div>
-      <div class="profile-right">
-        <div class="photo-frame-decoration"></div>
-        <div class="photo-main-wrap" id="photoWrap"></div>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- 2. 經歷（直接展開；content.js 裡標 collapsed: true 的組只先顯示前幾筆） -->
-    <section class="sec" id="experience">
-      <h2 class="sec-title" data-zh="經歷" data-en="Experience"></h2>
+  <!-- 2. 經歷（content.js 的 groups；標 collapsed: true 的組只先顯示前 3 筆） -->
+  <section class="block" id="experience">
+    <div class="wrap block-grid">
+      <h2 class="block-title" data-zh="經歷" data-en="Experience"></h2>
       <div class="exp-grid" id="expBody"></div>
-    </section>
+    </div>
+  </section>
 
-    <!-- 2-2. 近況（content.js 的 news，新到舊，先顯示 5 筆） -->
-    <section class="sec" id="news">
-      <h2 class="sec-title" data-zh="近況" data-en="Latest"></h2>
-      <ul class="news" id="newsBody"></ul>
-    </section>
+  <!-- 3. 近況（content.js 的 news，新到舊，先顯示 5 筆） -->
+  <section class="block" id="news">
+    <div class="wrap block-grid">
+      <h2 class="block-title" data-zh="近況" data-en="Latest"></h2>
+      <div><ul class="news" id="newsBody"></ul></div>
+    </div>
+  </section>
 
-    <!-- 3. 關注領域 -->
-    <section class="panel" id="focus">
-      <h2 class="panel-header" id="focusHeading"></h2>
-      <div class="panel-content three" id="focusBody"></div>
-    </section>
+  <!-- 4. 關注領域 -->
+  <section class="block washed" id="focus">
+    <div class="wrap block-grid">
+      <h2 class="block-title" id="focusHeading"></h2>
+      <div class="focus" id="focusBody"></div>
+    </div>
+  </section>
 
-    <!-- 4. 代表作 -->
-    <section class="sec" id="works">
-      <h2 class="sec-title" data-zh="代表作" data-en="Selected Work"></h2>
-      <div class="works-list" id="worksBody"></div>
-    </section>
+  <!-- 5. 代表作 -->
+  <section class="block" id="works">
+    <div class="wrap block-grid">
+      <h2 class="block-title" data-zh="代表作" data-en="Selected Work"></h2>
+      <div class="works" id="worksBody"></div>
+    </div>
+  </section>
 
-    <!-- 5. 媒體 -->
-    <section class="sec" id="media">
-      <h2 class="sec-title" data-zh="媒體與評論" data-en="Media & Commentary"></h2>
-      <div class="media-feat" id="mediaFeat"></div>
-      <div class="media-groups" id="mediaGroups"></div>
-    </section>
+  <!-- 6. 媒體 -->
+  <section class="block washed" id="media">
+    <div class="wrap block-grid">
+      <h2 class="block-title" data-zh="媒體與評論" data-en="Media"></h2>
+      <div>
+        <div class="media-feat" id="mediaFeat"></div>
+        <div class="media-groups" id="mediaGroups"></div>
+      </div>
+    </div>
+  </section>
 
-  </div>
 </main>
 
 <footer class="contact" id="contact">
   <div class="wrap">
-    <div>
-      <h2 data-zh="聯絡我" data-en="Get in touch"></h2>
-      <p id="contactName"></p>
+    <div class="contact-grid">
+      <h2 class="block-title" data-zh="聯絡" data-en="Contact"></h2>
+      <div>
+        <a class="contact-mail" id="contactMail" href="#"></a>
+        <div class="social" id="socialBottom"></div>
+        <a class="btn" id="cvBtn2" href="cv.html" data-zh="下載正式 CV" data-en="Download CV"></a>
+      </div>
     </div>
-    <div class="social" id="socialBottom"></div>
-    <a class="btn" id="cvBtn2" href="cv.html" data-zh="下載正式 CV" data-en="Download CV"></a>
     <p class="footnote" id="updated"></p>
   </div>
 </footer>
@@ -121,33 +140,34 @@
   document.querySelectorAll("[data-zh]").forEach(function (el) { el.textContent = el.getAttribute("data-" + L); });
   $("langBtn").textContent = L === "en" ? "中文" : "EN";
   $("langBtn").onclick = function () { U.setLang(other); };
-  ["cvBtn", "cvBtn2"].forEach(function (id) { $(id).href = "cv.html?lang=" + L; });
+  ["cvBtn", "cvBtn2", "cvBtn3"].forEach(function (id) { $(id).href = "cv.html?lang=" + L; });
 
-  /* 姓名：中文模式大字中文，英文模式大字英文。有 title 才顯示右欄 */
-  var big = L === "en" ? "en" : "zh", small = L === "en" ? "zh" : "en";
+  /* 桌牌：一律直排中文姓名；英文名直排在旁。英文模式另在介紹欄放大英文名 */
   document.title = S.name.zh + " " + S.name.en;
-  $("brand").innerHTML = esc(S.name[big]) + "<span>" + esc(S.name[small]) + "</span>";
-  var hasTitle = S.title && S.title.zh;
-  $("nameGrid").innerHTML = hasTitle
-    ? '<h1 class="name-ch">' + esc(S.name[big]) + '</h1><div class="title-ch">' + esc(S.title[big]) +
-      '</div><div class="name-en">' + esc(S.name[small]) + '</div><div class="title-en">' + esc(S.title[small]) + "</div>"
-    : '<h1 class="name-ch">' + esc(S.name[big]) + '</h1><div></div><div class="name-en">' + esc(S.name[small]) + "</div><div></div>";
+  $("brand").innerHTML = esc(S.name.zh) + "<span>" + esc(S.name.en) + "</span>";
+  $("plate").textContent = S.name.zh;
+  $("plate").setAttribute("aria-label", S.name.zh + " " + S.name.en);
+  $("plateEn").textContent = S.name.en;
+  if (L === "en") $("introName").textContent = S.name.en; else drop("introName");
 
   var tl = t(S.tagline, L);
   if (tl) $("tagline").textContent = tl; else drop("tagline");
   $("summary").textContent = t(S.summary, L);
-  var ex = U.visible(S.expertise, "web");
-  if (ex.length) $("chips").innerHTML = ex.map(function (e) { return "<span>" + esc(t(e, L)) + "</span>"; }).join("");
-  else drop("chips");
-  $("roles").innerHTML = U.visible(S.roles, "web").map(function (r) { return "<p>" + esc(t(r, L)) + "</p>"; }).join("");
+
+  /* 身分：content.js 的 roles。中文用全形空格分「單位　職稱」，英文用「職稱, 單位」 */
+  $("roles").innerHTML = U.visible(S.roles, "web").map(function (r) {
+    var s = t(r, L), org = s, role = "";
+    if (L === "en") { var i = s.indexOf(", "); if (i > 0) { role = s.slice(0, i); org = s.slice(i + 2); } }
+    else { var j = s.lastIndexOf("　"); if (j > 0) { org = s.slice(0, j).trim(); role = s.slice(j + 1).trim(); } }
+    return '<li><span class="org">' + esc(org) + '</span><span class="role">' + esc(role) + "</span></li>";
+  }).join("");
 
   /* 相片：找不到檔案就換成姓氏字樣 */
   var pw = $("photoWrap");
   function fallback() { pw.innerHTML = '<div class="photo-fallback">' + esc(S.name.zh.charAt(0)) + "</div>"; }
   if (S.photo) {
     var img = new Image();
-    img.className = "profile-photo"; img.alt = S.name.zh;
-    img.onerror = fallback; img.src = S.photo;
+    img.alt = S.name.zh; img.onerror = fallback; img.src = S.photo;
     pw.appendChild(img);
   } else fallback();
 
@@ -199,7 +219,7 @@
       nb.type = "button"; nb.className = "more-btn";
       nb.textContent = L === "en" ? "Show all" : "顯示全部";
       nb.onclick = function () { $("newsBody").classList.add("show-all"); nb.remove(); };
-      $("news").appendChild(nb);
+      $("newsBody").parentNode.appendChild(nb);
     }
   } else drop("news");
 
@@ -208,7 +228,7 @@
   if (focus.length) {
     $("focusHeading").textContent = t(S.focusHeading, L);
     $("focusBody").innerHTML = focus.map(function (i) {
-      return '<div class="wp-item"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
+      return '<div class="focus-item"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
     }).join("");
   } else drop("focus");
 
@@ -252,7 +272,7 @@
       var k = src(m);
       if (!shows[k]) { shows[k] = []; showOrder.push(k); }
       shows[k].push(m);
-    } else news.push(m);
+    } else if (!m.featured || full) news.push(m);   /* 精選已在上方出現的新聞，清單不重複列 */
   });
   function byDate(a, b) { return String(b.date).localeCompare(String(a.date)); }
   function row(m, label) {
@@ -304,8 +324,10 @@
     document.head.appendChild(sc);
   } catch (e) {}
 
-  $("contactName").textContent = S.name.zh + "　" + S.name.en;
-  $("updated").textContent = (L === "en" ? "Last updated " : "最後更新 ") + (S.updated || "");
+  var mail = U.activeLinks().filter(function (l) { return l.type === "email"; })[0];
+  if (mail) { $("contactMail").textContent = mail.url.replace(/^mailto:/, ""); $("contactMail").href = U.href(mail); }
+  else drop("contactMail");
+  $("updated").textContent = S.name.zh + " " + S.name.en + "　" + (L === "en" ? "Last updated " : "最後更新 ") + (S.updated || "");
 })();
 </script>
 </body>
