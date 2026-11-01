@@ -75,8 +75,10 @@ img { display: block; max-width: 100%; }
 .brand span { font-family: var(--sans); color: var(--muted); font-weight: 500; font-size: 13px; margin-left: 8px; letter-spacing: 0; }
 .topnav { display: flex; align-items: center; gap: clamp(10px, 2vw, 24px); }
 .navlink { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s ease; }
-.navlink:hover { color: var(--navy); }
-@media (max-width: 720px) { .navlink, .brand span { display: none; } }
+.navlink:hover, .navlink.is-current { color: var(--navy); }
+.navlink.is-current { font-weight: 700; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 6px; text-decoration-thickness: 2px; }
+@media (max-width: 720px) { .brand span { display: none; } }
+@media (max-width: 480px) { .topnav { gap: 12px; } .navlink { font-size: 13px; } .lang-btn, .btn { padding: 6px 10px; } }
 
 
 /* =========================================
@@ -126,7 +128,7 @@ html[lang="en"] .intro-name { font-family: var(--sans); font-weight: 700; }
 }
 .roles .org  { color: var(--text); font-weight: 500; }
 .roles .role { color: var(--navy); font-weight: 700; white-space: nowrap; }
-.intro-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; }
+
 
 .social { display: flex; flex-wrap: wrap; gap: 4px; }
 .social a {
@@ -154,7 +156,10 @@ html[lang="en"] .intro-name { font-family: var(--sans); font-weight: 700; }
 /* =========================================
    3. 區塊骨架：左欄標題、右欄內容
    ========================================= */
-.block { border-top: 1px solid var(--line); padding: clamp(44px, 6vw, 80px) 0; scroll-margin-top: 58px; }
+.block { border-top: 1px solid var(--line);
+}
+main > .block:first-child { border-top: 0; }
+.block { padding: clamp(44px, 6vw, 80px) 0; scroll-margin-top: 58px; }
 .block.washed { background: var(--wash); border-top: 0; }
 .block-grid { display: grid; grid-template-columns: var(--head-col) minmax(0, 1fr); gap: 24px clamp(24px, 4vw, 56px); }
 .block-title {
@@ -287,8 +292,6 @@ html[lang="en"] .contact-mail { font-family: var(--sans); }
 .contact .social { margin-top: 22px; }
 .contact .social a { color: #fff; }
 .contact .social a:hover { background: rgba(255, 255, 255, .1); color: #fff; }
-.contact .btn { background: #fff; color: var(--navy); border-color: #fff; margin-top: 22px; }
-.contact .btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
 .footnote { margin-top: 48px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, .15); font-size: 12.5px; color: rgba(255, 255, 255, .55); }
 @media (max-width: 760px) { .contact-grid { grid-template-columns: 1fr; } }
 

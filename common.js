@@ -7,7 +7,11 @@
   /* --- 語言：網址 ?lang=en 優先，其次是上次選的，預設中文 --- */
   function getLang() {
     var q = new URLSearchParams(location.search).get("lang");
-    if (q === "en" || q === "zh") return q;
+    if (q === "en" || q === "zh") {
+      /* 記下來：換到別的分頁（網址沒帶 ?lang）時語言才不會跳回中文 */
+      try { localStorage.setItem("lang", q); } catch (e) {}
+      return q;
+    }
     try { var s = localStorage.getItem("lang"); if (s === "en" || s === "zh") return s; } catch (e) {}
     return "zh";
   }

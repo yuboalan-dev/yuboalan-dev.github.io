@@ -34,7 +34,7 @@ window.SITE = {
   /* 首頁姓名下方的三個身分（對應議長頁的 roles-area） */
   roles: [
     { zh: "國立政治大學學生議會　議長",       en: "Speaker, NCCU Student Congress" },
-    { zh: "下一代人本交通促進會　北部分會會長", en: "Chair, Northern Chapter, Next Generation People-Oriented Transport Association" },
+    { zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" },
     { zh: "臺灣學生聯合會　理事",             en: "Board Member, National Students' Union of Taiwan" }
   ],
 
@@ -83,7 +83,9 @@ window.SITE = {
   news: [
     { date: "2026-11", text: { zh: "接任臺灣學生聯合會第七屆理事", en: "Joined the board of the National Students' Union of Taiwan (7th term)" } },
     { date: "2026-11", text: { zh: "卸任臺灣學生聯合會第六屆公關副祕書長", en: "Completed term as Deputy Secretary-General for PR, National Students' Union of Taiwan" } },
-    { date: "2026-11", text: { zh: "個人網站上線", en: "Launched this website" } }
+    { date: "2026-11", text: { zh: "個人網站上線", en: "Launched this website" } },
+    { date: "2026-02", text: { zh: "擔任下一代人本交通促進會副秘書長", en: "Became Deputy Secretary-General, Next Generation People-Oriented Transport Association" } },
+    { date: "2026-02", text: { zh: "就任國立政治大學學生議會議長", en: "Took office as Speaker of the NCCU Student Congress" } }
   ],
 
   /* ---------- 3. 經歷（首頁經歷區 + CV 各段） ----------
@@ -93,7 +95,7 @@ window.SITE = {
 
     { key: "current", title: { zh: "現職", en: "Current Positions" }, items: [
       { org: { zh: "國立政治大學學生議會", en: "NCCU Student Congress" },
-        role: { zh: "議長", en: "Speaker" }, period: "2026 – 今",
+        role: { zh: "議長", en: "Speaker" }, period: "2026.02 – 今",
         points: [
           { zh: "兼任學生會校務諮詢委員會總召集人",
             en: "Chief Convener, Student Association Advisory Committee on University Affairs" },
@@ -103,7 +105,7 @@ window.SITE = {
             en: "Formerly student legislator and Convener of the Budget Committee" }
         ] },
       { org: { zh: "社團法人下一代人本交通促進會", en: "Next Generation People-Oriented Transport Association" },
-        role: { zh: "北部分會會長", en: "Chair, Northern Chapter" }, period: "2026 – 今" },
+        role: { zh: "副秘書長、北部分會會長", en: "Deputy Secretary-General; Chair, Northern Chapter" }, period: "2026.02 – 今" },
       { org: { zh: "社團法人臺灣學生聯合會", en: "National Students' Union of Taiwan" },
         role: { zh: "第七屆理事", en: "Board Member (7th term)" }, period: "2026.11 – 今" },
       { org: { zh: "指南路交通改善小組", en: "Zhinan Road Traffic Improvement Task Force" },
@@ -118,7 +120,7 @@ window.SITE = {
 
     { key: "research", title: { zh: "研究與教學", en: "Research & Teaching" }, items: [
       { org: { zh: "國立政治大學國際關係研究中心", en: "Institute of International Relations, NCCU" },
-        role: { zh: "研究計畫助理", en: "Research Assistant" }, period: "2023 – 2026",
+        role: { zh: "研究計畫助理", en: "Research Assistant" }, period: "2023.09 – 2026.01",
         points: [
           { zh: "大陸委員會委託研究「習近平反貪腐鬥爭之策略、成效與影響」",
             en: "Mainland Affairs Council study on Xi Jinping’s anti-corruption campaign" },
@@ -132,17 +134,17 @@ window.SITE = {
     { key: "education", title: { zh: "學歷", en: "Education" }, items: [
       { org: { zh: "國立政治大學", en: "National Chengchi University" },
         role: { zh: "政治學系學士班", en: "B.A. in Political Science" },
-        period: "2022 – 2027（預計）",
+        period: "2022.09 – 2027（預計）",
         points: [
           { zh: "校學士：哲學、政治學與經濟學專長", en: "University Bachelor track: Philosophy, Politics and Economics" },
           { zh: "輔修經濟學系、哲學系", en: "Minors in Economics and Philosophy" },
           { zh: "人文領袖榮譽學分學程", en: "Humanities Leadership Honors Program" },
           { zh: "中國大陸與兩岸關係研究跨領域學分學程", en: "Interdisciplinary Program in China and Cross-Strait Studies" }
         ] },
-      /* 建中：網站顯示、CV 不放。畢業年份請補 */
+      /* 建中：網站顯示、CV 不放 */
       { cv: false,
         org: { zh: "臺北市立建國高級中學", en: "Taipei Municipal Jianguo High School" },
-        role: { zh: "畢業", en: "Graduated" }, period: "" }
+        role: { zh: "畢業", en: "Graduated" }, period: "2019 – 2022" }
     ] },
 
     { key: "experience", collapsed: true, title: { zh: "其他經歷", en: "Other Experience" }, items: [
@@ -155,7 +157,7 @@ window.SITE = {
       { org: { zh: "臺北市中正區參與式預算", en: "Zhongzheng District Participatory Budgeting, Taipei" },
         role: { zh: "「您行我也行」提案人", en: "Proposer" }, period: "2024" },
       { org: { zh: "政大野火陣線社", en: "NCCU Wildfire Front Club" },
-        role: { zh: "副社長", en: "Vice President" }, period: "2023 – 2024" },
+        role: { zh: "副社長", en: "Vice President" }, period: "2023.02 – 2024.07" },
       { org: { zh: "政大學生會權益部", en: "Student Rights Department, NCCU Student Association" },
         role: { zh: "部員", en: "Member" }, period: "" }
     ] }

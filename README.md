@@ -8,7 +8,8 @@
 |---|---|---|
 | `content.js` | **所有文字、經歷、連結** | ✅ 平常只改這個 |
 | `assets/photo.jpg` | 大頭照（直式 3:4） | ✅ 換照片就上傳同名檔覆蓋 |
-| `index.html` | 個人首頁 | 不用 |
+| `index.html`、`experience.html`、`work.html`、`media.html` | 首頁與三個分頁（內容由 `site.js` 畫出） | 不用 |
+| `site.js` | 各分頁共用的版面 | 不用 |
 | `cv.html` | 正式 CV（A4，可列印／存 PDF，中英切換） | 不用 |
 | `style.css` | 外觀；想換顏色只改第 0 段 | 很少 |
 | `common.js` | 首頁與 CV 共用的小程式；社群圖示（Bootstrap Icons，MIT 授權）也在這裡 | 不用 |
