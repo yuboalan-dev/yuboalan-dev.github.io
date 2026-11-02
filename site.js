@@ -278,7 +278,10 @@
       }).join("");
       var steps = (w.steps || []).map(function (s) { return "<li>" + esc(t(s, L)) + "</li>"; }).join("");
       return '<article class="work" data-reveal data-line="' + lineOf(w) + '"><div><h3>' + dot(w, true) + esc(t(w.title, L)) + '</h3><p class="desc">' + esc(t(w.text, L)) + "</p>" +
-        (links ? '<div class="proof">' + links + "</div>" : "") + "</div>" +
+        (links ? '<div class="proof">' + links + "</div>" : "") +
+        /* 作品圖（content.js 的 image）：縮圖，點開看原圖 */
+        (w.image && w.image.src ? '<a class="work-img" href="/' + esc(String(w.image.src).replace(/^\//, "")) + '" target="_blank" rel="noopener"><img loading="lazy" src="/' +
+          esc(String(w.image.src).replace(/^\//, "")) + '" alt="' + esc(t(w.image.alt, L)) + '"><span>' + esc(t(w.image.caption, L)) + "</span></a>" : "") + "</div>" +
         (steps ? '<ol class="steps">' + steps + "</ol>" : "") + "</article>";
     }).join("") + "</div>";
     main.innerHTML = block("works", title, inner);

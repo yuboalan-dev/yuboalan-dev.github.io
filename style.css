@@ -367,8 +367,13 @@ main > .block:first-child { border-top: 0; }
     border: 2px solid var(--line); border-radius: 999px; padding: 4px 14px; transition: border-color .2s ease;
 }
 .proof a:hover { border-color: var(--c, var(--navy)); }
+/* 作品圖：小縮圖＋說明，點開看原圖 */
+.work-img { display: inline-flex; flex-direction: column; gap: 6px; margin-top: 18px; text-decoration: none; }
+.work-img img { width: 168px; border-radius: 12px; border: 2px solid var(--line); transition: border-color .2s ease; }
+.work-img:hover img { border-color: var(--c, var(--navy)); }
+.work-img span { font-size: 13px; color: var(--muted); }
 /* 時間軸：先後順序的站點 */
-.steps { list-style: none; padding: 0; position: relative; }
+.steps { list-style: none; padding: 0; position: relative; align-self: start; }   /* 卡片變高時，步驟線不要被拉長 */
 .steps::before { content: ""; position: absolute; left: 10px; top: 12px; bottom: 12px; width: var(--track); border-radius: 2px;
     background: radial-gradient(circle, var(--c, var(--navy)) 2.4px, transparent 2.9px) 50% 0 / 100% 10px repeat-y; width: 6px; left: 9px; }
 .steps li { position: relative; padding: 0 0 18px 40px; font-size: 15px; line-height: 1.65; }

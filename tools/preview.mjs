@@ -88,7 +88,7 @@ const KEY_NAMES = { updated: "更新日期", english: "英文版開關", name: "
 const TECH = new Set(["line", "key", "collapsed"]);
 const SUB_NAMES = { items: "", roles: "", text: "", zh: "", en: "英文", role: "職稱", period: "期間", points: "條列說明",
   line: "路線色", minor: "收進「顯示其他」", also: "另見", more: "代表作連結", title: "標題", org: "組織", station: "路線圖站點",
-  cv: "放進 CV", web: "放上網站", show: "顯示", mark: "圓章簡稱", logo: "標誌", url: "連結", date: "日期", key: "代號", note: "一句話說明", thumb: "用縮圖" };
+  cv: "放進 CV", web: "放上網站", show: "顯示", mark: "圓章簡稱", logo: "標誌", url: "連結", date: "日期", key: "代號", note: "一句話說明", thumb: "用縮圖", image: "作品圖", caption: "圖說", alt: "替代文字", src: "圖檔" };
 const show = v => typeof v === "string" ? `「${v}」` : JSON.stringify(v);
 const changes = [];
 function diff(a, b, trail) {
