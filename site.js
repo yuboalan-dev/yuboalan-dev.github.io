@@ -206,7 +206,8 @@
     }
     function roleLine(r) { return esc(t(r.role, L)) + (r.period ? "　" + esc(U.period(r.period, L)) : ""); }
     function item(it, i) {
-      var rs = rolesOf(it), ROLES_SHOWN = 3;  /* 一個組織職務超過三個時，先顯示三個，其餘收合 */
+      /* 一個組織職務超過三個時，先顯示三個，其餘收合；content.js 寫 fold: false 的全部展開 */
+      var rs = rolesOf(it), ROLES_SHOWN = it.fold === false ? 99 : 3;
       var rolesHtml = rs.map(function (r, ri) {
         var p = U.period(r.period, L), now = /今/.test(r.period || "");
         var pts = (r.points || []).filter(function (x) { return x.show !== false && x.web !== false; })

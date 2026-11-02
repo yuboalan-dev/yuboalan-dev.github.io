@@ -112,6 +112,7 @@ window.SITE = {
      minor: true   次要經歷：網站上收在「顯示其他」後面；CV 放在「其他經歷與研習」
      also: "transport"  這筆也跟另一段有關：正式放在這段，另一段只顯示一行連結
      more: "/work.html" 在這筆下面加「完整過程見代表作」連結
+     fold: false   職務超過三個也全部展開（預設只先顯示三個）
      職稱不寫屆次與會期；日期一律 YYYY.MM – YYYY.MM，現職寫「今」。
      整理準則見 GitHub repo 的 CLAUDE.md「經歷的整理準則」。 */
   groups: [
@@ -211,17 +212,17 @@ window.SITE = {
     ] },
 
     { key: "education", line: "", title: { zh: "學歷", en: "Education" }, items: [
-      { mark: "政治", logo: "",
-        org: { zh: "國立政治大學政治學系", en: "Department of Political Science, NCCU" },
+      /* 一個學位、學程一行；fold: false＝職務超過三個也全部展開 */
+      { mark: "政大", logo: "", fold: false,
+        org: { zh: "國立政治大學", en: "National Chengchi University" },
         roles: [
-          { role: { zh: "學士班", en: "B.A. in Political Science" }, period: "2022.09 – 2027.06（預計）",
-            station: { zh: "政大", en: "NCCU" },
-            points: [
-              { zh: "校學士：哲學、政治學與經濟學專長", en: "University Bachelor track: Philosophy, Politics and Economics" },
-              { zh: "輔修經濟學系、哲學系", en: "Minors in Economics and Philosophy" },
-              { zh: "人文領袖榮譽學分學程", en: "Humanities Leadership Honors Program" },
-              { zh: "中國大陸與兩岸關係研究跨領域學分學程", en: "Interdisciplinary Program in China and Cross-Strait Studies" }
-            ] }
+          { role: { zh: "政治學系學士班", en: "B.A. in Political Science" }, period: "2022.09 – 2027.06（預計）",
+            station: { zh: "政大", en: "NCCU" } },
+          { role: { zh: "校學士：哲學、政治學與經濟學專長", en: "University Bachelor track: Philosophy, Politics and Economics" }, period: "" },
+          { role: { zh: "輔修：經濟學系", en: "Minor in Economics" }, period: "" },
+          { role: { zh: "輔修：哲學系", en: "Minor in Philosophy" }, period: "" },
+          { role: { zh: "人文領袖榮譽學分學程", en: "Humanities Leadership Honors Program" }, period: "" },
+          { role: { zh: "中國大陸與兩岸關係研究跨領域學分學程", en: "Interdisciplinary Program in China and Cross-Strait Studies" }, period: "" }
         ] },
       /* 建中：網站顯示、CV 不放 */
       { cv: false, mark: "建中", logo: "",
