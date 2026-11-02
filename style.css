@@ -4,7 +4,7 @@
    概念：把經歷畫成一張捷運路線圖。
    ・圓點＝站點。實心＝現在進行中，空心＝已結束。
    ・三條路線＝三個關注領域，各一個顏色（content.js 的 line）：
-       gov 議事與治理（藍）／china 兩岸與中國政治（金）／transport 人本交通（綠）
+       student 學生自治（藍）／research 研究與教學（金）／transport 人本交通（綠）
    ・紅點只有一個意思：「現在位置」。
    ・字型：昭源圓黑（Chiron GoRound TC），字形的圓角和圓點同一個語言。
    ・按鈕、標籤一律膠囊形。
@@ -29,9 +29,9 @@
     --page-bg:      #ffffff;
 
     /* 三條路線的顏色（content.js 的 line 對應到這裡） */
-    --line-gov:       #2b3a8c;   /* 議事與治理 */
-    --line-china:     #c98a0b;   /* 兩岸與中國政治 */
-    --line-transport: #12925a;   /* 人本交通與地方提案 */
+    --line-student:   #2b3a8c;   /* 學生自治 */
+    --line-research:  #c98a0b;   /* 研究與教學 */
+    --line-transport: #12925a;   /* 人本交通 */
     --line-none:      #a3a3b5;   /* 沒有指定路線 */
 
     --round: "Chiron GoRound TC", "Noto Sans TC", -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
@@ -58,8 +58,8 @@ img { display: block; max-width: 100%; }
 .wrap { max-width: var(--page-w); margin: 0 auto; padding: 0 var(--gutter); }
 
 /* 路線色：任何元素加 data-line 就拿到 --c */
-[data-line="gov"]       { --c: var(--line-gov); }
-[data-line="china"]     { --c: var(--line-china); }
+[data-line="student"]   { --c: var(--line-student); }
+[data-line="research"]  { --c: var(--line-research); }
 [data-line="transport"] { --c: var(--line-transport); }
 [data-line=""], [data-line="none"] { --c: var(--line-none); }
 
@@ -211,7 +211,10 @@ main > .block:first-child { border-top: 0; }
    ========================================= */
 .exp-grid { columns: 2 380px; column-gap: clamp(32px, 5vw, 64px); }
 .exp-group { break-inside: avoid; margin-bottom: 44px; }
-.exp-title { font-size: 19px; font-weight: 900; color: var(--navy); margin-bottom: 14px; }
+.exp-title { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 900; color: var(--navy); margin-bottom: 14px; }
+/* 段名前的圓點＝這一段的路線色（學歷、其他是灰色） */
+.exp-title::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--c, var(--line-none)); flex-shrink: 0; }
+.exp-group.is-folded:not(.show-all) .exp-list::before { display: none; }
 .exp-list { list-style: none; padding: 0; position: relative; }
 .exp-list::before { content: ""; position: absolute; left: 21px; top: 24px; bottom: 24px; width: 2px;
     background: repeating-linear-gradient(180deg, var(--line) 0 6px, transparent 6px 12px); background-size: 2px 12px; }
@@ -228,15 +231,7 @@ main > .block:first-child { border-top: 0; }
 .org-mark img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
 .org-mark.is-now { background: var(--c); color: #fff; }
 .org-mark.is-now.has-logo { background: #fff; box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--c); }
-.line-tag, .now-tag {
-    display: inline-block; font-size: 11.5px; font-weight: 700; line-height: 1; vertical-align: 2px;
-    border-radius: 999px; padding: 4px 8px; margin-left: 8px; white-space: nowrap;
-}
-.line-tag { color: var(--c); border: 1.5px solid var(--c); }
-.now-tag { color: #fff; background: var(--accent); }
 .exp-head { display: flex; justify-content: space-between; align-items: center; gap: 4px 12px; flex-wrap: wrap; min-height: 44px; }
-.tags { display: flex; gap: 6px; }
-.tags .line-tag, .tags .now-tag { margin-left: 0; }
 /* 同一組織的各個職務：小圓點用虛線串起來 */
 .exp-roles { list-style: none; padding: 0; margin-top: 2px; position: relative; }
 .exp-role { position: relative; padding: 4px 0 6px; }
@@ -259,6 +254,13 @@ main > .block:first-child { border-top: 0; }
 .item-points li { position: relative; padding-left: 14px; }
 .item-points li::before { content: ""; position: absolute; left: 0; top: .72em; width: 5px; height: 5px; border-radius: 50%; background: var(--c, var(--line-none)); }
 .exp-list .is-more { display: none; }
+/* 「完整過程見代表作」與橫跨兩段的一行連結 */
+.exp-more { display: inline-block; margin-top: 8px; font-size: 14px; font-weight: 700; color: var(--c, var(--navy)); }
+.exp-also { position: relative; padding: 10px 0 10px 60px; font-size: 14.5px; line-height: 1.6; }
+.exp-also::before { content: ""; position: absolute; left: 15px; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%;
+    border: 2.5px dashed var(--c, var(--line-none)); background: #fff; box-sizing: border-box; }
+.exp-also a { color: var(--text); }
+.exp-also-note { margin-left: 8px; font-size: 13px; color: var(--muted); white-space: nowrap; }
 .exp-group.show-all .is-more { display: grid; }
 
 .more-btn {
