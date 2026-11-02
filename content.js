@@ -170,7 +170,7 @@ window.SITE = {
           { role: { zh: "教務會議（學院代表）", en: "Academic Affairs Council (college representative)" }, period: "2025.02 – 2025.07", cv: false },
           { role: { zh: "校務考核委員會", en: "University Evaluation Committee" }, period: "2024.09 – 2025.07", cv: false }
         ] },
-      { mark: "學聯", logo: "",
+      { mark: "學聯", logo: "assets/logos/nsut.png",
         org: { zh: "社團法人臺灣學生聯合會", en: "National Students' Union of Taiwan" },
         roles: [
           { role: { zh: "理事", en: "Board Member" }, period: "2026.11 – 今",
@@ -270,7 +270,7 @@ window.SITE = {
         roles: [
           { role: { zh: "結業：公共事務人才培力基礎入門課程", en: "Completed: Public Affairs Talent Foundation Course" }, period: "2025.03" }
         ] },
-      { minor: true, cv: false, mark: "野火", logo: "",
+      { minor: true, cv: false, mark: "野火", logo: "assets/logos/wildfire.png",
         org: { zh: "國立政治大學野火陣線社", en: "NCCU Wildfire Front Club" },
         roles: [
           { role: { zh: "總務", en: "Treasurer" }, period: "2024.08 – 2025.07" },
