@@ -122,6 +122,7 @@
       return "<li>" + dot(r, true) + '<span class="org">' + esc(org) + '</span><span class="role">' + esc(role) + "</span></li>";
     }).join("");
     var tl = t(S.tagline, L);
+    var seek = t(S.seeking, L);
 
     /* 職涯路線圖：經歷裡有 station 的條目，依開始年月排列；最後一站是「現在位置」 */
     /* 站點：每個職務上有 station 的，都是一站（用那個職務的期間） */
@@ -152,6 +153,7 @@
           '<div class="hero-name"><h1>' + esc(EN ? S.name.en : S.name.zh) + '</h1><span class="en">' + esc(EN ? S.name.zh : S.name.en) + "</span></div>" +
           '<div class="intro">' +
             (tl ? '<p class="tagline">' + esc(tl) + "</p>" : "") +
+            (seek ? '<p class="seeking"><span class="seeking-dot" aria-hidden="true"></span>' + esc(seek) + "</p>" : "") +
             '<p class="summary">' + esc(t(S.summary, L)) + "</p>" +
             (roles ? '<ul class="roles">' + roles + "</ul>" : "") +
           "</div></div>" +

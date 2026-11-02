@@ -17,6 +17,7 @@
      show: false   整筆藏起來（網站和 CV 都不顯示），資料留著
      cv: false     網站顯示、CV 不放        web: false   CV 放、網站不顯示
      points        條列說明（網站卡片不顯示，CV 和代表作會用）
+     seeking       求職狀態（首頁、CV 抬頭、分享圖），留空就不顯示
      line          路線（決定圓點顏色）："student" 學生自治（藍）、"research" 研究與教學（金）、
                    "transport" 人本交通（綠）；不寫就是灰色。經歷的每一筆自動用所屬那一組的 line
      mark          經歷旁圓章裡的簡稱（一兩個字），沒有標誌圖檔時顯示
@@ -42,6 +43,13 @@ window.SITE = {
 
   /* 首頁大標下面那一句定位。留空 "" 就不顯示。【待決定】 */
   tagline: { zh: "", en: "" },
+
+  /* 求職狀態：在找什麼工作、什麼時候能開始。顯示在首頁簡介上方、CV 抬頭、分享預覽圖。
+     留空 "" 就不顯示。【待確認】Claude 依「想當政治幕僚」與畢業時間起的草稿 */
+  seeking: {
+    zh: "2027 年 6 月畢業，尋找國會、地方議會、政黨與智庫的幕僚工作。",
+    en: "Graduating June 2027; seeking staff roles in legislative offices, political parties and think tanks."
+  },
 
   /* 首頁姓名下方的身分。首頁用好讀的簡稱（不寫「社團法人」等）；
      formal 是正式全名，CV 標題用它（沒寫就用 zh） */
