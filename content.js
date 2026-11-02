@@ -113,7 +113,10 @@ window.SITE = {
      also: "transport"  這筆也跟另一段有關：正式放在這段，另一段只顯示一行連結
      more: "/work.html" 在這筆下面加「完整過程見代表作」連結
      fold: false   職務超過三個也全部展開（預設只先顯示三個）
-     職稱不寫屆次與會期；日期一律 YYYY.MM – YYYY.MM，現職寫「今」。
+     文字格式（全站一致）：
+       role 只寫職稱；有特定對象時寫「職稱：對象」，課名、案名用「」，例：教學助理：「人本交通與永續校園規劃」
+       不寫屆次、會期，也不寫指導教授等附註；經歷不放條列說明（points），細節放代表作
+       日期一律 YYYY.MM – YYYY.MM，現職寫「今」；只知道年份才寫 YYYY
      整理準則見 GitHub repo 的 CLAUDE.md「經歷的整理準則」。 */
   groups: [
 
@@ -160,14 +163,10 @@ window.SITE = {
       { mark: "國關", logo: "",
         org: { zh: "國立政治大學國際關係研究中心", en: "Institute of International Relations, NCCU" },
         roles: [
-          { role: { zh: "研究計畫助理", en: "Research Assistant" }, period: "2023.09 – 2026.01",
-            station: { zh: "國關中心", en: "IIR" },
-            points: [
-              { zh: "大陸委員會委託研究「習近平反貪腐鬥爭之策略、成效與影響」", en: "Mainland Affairs Council study on Xi Jinping’s anti-corruption campaign" },
-              { zh: "國科會研究「中共二十大後政治菁英甄補：趨勢、預測與結構變遷」", en: "NSTC project on CCP elite recruitment after the 20th Party Congress" }
-            ] },
-          { role: { zh: "教學助理：「經濟全球化與台商大陸投資」（陳德昇教授）", en: "Teaching Assistant: Economic Globalisation & Taiwanese Investment in China (Prof. Chen Te-sheng)" }, period: "2024.01 – 2026.01", cv: false },
-          { role: { zh: "政治大學夏令研習營副召集人", en: "Deputy Convener, NCCU Summer Institute" }, period: "2024.08", cv: false }
+          { role: { zh: "研究計畫助理：大陸委員會、國科會委託研究", en: "Research Assistant: Mainland Affairs Council and NSTC projects" }, period: "2023.09 – 2026.01",
+            station: { zh: "國關中心", en: "IIR" } },
+          { role: { zh: "教學助理：「經濟全球化與台商大陸投資」", en: "Teaching Assistant: Economic Globalisation & Taiwanese Investment in China" }, period: "2024.01 – 2026.01", cv: false },
+          { role: { zh: "副召集人：政治大學夏令研習營", en: "Deputy Convener: NCCU Summer Institute" }, period: "2024.08", cv: false }
         ] },
       { minor: true, also: "transport", mark: "地政", logo: "",
         org: { zh: "國立政治大學地政學系", en: "Department of Land Economics, NCCU" },
@@ -182,7 +181,7 @@ window.SITE = {
       { minor: true, cv: false, mark: "陸委會", logo: "",
         org: { zh: "大陸委員會", en: "Mainland Affairs Council" },
         roles: [
-          { role: { zh: "臺灣青年學生兩岸關係研習營學員", en: "Participant, Cross-Strait Relations Workshop for Taiwanese Youth" }, period: "2022.08" }
+          { role: { zh: "學員：臺灣青年學生兩岸關係研習營", en: "Participant: Cross-Strait Relations Workshop for Taiwanese Youth" }, period: "2022.08" }
         ] }
     ] },
 
@@ -197,17 +196,12 @@ window.SITE = {
         org: { zh: "政大指南路交通改善小組", en: "NCCU Zhinan Road Traffic Improvement Task Force" },
         roles: [
           { role: { zh: "召集人", en: "Convener" }, period: "2025.01 – 今",
-            station: { zh: "指南路", en: "Zhinan Rd." },
-            points: [
-              { zh: "發起政大校門行人穿越道學生導護，獲華視新聞報導", en: "Started student crossing guards at the campus gate, covered by CTS News" },
-              { zh: "提出文山區參與式預算兩案皆通過，促成指南路二段人行道改善工程", en: "Two Wenshan participatory-budget proposals adopted, leading to sidewalk works on Zhinan Rd. Sec. 2" }
-            ] }
+            station: { zh: "指南路", en: "Zhinan Rd." } }
         ] },
       { minor: true, mark: "預算", logo: "",
-        org: { zh: "臺北市參與式預算（中正區）", en: "Taipei Participatory Budgeting (Zhongzheng)" },
+        org: { zh: "臺北市參與式預算", en: "Taipei Participatory Budgeting" },
         roles: [
-          { role: { zh: "「您行我也行」提案人", en: "Proposer" }, period: "2024",
-            points: [ { zh: "獲臺北市政府感謝狀", en: "Certificate of appreciation, Taipei City Government" } ] }
+          { role: { zh: "提案人：中正區「您行我也行」（獲臺北市政府感謝狀）", en: "Proposer: Zhongzheng District project (certificate of appreciation)" }, period: "2024" }
         ] }
     ] },
 
@@ -216,13 +210,13 @@ window.SITE = {
       { mark: "政大", logo: "", fold: false,
         org: { zh: "國立政治大學", en: "National Chengchi University" },
         roles: [
-          { role: { zh: "政治學系學士班", en: "B.A. in Political Science" }, period: "2022.09 – 2027.06（預計）",
+          { role: { zh: "學士：政治學系", en: "B.A.: Political Science" }, period: "2022.09 – 2027.06（預計）",
             station: { zh: "政大", en: "NCCU" } },
           { role: { zh: "校學士：哲學、政治學與經濟學專長", en: "University Bachelor track: Philosophy, Politics and Economics" }, period: "" },
-          { role: { zh: "輔修：經濟學系", en: "Minor in Economics" }, period: "" },
-          { role: { zh: "輔修：哲學系", en: "Minor in Philosophy" }, period: "" },
-          { role: { zh: "人文領袖榮譽學分學程", en: "Humanities Leadership Honors Program" }, period: "" },
-          { role: { zh: "中國大陸與兩岸關係研究跨領域學分學程", en: "Interdisciplinary Program in China and Cross-Strait Studies" }, period: "" }
+          { role: { zh: "輔修：經濟學系", en: "Minor: Economics" }, period: "" },
+          { role: { zh: "輔修：哲學系", en: "Minor: Philosophy" }, period: "" },
+          { role: { zh: "學程：人文領袖榮譽學分學程", en: "Program: Humanities Leadership Honors Program" }, period: "" },
+          { role: { zh: "學程：中國大陸與兩岸關係研究跨領域學分學程", en: "Program: China and Cross-Strait Studies" }, period: "" }
         ] },
       /* 建中：網站顯示、CV 不放 */
       { cv: false, mark: "建中", logo: "",
@@ -246,12 +240,12 @@ window.SITE = {
       { minor: true, mark: "市府", logo: "",
         org: { zh: "臺北市政府", en: "Taipei City Government" },
         roles: [
-          { role: { zh: "大專青年學生公部門暑期工讀", en: "Public Sector Summer Intern" }, period: "2025.07" }
+          { role: { zh: "暑期工讀：大專青年學生公部門", en: "Summer Intern: Public Sector Program for College Students" }, period: "2025.07" }
         ] },
       { minor: true, cv: false, mark: "青發署", logo: "",
         org: { zh: "教育部青年發展署", en: "Youth Development Administration, Ministry of Education" },
         roles: [
-          { role: { zh: "公共事務人才培力基礎入門課程結業", en: "Completed Public Affairs Talent Foundation Course" }, period: "2025.03" }
+          { role: { zh: "結業：公共事務人才培力基礎入門課程", en: "Completed: Public Affairs Talent Foundation Course" }, period: "2025.03" }
         ] },
       { minor: true, cv: false, mark: "野火", logo: "",
         org: { zh: "國立政治大學野火陣線社", en: "NCCU Wildfire Front Club" },
