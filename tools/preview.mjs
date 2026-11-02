@@ -81,14 +81,14 @@ function labelOf(x) {
   return null;
 }
 /* content.js 頂層欄位的中文名稱（新增欄位時順便補；沒補就顯示英文欄位名） */
-const KEY_NAMES = { updated: "更新日期", english: "英文版開關", name: "姓名", tagline: "首頁定位句", seeking: "求職狀態", headline: "身分一句", roles: "首頁身分", photo: "照片", summary: "簡介",
+const KEY_NAMES = { updated: "更新日期", english: "英文版開關", name: "姓名", tagline: "首頁定位句", seeking: "求職狀態", seekingRotate: "求職輪播", highlights: "簡介螢光筆", headline: "身分一句", roles: "首頁身分", photo: "照片", summary: "簡介",
   expertise: "專長", links: "社群與連結", cvContact: "CV 聯絡方式", news: "近況", groups: "經歷", focusHeading: "關注領域標題",
   focus: "關注領域", works: "代表作", mediaList: "媒體清單列法", media: "媒體", zh: "中文", en: "英文", period: "期間",
   points: "條列說明", url: "連結", date: "日期" };
 const TECH = new Set(["line", "key", "collapsed"]);
 const SUB_NAMES = { items: "", roles: "", text: "", zh: "", en: "英文", role: "職稱", period: "期間", points: "條列說明",
   line: "路線色", minor: "收進「顯示其他」", also: "另見", more: "代表作連結", title: "標題", org: "組織", station: "路線圖站點",
-  cv: "放進 CV", web: "放上網站", show: "顯示", mark: "圓章簡稱", logo: "標誌", url: "連結", date: "日期", key: "代號", note: "一句話說明", thumb: "用縮圖", image: "作品圖", caption: "圖說", alt: "替代文字", src: "圖檔" };
+  cv: "放進 CV", web: "放上網站", show: "顯示", mark: "圓章簡稱", logo: "標誌", url: "連結", date: "日期", key: "代號", note: "一句話說明", thumb: "用縮圖", image: "作品圖", stats: "數字", num: "數值", unit: "單位", label: "說明", words: "輪播詞", caption: "圖說", alt: "替代文字", src: "圖檔" };
 const show = v => typeof v === "string" ? `「${v}」` : JSON.stringify(v);
 const changes = [];
 function diff(a, b, trail) {
