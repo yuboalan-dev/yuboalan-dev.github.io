@@ -2,7 +2,7 @@
    site.js ── 各分頁共用的版面程式（平常不用改；文字請改 content.js）
    ---------------------------------------------------------
    每個分頁的 <body data-page="..."> 決定要畫哪些區塊：
-     home        首頁：桌牌首屏、關注領域、近況
+     home        首頁：首屏、關注領域、歷程（路線圖＋最新近況）
      experience  經歷
      work        代表作
      media       媒體與評論
@@ -46,8 +46,8 @@
      download 是對方存檔時看到的檔名。 */
   var CV_PDF = EN ? { href: "/cv/alan-yu-cv-en.pdf", name: "Alan_Yu_CV.pdf" }
                   : { href: "/cv/yuboan-cv-zh.pdf", name: "游博安_CV.pdf" };
-  /* 完整版 CV（含 content.js 標 cv: false 的次要經歷，可能超過一頁）只從頁尾連結 */
-  var CV_FULL = EN ? "/cv/alan-yu-cv-en-full.pdf" : "/cv/yuboan-cv-zh-full.pdf";
+  /* CV 的定位（2026-11-02）：CV 就是投履歷時附的那份 PDF，網站只提供最新版（頁首「下載 CV」）。
+     可勾選選項的 cv.html 是使用者自己的工具，網站上不連結（網址 /cv.html 仍可用，不給搜尋引擎收錄）。 */
 
   /* ---------- 頁首 ---------- */
   var nav = PAGES.map(function (p) {
@@ -163,30 +163,24 @@
       return '<p class="go" data-reveal><a class="go-btn" href="' + href + '"><span class="go-dot" aria-hidden="true"></span>' + esc(tx(zh, en)) + "</a></p>";
     }
 
-    /* 首頁順序：關注領域 → 一路走來（路線圖）→ 近況 */
+    /* 首頁順序：關注領域 → 歷程（路線圖＋最新三則近況） */
     var focus = U.visible(S.focus, "web");
     if (focus.length) html += block("focus", t(S.focusHeading, L), '<div class="focus">' + focus.map(function (i) {
       return '<div class="focus-item" data-reveal data-line="' + lineOf(i) + '"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
     }).join("") + "</div>" + goto("/work.html", "看代表作", "See selected work"), true);
 
-    if (route) html += block("route", tx("一路走來", "The route so far"), route + goto("/experience.html", "看完整經歷", "See full experience"));
-
-    /* 近況：先顯示 5 筆；最新一筆是紅點 */
-    var news = U.visible(S.news, "web").slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
-    if (news.length) {
-      html += '<section class="block" id="news"><div class="wrap"><div class="block-head" data-reveal><h2 class="block-title">' + tx("近況", "Latest") + '</h2></div><ul class="news" id="newsBody">' + news.map(function (n, i) {
-        var txt = esc(t(n.text, L));
-        if (n.url) txt = '<a href="' + esc(n.url) + '" target="_blank" rel="noopener">' + txt + "</a>";
-        return "<li data-reveal" + (i >= 5 ? ' class="is-more"' : "") + ' style="--i:' + i + '">' + dot(n, false) + '<span class="d">' + esc(n.date || "") + "</span><span>" + txt + "</span></li>";
-      }).join("") + "</ul>" +
-      (news.length > 5 ? '<button class="more-btn" type="button" id="newsMore">' + tx("顯示全部", "Show all") + "</button>" : "") +
-      goto("/media.html", "看媒體與評論", "See media appearances") + "</div></section>";
-    }
+    /* 歷程：上面是路線圖（從起點到現在位置），下面接最新三則近況，當成路線的延續。
+       近況只顯示最新 NEWS_SHOWN 則；更早的留在 content.js 不刪 */
+    var NEWS_SHOWN = 3;
+    var news = U.visible(S.news, "web").slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); }).slice(0, NEWS_SHOWN);
+    var newsHtml = news.length ? '<div class="history-news" data-reveal><h3 class="history-sub">' + tx("最近", "Latest") + '</h3><ul class="news">' + news.map(function (n, i) {
+      var txt = esc(t(n.text, L));
+      if (n.url) txt = '<a href="' + esc(n.url) + '" target="_blank" rel="noopener">' + txt + "</a>";
+      return '<li data-reveal style="--i:' + i + '">' + dot(n, false) + '<span class="d">' + esc(n.date || "") + "</span><span>" + txt + "</span></li>";
+    }).join("") + "</ul></div>" : "";
+    if (route || newsHtml) html += block("history", tx("歷程", "Journey"), route + newsHtml + goto("/experience.html", "看完整經歷", "See full experience"));
 
     main.innerHTML = html;
-
-    var nm = document.getElementById("newsMore");
-    if (nm) nm.onclick = function () { document.getElementById("newsBody").classList.add("show-all"); nm.remove(); };
 
     /* 相片：找不到檔案就換成姓氏字樣 */
     var pw = document.getElementById("photoWrap");
@@ -212,19 +206,21 @@
     }
     function roleLine(r) { return esc(t(r.role, L)) + (r.period ? "　" + esc(U.period(r.period, L)) : ""); }
     function item(it, i) {
-      var rs = rolesOf(it);
-      var rolesHtml = rs.map(function (r) {
+      var rs = rolesOf(it), ROLES_SHOWN = 3;  /* 一個組織職務超過三個時，先顯示三個，其餘收合 */
+      var rolesHtml = rs.map(function (r, ri) {
         var p = U.period(r.period, L), now = /今/.test(r.period || "");
         var pts = (r.points || []).filter(function (x) { return x.show !== false && x.web !== false; })
           .map(function (x) { return "<li>" + esc(t(x, L)) + "</li>"; }).join("");
-        return '<li class="exp-role' + (now ? " is-now" : "") + '"><div class="exp-role-head"><span class="role-name">' + esc(t(r.role, L)) + "</span>" +
+        return '<li class="exp-role' + (now ? " is-now" : "") + (ri >= ROLES_SHOWN ? " is-extra" : "") + '"><div class="exp-role-head"><span class="role-name">' + esc(t(r.role, L)) + "</span>" +
           (p ? '<span class="exp-period">' + esc(p) + "</span>" : "") + "</div>" +
           (pts ? '<ul class="item-points">' + pts + "</ul>" : "") + "</li>";
       }).join("");
       var more = it.more ? '<a class="exp-more" href="' + esc(it.more) + '">' + tx("完整過程見代表作", "See the full story") + " →</a>" : "";
       return '<li class="exp-item' + (it.minor ? " is-more is-minor" : "") + '" id="' + idOf(it) + '" data-reveal data-line="' + lineOf(it) + '" style="--i:' + i + '">' + orgMark(it) +
         '<div><div class="exp-head"><div class="item-main">' + esc(t(it.org, L)) + "</div></div>" +
-        '<ul class="exp-roles' + (rs.length > 1 ? " is-multi" : "") + '">' + rolesHtml + "</ul>" + more + "</div></li>";
+        '<ul class="exp-roles' + (rs.length > 1 ? " is-multi" : "") + '">' + rolesHtml + "</ul>" +
+        (rs.length > ROLES_SHOWN ? '<button class="roles-more" type="button">' + tx("還有 " + (rs.length - ROLES_SHOWN) + " 個職務", (rs.length - ROLES_SHOWN) + " more roles") + "</button>" : "") +
+        more + "</div></li>";
     }
     /* 橫跨兩段的經歷（also）：正式放在自己那段，另一段只放一行連結 */
     function alsoLines(g) {
@@ -252,6 +248,9 @@
     main.innerHTML = block("experience", title, inner);
     main.querySelectorAll(".more-btn[data-g]").forEach(function (b) {
       b.onclick = function () { document.getElementById(b.dataset.g).classList.add("show-all"); b.remove(); };
+    });
+    main.querySelectorAll(".roles-more").forEach(function (b) {
+      b.onclick = function () { b.previousElementSibling.classList.add("show-extra"); b.remove(); };
     });
   }
 
@@ -340,9 +339,7 @@
     f.innerHTML = '<div class="wrap"><div class="block-head"><h2 class="block-title">' + tx("聯絡", "Contact") + "</h2></div>" +
       (mail ? '<a class="contact-mail" href="' + esc(U.href(mail)) + '">' + esc(mail.url.replace(/^mailto:/, "")) + "</a>" : "") +
       (social ? '<div class="social">' + social + "</div>" : "") +
-      '<p class="footnote">' + esc(S.name.zh + " " + S.name.en) + "　" + tx("最後更新 ", "Last updated ") + esc(S.updated || "") +
-      '　<a href="/cv.html?lang=' + L + '">' + tx("CV 網頁版（可選附照片等）", "CV builder") + "</a>" +
-      '　<a href="' + CV_FULL + '" download>' + tx("完整版 CV", "Full CV") + "</a></p></div>";
+      '<p class="footnote">' + esc(S.name.zh + " " + S.name.en) + "　" + tx("最後更新 ", "Last updated ") + esc(S.updated || "") + "</p></div>";
     document.body.appendChild(f);
   }
 

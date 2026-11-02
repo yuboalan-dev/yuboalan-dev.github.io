@@ -254,6 +254,11 @@ main > .block:first-child { border-top: 0; }
 .item-points li { position: relative; padding-left: 14px; }
 .item-points li::before { content: ""; position: absolute; left: 0; top: .72em; width: 5px; height: 5px; border-radius: 50%; background: var(--c, var(--line-none)); }
 .exp-list .is-more { display: none; }
+/* 職務超過三個時，其餘收合 */
+.exp-roles .is-extra { display: none; }
+.exp-roles.show-extra .is-extra { display: block; }
+.roles-more { margin-top: 6px; padding: 0; border: 0; background: none; font: inherit; font-size: 14px; font-weight: 700; color: var(--c, var(--navy)); cursor: pointer; }
+.roles-more::before { content: "＋ "; }
 /* 「完整過程見代表作」與橫跨兩段的一行連結 */
 .exp-more { display: inline-block; margin-top: 8px; font-size: 14px; font-weight: 700; color: var(--c, var(--navy)); }
 .exp-also { position: relative; padding: 10px 0 10px 60px; font-size: 14.5px; line-height: 1.6; }
@@ -291,6 +296,9 @@ main > .block:first-child { border-top: 0; }
 /* =========================================
    5. 近況
    ========================================= */
+/* 歷程：路線圖下面接最新近況 */
+.history-news { margin-top: 44px; }
+.history-sub { font-size: 16px; font-weight: 900; color: var(--navy); margin-bottom: 10px; }
 .news { list-style: none; padding: 0; position: relative; max-width: 760px; }
 .news::before { content: ""; position: absolute; left: 6px; top: 14px; bottom: 14px; width: 2px;
     background: repeating-linear-gradient(180deg, var(--line) 0 6px, transparent 6px 12px); }

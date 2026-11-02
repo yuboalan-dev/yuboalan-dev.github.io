@@ -6,7 +6,7 @@
    2. 用瀏覽器把各分頁畫好，存成「內容已經在裡面」的 HTML
       → 搜尋引擎、LINE／FB／LinkedIn 預覽不用跑程式也看得到內容
    3. 產生正式 CV 的 PDF：cv/yuboan-cv-zh.pdf、cv/alan-yu-cv-en.pdf
-      → 頁首「下載 CV」直接下載這兩個檔；另有完整版 *-full.pdf（頁尾連結）
+      → 頁首「下載 CV」直接下載這個檔（英文版開關打開時才有英文）
    4. 產生分享預覽圖 assets/og.jpg（版型在 tools/og.html，資料讀 content.js）
    CV 超過一頁時：推上 main 照樣發布，但會自動開一個 Issue 提醒；
    在 PR 裡則讓檢查失敗，修好再合併（見 .github/workflows/pages.yml）。
@@ -29,10 +29,9 @@ const PAGES = ["index.html", "experience.html", "work.html", "media.html", "404.
 const ENGLISH = !/^\s*english:\s*false\b/m.test(fs.readFileSync(path.join(ROOT, "content.js"), "utf8"));
 const CVS = [
   { lang: "zh", file: "cv/yuboan-cv-zh.pdf" },
-  { lang: "en", file: "cv/alan-yu-cv-en.pdf" },
-  /* 完整版：列出 cv: false 的次要經歷，不檢查頁數 */
-  { lang: "zh", file: "cv/yuboan-cv-zh-full.pdf", full: true },
-  { lang: "en", file: "cv/alan-yu-cv-en-full.pdf", full: true }
+  { lang: "en", file: "cv/alan-yu-cv-en.pdf" }
+  /* 完整版 PDF 不再產生（2026-11-02 CV 定位：網站只提供正式一頁版）；
+     要完整版時開 /cv.html?full=1 自己列印 */
 ].filter(c => ENGLISH || c.lang === "zh");
 
 /* 1. 複製檔案 */
