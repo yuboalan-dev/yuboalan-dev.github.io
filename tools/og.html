@@ -35,7 +35,7 @@ body {
 <script>
 (function () {
   var S = window.SITE;
-  var LINE = { gov: "#2b3a8c", china: "#c98a0b", transport: "#12925a" }, NONE = "#a3a3b5";
+  var LINE = { student: "#2b3a8c", research: "#c98a0b", transport: "#12925a" }, NONE = "#a3a3b5";
   document.getElementById("name").textContent = S.name.zh;
   document.getElementById("en").textContent = S.name.en;
   document.getElementById("photo").src = "/" + String(S.photo || "").replace(/^\//, "");
@@ -46,7 +46,7 @@ body {
   (S.groups || []).filter(vis).forEach(function (g) {
     (g.items || []).filter(vis).forEach(function (it) {
       var roles = it.roles ? it.roles.filter(vis) : [{ period: it.period, station: it.station }];
-      roles.forEach(function (r) { if (r.station) st.push({ n: r.station.zh, c: LINE[it.line] || NONE, now: /今/.test(r.period || ""), k: key(r.period) }); });
+      roles.forEach(function (r) { if (r.station) st.push({ n: r.station.zh, c: LINE[it.line !== undefined ? it.line : g.line] || NONE, now: /今/.test(r.period || ""), k: key(r.period) }); });
     });
   });
   st.sort(function (a, b) { return a.k - b.k; });

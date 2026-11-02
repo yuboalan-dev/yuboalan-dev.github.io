@@ -4,8 +4,17 @@
 (function () {
   var S = window.SITE;
 
-  /* --- 語言：網址 ?lang=en 優先，其次是上次選的，預設中文 --- */
+  /* 經歷每一筆的路線色跟著所屬的組（content.js 的 groups[].line），不用每筆寫；
+     個別一筆寫了 line 就以那筆為準 */
+  (S.groups || []).forEach(function (g) {
+    (g.items || []).forEach(function (it) { if (it.line === undefined) it.line = g.line || ""; it.group = g.key; });
+  });
+
+  /* --- 語言：網址 ?lang=en 優先，其次是上次選的，預設中文。
+         content.js 的 english: false 時一律中文 --- */
+  var ENGLISH = S.english !== false;
   function getLang() {
+    if (!ENGLISH) return "zh";
     var q = new URLSearchParams(location.search).get("lang");
     if (q === "en" || q === "zh") {
       /* 記下來：換到別的分頁（網址沒帶 ?lang）時語言才不會跳回中文 */
@@ -90,7 +99,7 @@
   }
 
   window.UTIL = {
-    S: S, getLang: getLang, setLang: setLang, t: t, period: period, esc: esc,
+    S: S, ENGLISH: ENGLISH, getLang: getLang, setLang: setLang, t: t, period: period, esc: esc,
     visible: visible, href: href, prettyUrl: prettyUrl, icon: icon, activeLinks: activeLinks
   };
 })();

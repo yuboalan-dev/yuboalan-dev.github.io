@@ -59,10 +59,10 @@
   header.innerHTML =
     '<div class="wrap"><a class="brand" href="/">' + esc(S.name.zh) + "<span>" + esc(S.name.en) + "</span></a>" +
     '<nav class="topnav" aria-label="' + tx("主選單", "Main") + '">' + nav +
-    '<button class="lang-btn" type="button" id="langBtn">' + (EN ? "中文" : "EN") + "</button>" +
+    (U.ENGLISH ? '<button class="lang-btn" type="button" id="langBtn">' + (EN ? "中文" : "EN") + "</button>" : "") +
     '<a class="btn" href="' + CV_PDF.href + '" download="' + esc(CV_PDF.name) + '">' + tx("下載 CV", "Download CV") + "</a></nav></div>";
   document.body.insertBefore(header, document.body.firstChild);
-  document.getElementById("langBtn").onclick = function () { U.setLang(EN ? "zh" : "en"); };
+  if (U.ENGLISH) document.getElementById("langBtn").onclick = function () { U.setLang(EN ? "zh" : "en"); };
 
   var main = document.getElementById("main");
 
@@ -197,31 +197,56 @@
     addPersonData();
   }
 
-  /* ---------- 經歷：每一組是一段路線，條目是站點 ---------- */
+  /* ---------- 經歷：每一組是一段路線，條目是站點 ----------
+     段落＝content.js 的 groups（學生自治、研究與教學、人本交通、學歷、其他）。
+     每段內：主要經歷在前、次要（minor）在後；同一類「現職在前、過去在後」，其餘照 content.js 的順序。
+     次要經歷先收起來，按「顯示其他」才出現。現職／過去用實心／空心圓章表示，不另加標籤。 */
   function renderExperience() {
     var title = tx("經歷", "Experience");
     setTitle(title);
-    var SHOW_FIRST = 3;
     var groups = (S.groups || []).filter(function (g) { return g.show !== false && g.web !== false && U.visible(g.items, "web").length; });
-    var inner = legend("legend") + '<div class="exp-grid">' + groups.map(function (g, gi) {
-      var items = U.visible(g.items, "web");
-      return '<div class="exp-group" id="g' + gi + '"><h3 class="exp-title">' + esc(t(g.title, L)) + '</h3><ul class="exp-list">' + items.map(function (it, i) {
-        var ln = lineName(it.line), rs = rolesOf(it);
-        var rolesHtml = rs.map(function (r) {
-          var p = U.period(r.period, L), now = /今/.test(r.period || "");
-          var pts = (r.points || []).filter(function (x) { return x.show !== false && x.web !== false; })
-            .map(function (x) { return "<li>" + esc(t(x, L)) + "</li>"; }).join("");
-          return '<li class="exp-role' + (now ? " is-now" : "") + '"><div class="exp-role-head"><span class="role-name">' + esc(t(r.role, L)) + "</span>" +
-            (p ? '<span class="exp-period">' + esc(p) + "</span>" : "") + "</div>" +
-            (pts ? '<ul class="item-points">' + pts + "</ul>" : "") + "</li>";
-        }).join("");
-        return '<li class="exp-item' + (g.collapsed && i >= SHOW_FIRST ? " is-more" : "") + '" id="' + idOf(it) + '" data-reveal data-line="' + lineOf(it) + '" style="--i:' + i + '">' + orgMark(it) +
-          '<div><div class="exp-head"><div class="item-main">' + esc(t(it.org, L)) + "</div>" +
-          '<div class="tags">' + (ln ? '<span class="line-tag">' + esc(ln) + "</span>" : "") + (isNow(it) ? '<span class="now-tag">' + tx("現職", "Current") + "</span>" : "") + "</div></div>" +
-          '<ul class="exp-roles' + (rs.length > 1 ? " is-multi" : "") + '">' + rolesHtml + "</ul></div></li>";
-      }).join("") + "</ul>" +
-      (g.collapsed && items.length > SHOW_FIRST
-        ? '<button class="more-btn" type="button" data-g="g' + gi + '">' + tx("顯示全部 " + items.length + " 筆", "Show all " + items.length) + "</button>" : "") +
+    function ordered(items) {
+      return items.map(function (it, i) { return { it: it, i: i }; }).sort(function (a, b) {
+        return (a.it.minor ? 1 : 0) - (b.it.minor ? 1 : 0) || (isNow(a.it) ? 0 : 1) - (isNow(b.it) ? 0 : 1) || a.i - b.i;
+      }).map(function (x) { return x.it; });
+    }
+    function roleLine(r) { return esc(t(r.role, L)) + (r.period ? "　" + esc(U.period(r.period, L)) : ""); }
+    function item(it, i) {
+      var rs = rolesOf(it);
+      var rolesHtml = rs.map(function (r) {
+        var p = U.period(r.period, L), now = /今/.test(r.period || "");
+        var pts = (r.points || []).filter(function (x) { return x.show !== false && x.web !== false; })
+          .map(function (x) { return "<li>" + esc(t(x, L)) + "</li>"; }).join("");
+        return '<li class="exp-role' + (now ? " is-now" : "") + '"><div class="exp-role-head"><span class="role-name">' + esc(t(r.role, L)) + "</span>" +
+          (p ? '<span class="exp-period">' + esc(p) + "</span>" : "") + "</div>" +
+          (pts ? '<ul class="item-points">' + pts + "</ul>" : "") + "</li>";
+      }).join("");
+      var more = it.more ? '<a class="exp-more" href="' + esc(it.more) + '">' + tx("完整過程見代表作", "See the full story") + " →</a>" : "";
+      return '<li class="exp-item' + (it.minor ? " is-more is-minor" : "") + '" id="' + idOf(it) + '" data-reveal data-line="' + lineOf(it) + '" style="--i:' + i + '">' + orgMark(it) +
+        '<div><div class="exp-head"><div class="item-main">' + esc(t(it.org, L)) + "</div></div>" +
+        '<ul class="exp-roles' + (rs.length > 1 ? " is-multi" : "") + '">' + rolesHtml + "</ul>" + more + "</div></li>";
+    }
+    /* 橫跨兩段的經歷（also）：正式放在自己那段，另一段只放一行連結 */
+    function alsoLines(g) {
+      var out = [];
+      groups.forEach(function (h) {
+        if (h === g) return;
+        U.visible(h.items, "web").forEach(function (it) {
+          if (it.also !== g.key) return;
+          var r = rolesOf(it)[0];
+          out.push('<li class="exp-also" data-line="' + lineOf(it) + '"><a href="#' + idOf(it) + '">' + esc(t(it.org, L)) + "　" + (r ? roleLine(r) : "") + "</a>" +
+            '<span class="exp-also-note">' + tx("見「" + t(h.title, L) + "」", "see " + t(h.title, L)) + "</span></li>");
+        });
+      });
+      return out.join("");
+    }
+    var inner = '<div class="exp-grid">' + groups.map(function (g) {
+      var items = ordered(U.visible(g.items, "web"));
+      var minorN = items.filter(function (it) { return it.minor; }).length, allMinor = minorN === items.length;
+      return '<div class="exp-group' + (allMinor ? " is-folded" : "") + '" id="g-' + esc(g.key || "") + '" data-line="' + esc(g.line || "") + '">' +
+        '<h3 class="exp-title">' + esc(t(g.title, L)) + '</h3><ul class="exp-list">' + items.map(item).join("") + alsoLines(g) + "</ul>" +
+        (minorN ? '<button class="more-btn" type="button" data-g="g-' + esc(g.key || "") + '">' +
+          (allMinor ? tx("顯示 " + minorN + " 筆", "Show " + minorN) : tx("顯示其他 " + minorN + " 筆", "Show " + minorN + " more")) + "</button>" : "") +
       "</div>";
     }).join("") + "</div>";
     main.innerHTML = block("experience", title, inner);
@@ -381,7 +406,8 @@
     var hit = document.getElementById(decodeURIComponent(location.hash.slice(1)));
     if (hit) {
       hit.classList.add("is-in");
-      var grp = hit.closest(".exp-group"); if (grp) grp.classList.add("show-all");
+      var grp = hit.closest(".exp-group");
+      if (grp) { grp.classList.add("show-all"); var mb = grp.querySelector(".more-btn"); if (mb) mb.remove(); }
       setTimeout(function () { hit.scrollIntoView({ block: "center", behavior: ANIM ? "smooth" : "auto" }); hit.classList.add("flash"); }, 60);
     }
   }

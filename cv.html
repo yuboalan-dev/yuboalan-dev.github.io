@@ -156,19 +156,22 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
      聯絡方式仍照 cv: false（社群帳號不印在正式 CV） */
   function W() { return opt.full ? "all" : "cv"; }
 
-  /* CV 段落順序：先學歷，再依 content.js 的 groups 順序 */
-  var CV_ORDER = ["education", "current", "research", "experience"];
+  /* CV 段落：網站按領域分段，CV 按傳統分段（同一份 content.js）
+     學歷與榮譽 ← groups 的 education
+     經歷       ← 三條路線（PATHS）裡的主要經歷，現職在前、過去在後，其餘照 content.js 順序
+     其他經歷與研習 ← 三條路線裡標 minor 的，加上 groups 的 other */
+  var PATHS = ["student", "research", "transport"];
 
   var TX = {
     zh: { back: "← 回個人網站", photo: "附照片", focus: "附關注領域", works: "附代表作", mediaOpt: "附媒體", full: "完整版（含次要經歷，可能超過一頁）",
           print: "列印／存成 PDF",
           hint: "按「列印／存成 PDF」→ 目的地選「另存為 PDF」，紙張 A4、邊界「預設」，勾選「背景圖形」。勾選的選項會記在網址裡，可以直接把網址傳給別人。",
-          summary: "簡介", media: "媒體與評論", shows: "政論節目來賓", news: "新聞受訪", focusT: "關注領域", worksT: "代表作",
+          summary: "簡介", exp: "經歷", media: "媒體與評論", shows: "政論節目來賓", news: "新聞受訪", focusT: "關注領域", worksT: "代表作",
           expertise: "專長", updated: "更新日期", ep: "集" },
     en: { back: "← Back to website", photo: "Photo", focus: "Focus areas", works: "Selected work", mediaOpt: "Media", full: "Full version (all entries; may exceed one page)",
           print: "Print / Save as PDF",
           hint: "In the print dialog choose “Save as PDF”, paper A4, default margins, and enable “Background graphics”. Your options are kept in the URL so you can share it.",
-          summary: "Profile", media: "Media & Commentary", shows: "Political talk shows", news: "News interviews", focusT: "Focus Areas", worksT: "Selected Work",
+          summary: "Profile", exp: "Experience", media: "Media & Commentary", shows: "Political talk shows", news: "News interviews", focusT: "Focus Areas", worksT: "Selected Work",
           expertise: "Expertise", updated: "Updated", ep: "episodes" }
   }[L];
 
@@ -182,6 +185,8 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
   document.getElementById("printBtn").textContent = TX.print;
   document.getElementById("hint").textContent = TX.hint;
   document.getElementById("printBtn").onclick = function () { window.print(); };
+  /* content.js 的 english: false 時不顯示語言切換 */
+  if (!U.ENGLISH) document.querySelectorAll(".seg").forEach(function (el) { el.style.display = "none"; });
   document.querySelectorAll(".seg button").forEach(function (b) {
     if (b.dataset.lang === L) b.classList.add("on");
     b.onclick = function () { if (b.dataset.lang !== L) U.setLang(b.dataset.lang); };
@@ -281,11 +286,17 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
     html += section(TX.summary, S.summary ? '<p class="cv-summary">' + esc(t(S.summary, L)) + "</p>" : "");
 
     var gs = (S.groups || []).filter(function (g) { return g.show !== false && (opt.full || g.cv !== false); });
-    gs.sort(function (a, b) {
-      var ia = CV_ORDER.indexOf(a.key), ib = CV_ORDER.indexOf(b.key);
-      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    function grp(key) { return gs.filter(function (g) { return g.key === key; })[0]; }
+    function isNow(it) { return (it.roles || []).some(function (r) { return r.show !== false && /今/.test(r.period || ""); }); }
+    var main = [], minor = [];
+    gs.filter(function (g) { return PATHS.indexOf(g.key) >= 0; }).forEach(function (g) {
+      (g.items || []).forEach(function (it) { (it.minor ? minor : main).push(it); });
     });
-    gs.forEach(function (g) { html += section(t(g.title, L), entries(g.items)); });
+    main = main.filter(isNow).concat(main.filter(function (it) { return !isNow(it); }));
+    if (grp("other")) minor = minor.concat(grp("other").items || []);
+    if (grp("education")) html += section(t(grp("education").title, L), entries(grp("education").items));
+    html += section(TX.exp, entries(main));
+    html += section(t((grp("other") || {}).title || { zh: "其他經歷與研習", en: "Other Experience & Training" }, L), entries(minor));
 
     if (opt.works) html += section(TX.worksT, U.visible(S.works, W()).map(function (w) {
       return '<div class="cv-entry"><div><span class="cv-org">' + esc(t(w.title, L)) + "</span>　" +
