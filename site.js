@@ -219,8 +219,8 @@
       var rs = rolesOf(it), ROLES_SHOWN = it.fold === false ? 99 : 3;
       var rolesHtml = rs.map(function (r, ri) {
         var p = U.period(r.period, L), now = /今/.test(r.period || "");
-        var pts = (r.points || []).filter(function (x) { return x.show !== false && x.web !== false; })
-          .map(function (x) { return "<li>" + esc(t(x, L)) + "</li>"; }).join("");
+        /* 經歷頁不放條列說明（CLAUDE.md 經歷整理準則第 8 條）：points 只給 CV 用，細節放代表作 */
+        var pts = "";
         return '<li class="exp-role' + (now ? " is-now" : "") + (ri >= ROLES_SHOWN ? " is-extra" : "") + '"><div class="exp-role-head"><span class="role-name">' + esc(t(r.role, L)) + "</span>" +
           (p ? '<span class="exp-period">' + esc(p) + "</span>" : "") + "</div>" +
           (pts ? '<ul class="item-points">' + pts + "</ul>" : "") + "</li>";
