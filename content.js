@@ -69,12 +69,14 @@ window.SITE = {
     en: "Political science (PPE) student at NCCU; Speaker of its Student Congress; board member, National Students' Union of Taiwan; former research assistant on CCP elite politics; won participatory-budget funding for safer streets."
   },
 
-  /* 專長（首頁小標籤 + CV） */
+  /* 專長（CV 抬頭＋給搜尋引擎的結構化資料）
+     每一項都要在經歷或代表作找得到佐證，招募者才會信；和網站的三個關注領域對得上。
+     【待確認】2026-11-02 Claude 依經歷改寫（原本：海峽兩岸關係、地緣政治經濟、公共政策分析、人本交通政策） */
   expertise: [
-    { zh: "海峽兩岸關係",   en: "Cross-Strait Relations" },
-    { zh: "地緣政治經濟",   en: "Geopolitical Economy" },
-    { zh: "公共政策分析",   en: "Public Policy Analysis" },
-    { zh: "人本交通政策",   en: "Transport Policy" }
+    { zh: "議事規則與預算審查",   en: "Parliamentary Procedure & Budget Review" },
+    { zh: "兩岸與中國政治研究",   en: "Cross-Strait & Chinese Politics Research" },
+    { zh: "參與式預算與交通提案", en: "Participatory Budgeting & Transport Proposals" },
+    { zh: "政論節目與媒體溝通",   en: "Political Commentary & Media" }
   ],
 
   /* ---------- 2. 聯絡與社群 ----------
