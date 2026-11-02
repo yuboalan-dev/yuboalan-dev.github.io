@@ -16,6 +16,8 @@ body {
 .name { position: absolute; left: 80px; top: 110px; font-size: 150px; font-weight: 900; letter-spacing: .04em; line-height: 1; }
 .name::after { content: ""; display: inline-block; width: 30px; height: 30px; border-radius: 50%; background: #e60012; margin-left: 12px; }
 .en { position: absolute; left: 86px; top: 290px; font-size: 40px; font-weight: 700; color: #5a5a70; }
+.role { position: absolute; left: 86px; top: 362px; font-size: 32px; font-weight: 700; }
+.seek { position: absolute; left: 86px; top: 418px; width: 700px; font-size: 22px; font-weight: 500; color: #5a5a70; line-height: 1.4; }
 .photo { position: absolute; right: 80px; top: 85px; width: 330px; height: 330px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 8px #fff, 0 0 0 13px #e60012; }
 .photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
 .route { position: absolute; left: 80px; right: 80px; top: 500px; height: 30px; }
@@ -29,6 +31,8 @@ body {
 <body>
 <div class="name" id="name"></div>
 <div class="en" id="en"></div>
+<div class="role" id="role"></div>
+<div class="seek" id="seek"></div>
 <div class="photo"><img id="photo" alt=""></div>
 <div class="route" id="route"></div>
 <script src="/content.js"></script>
@@ -38,6 +42,10 @@ body {
   var LINE = { student: "#2b3a8c", research: "#c98a0b", transport: "#12925a" }, NONE = "#a3a3b5";
   document.getElementById("name").textContent = S.name.zh;
   document.getElementById("en").textContent = S.name.en;
+  /* 身分（首頁第一個身分）與求職狀態：分享到 LINE、FB 時對方一眼看懂 */
+  var r0 = (S.roles || []).filter(function (r) { return r.show !== false && r.web !== false; })[0];
+  document.getElementById("role").textContent = r0 ? r0.zh : "";
+  document.getElementById("seek").textContent = (S.seeking && S.seeking.zh) || "";
   document.getElementById("photo").src = "/" + String(S.photo || "").replace(/^\//, "");
   function key(p) { var m = String(p || "").match(/(\d{4})(?:\.(\d{1,2}))?/); return m ? (+m[1]) * 100 + (+(m[2] || 0)) : 0; }
   function vis(x) { return x && x.show !== false && x.web !== false; }
@@ -50,7 +58,8 @@ body {
     });
   });
   st.sort(function (a, b) { return a.k - b.k; });
-  var W = 1040, step = st.length > 1 ? (W - 28) / (st.length - 1) : 0, h = "";
+  /* 右邊留出最後一站站名的寬度，字才不會貼到圖片邊緣 */
+  var W = 960, step = st.length > 1 ? (W - 28) / (st.length - 1) : 0, h = "";
   st.forEach(function (s, i) {
     if (i) h += '<div class="seg" style="left:' + ((i - 1) * step + 14) + 'px;width:' + step + 'px;background:repeating-linear-gradient(90deg,' + s.c + ' 0 12px,transparent 12px 20px)"></div>';
   });

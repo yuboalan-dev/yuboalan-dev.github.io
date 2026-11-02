@@ -170,12 +170,12 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
           print: "列印／存成 PDF",
           hint: "按「列印／存成 PDF」→ 目的地選「另存為 PDF」，紙張 A4、邊界「預設」，勾選「背景圖形」。勾選的選項會記在網址裡，可以直接把網址傳給別人。",
           summary: "簡介", exp: "經歷", media: "媒體與評論", shows: "政論節目來賓", news: "新聞受訪", focusT: "關注領域", worksT: "代表作",
-          expertise: "專長", updated: "更新日期", ep: "集" },
+          expertise: "專長", seeking: "求職", updated: "更新日期", ep: "集" },
     en: { back: "← Back to website", photo: "Photo", focus: "Focus areas", works: "Selected work", mediaOpt: "Media", full: "Full version (all entries; may exceed one page)",
           print: "Print / Save as PDF",
           hint: "In the print dialog choose “Save as PDF”, paper A4, default margins, and enable “Background graphics”. Your options are kept in the URL so you can share it.",
           summary: "Profile", exp: "Experience", media: "Media & Commentary", shows: "Political talk shows", news: "News interviews", focusT: "Focus Areas", worksT: "Selected Work",
-          expertise: "Expertise", updated: "Updated", ep: "episodes" }
+          expertise: "Expertise", seeking: "Seeking", updated: "Updated", ep: "episodes" }
   }[L];
 
   document.documentElement.lang = L === "en" ? "en" : "zh-Hant";
@@ -282,6 +282,7 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
       '<header class="cv-head"><div>' +
         '<div class="cv-name">' + esc(first) + "<small>" + esc(second) + "</small></div>" +
         (headline ? '<div class="cv-headline">' + esc(headline) + "</div>" : "") +
+        (t(S.seeking, L) ? '<div class="cv-expertise"><b>' + esc(TX.seeking) + "</b>　" + esc(t(S.seeking, L)) + "</div>" : "") +
         (U.visible(S.expertise, "cv").length ? '<div class="cv-expertise"><b>' + esc(TX.expertise) + "</b>　" +
           U.visible(S.expertise, "cv").map(function (e) { return esc(t(e, L)); }).join(L === "en" ? " · " : "、") + "</div>" : "") +
         '<div class="cv-contact">' + contact.join("") + "</div>" +

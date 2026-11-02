@@ -5,7 +5,7 @@
      home        首頁：首屏、關注領域、歷程（路線圖＋最新近況）
      experience  經歷
      work        代表作
-     media       媒體與評論
+     media       媒體
      notfound    找不到頁面（404.html）
    頁首（導覽、語言、CV）與頁尾（聯絡）所有分頁共用，只寫在這裡一份。
 
@@ -109,7 +109,7 @@
     var items = U.visible(S.focus, "web").filter(function (f) { return f.line; }).map(function (f) {
       return '<span data-line="' + f.line + '">' + (cls === "route-legend" ? "" : dot(f, true)) + esc(t(f.title, L)) + "</span>";
     }).join("");
-    return items ? '<div class="' + cls + '">' + items + (cls === "route-legend" ? '<span class="now">' + tx("現在位置", "Now") + "</span>" : "") + "</div>" : "";
+    return items ? '<div class="' + cls + '">' + items + (cls === "route-legend" ? '<span class="now">' + tx("最新一站", "Latest") + "</span>" : "") + "</div>" : "";
   }
 
   /* ---------- 首頁 ---------- */
@@ -122,6 +122,7 @@
       return "<li>" + dot(r, true) + '<span class="org">' + esc(org) + '</span><span class="role">' + esc(role) + "</span></li>";
     }).join("");
     var tl = t(S.tagline, L);
+    var seek = t(S.seeking, L);
 
     /* 職涯路線圖：經歷裡有 station 的條目，依開始年月排列；最後一站是「現在位置」 */
     /* 站點：每個職務上有 station 的，都是一站（用那個職務的期間） */
@@ -152,6 +153,7 @@
           '<div class="hero-name"><h1>' + esc(EN ? S.name.en : S.name.zh) + '</h1><span class="en">' + esc(EN ? S.name.zh : S.name.en) + "</span></div>" +
           '<div class="intro">' +
             (tl ? '<p class="tagline">' + esc(tl) + "</p>" : "") +
+            (seek ? '<p class="seeking"><span class="seeking-dot" aria-hidden="true"></span>' + esc(seek) + "</p>" : "") +
             '<p class="summary">' + esc(t(S.summary, L)) + "</p>" +
             (roles ? '<ul class="roles">' + roles + "</ul>" : "") +
           "</div></div>" +
@@ -222,7 +224,7 @@
         '<div><div class="exp-head"><div class="item-main">' + esc(t(it.org, L)) + "</div></div>" +
         /* 只有一個職務也用同樣的圓點樣式，全頁每一行職務看起來一致 */
         '<ul class="exp-roles is-multi">' + rolesHtml + "</ul>" +
-        (rs.length > ROLES_SHOWN ? '<button class="roles-more" type="button">' + tx("還有 " + (rs.length - ROLES_SHOWN) + " 個職務", (rs.length - ROLES_SHOWN) + " more roles") + "</button>" : "") +
+        (rs.length > ROLES_SHOWN ? '<button class="roles-more" type="button">' + tx("顯示其他 " + (rs.length - ROLES_SHOWN) + " 個職務", "Show " + (rs.length - ROLES_SHOWN) + " more roles") + "</button>" : "") +
         more + "</div></li>";
     }
     /* 橫跨兩段的經歷（also）：正式放在自己那段，另一段只放一行連結 */
@@ -243,11 +245,12 @@
     var cvBtn = '<p class="exp-cv"><a class="go-btn" href="' + CV_PDF.href + '" download="' + esc(CV_PDF.name) + '"><span class="go-dot" aria-hidden="true"></span>' + tx("下載正式 CV（PDF）", "Download CV (PDF)") + "</a></p>";
     var inner = cvBtn + '<div class="exp-grid">' + groups.map(function (g) {
       var items = ordered(U.visible(g.items, "web"));
+      /* 整段都是次要經歷（例：其他經歷與研習）時直接展開，不然那一段只剩一顆按鈕、看起來是空的 */
       var minorN = items.filter(function (it) { return it.minor; }).length, allMinor = minorN === items.length;
-      return '<div class="exp-group' + (allMinor ? " is-folded" : "") + '" id="g-' + esc(g.key || "") + '" data-line="' + esc(g.line || "") + '">' +
+      return '<div class="exp-group' + (allMinor ? " show-all" : "") + '" id="g-' + esc(g.key || "") + '" data-line="' + esc(g.line || "") + '">' +
         '<h3 class="exp-title">' + esc(t(g.title, L)) + '</h3><ul class="exp-list">' + items.map(item).join("") + alsoLines(g) + "</ul>" +
-        (minorN ? '<button class="more-btn" type="button" data-g="g-' + esc(g.key || "") + '">' +
-          (allMinor ? tx("顯示 " + minorN + " 筆", "Show " + minorN) : tx("顯示其他 " + minorN + " 筆", "Show " + minorN + " more")) + "</button>" : "") +
+        (minorN && !allMinor ? '<button class="more-btn" type="button" data-g="g-' + esc(g.key || "") + '">' +
+          tx("顯示其他 " + minorN + " 筆", "Show " + minorN + " more") + "</button>" : "") +
       "</div>";
     }).join("") + "</div>";
     main.innerHTML = block("experience", title, inner);
@@ -280,21 +283,23 @@
        "summary" 每個節目一行（名稱、年份、一集一個點），"full" 逐集列出。
      新聞受訪逐則列出；已在上方精選出現的不重複。 */
   function renderMedia() {
-    var title = tx("媒體與評論", "Media");
+    var title = tx("媒體", "Media");
     setTitle(title);
     var media = U.visible(S.media, "web"), full = S.mediaList === "full";
     function src(m) { return t(m.kind === "show" ? m.program : m.outlet, L); }
     function vurl(m) { return m.url || ("https://www.youtube.com/watch?v=" + m.id); }
     function byDate(a, b) { return String(b.date).localeCompare(String(a.date)); }
+    /* 日期顯示和全站一致：「2025-05-05」→「2025.05」；只知道年份就只寫年份 */
+    function day(m) { return String(m.date || "").replace(/^(\d{4})-(\d{2}).*$/, "$1.$2"); }
     function row(m, label) {
-      return '<li><a href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><span class="d">' + esc(m.date || "") +
+      return '<li><a href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><span class="d">' + esc(day(m)) +
         "</span><span>" + (label ? "<b>" + esc(label) + "</b>　" : "") + esc(t(m.title, L)) + "</span></a></li>";
     }
     var feat = media.filter(function (m) { return m.featured; });
     var html = feat.length ? '<div class="media-feat">' + feat.map(function (m) {
       var thumb = m.id ? '<img loading="lazy" alt="" onerror="this.remove()" src="https://i.ytimg.com/vi/' + esc(m.id) + '/hqdefault.jpg">' : "";
       return '<a class="vid" data-reveal href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><div class="thumb">' + thumb + "</div>" +
-        '<div class="src">' + esc(src(m)) + '</div><div class="vt">' + esc(t(m.title, L)) + '</div><div class="vd">' + esc(m.date || "") + "</div></a>";
+        '<div class="src">' + esc(src(m)) + '</div><div class="vt">' + esc(t(m.title, L)) + '</div><div class="vd">' + esc(day(m)) + "</div></a>";
     }).join("") + "</div>" : "";
 
     var shows = {}, order = [], news = [];

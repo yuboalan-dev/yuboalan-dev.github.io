@@ -141,6 +141,9 @@ img { display: block; max-width: 100%; }
 html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 .intro { display: flex; flex-direction: column; gap: 22px; margin-top: 24px; max-width: 38em; }
 .tagline { font-size: clamp(19px, 2.2vw, 23px); font-weight: 700; color: var(--navy); line-height: 1.6; }
+/* 求職狀態：簡介上方一行，紅點＝現在 */
+.seeking { display: flex; align-items: baseline; gap: 10px; font-size: clamp(16.5px, 1.8vw, 18.5px); font-weight: 700; color: var(--navy); line-height: 1.6; }
+.seeking-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); flex-shrink: 0; transform: translateY(-1px); }
 .summary { font-size: 16.5px; line-height: 1.95; color: var(--text); }
 .roles { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .roles li { display: flex; align-items: center; gap: 12px; font-size: 15.5px; }
@@ -272,7 +275,6 @@ main > .block:first-child { border-top: 0; }
 .exp-roles .is-extra { display: none; }
 .exp-roles.show-extra .is-extra { display: block; }
 .roles-more { margin-top: 6px; padding: 0; border: 0; background: none; font: inherit; font-size: 14px; font-weight: 700; color: var(--c, var(--navy)); cursor: pointer; }
-.roles-more::before { content: "＋ "; }
 /* 「完整過程見代表作」與橫跨兩段的一行連結 */
 .exp-more { display: inline-block; margin-top: 8px; font-size: 14px; font-weight: 700; color: var(--c, var(--navy)); }
 .exp-also { position: relative; padding: 10px 0 10px 60px; font-size: 14.5px; line-height: 1.6; }
