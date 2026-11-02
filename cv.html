@@ -185,6 +185,8 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
   document.querySelectorAll(".seg button").forEach(function (b) {
     if (b.dataset.lang === L) b.classList.add("on");
     b.onclick = function () { if (b.dataset.lang !== L) U.setLang(b.dataset.lang); };
+  /* content.js 的 english: false 時不顯示語言切換 */
+  if (!U.ENGLISH) document.querySelectorAll(".seg").forEach(function (el) { el.style.display = "none"; });
   });
   Object.keys(opt).forEach(function (k) {
     var el = document.getElementById("opt-" + k);

@@ -78,7 +78,7 @@ function labelOf(x) {
   return null;
 }
 /* content.js 頂層欄位的中文名稱（新增欄位時順便補；沒補就顯示英文欄位名） */
-const KEY_NAMES = { updated: "更新日期", name: "姓名", tagline: "首頁定位句", roles: "首頁身分", photo: "照片", summary: "簡介",
+const KEY_NAMES = { updated: "更新日期", english: "英文版開關", name: "姓名", tagline: "首頁定位句", roles: "首頁身分", photo: "照片", summary: "簡介",
   expertise: "專長", links: "社群與連結", cvContact: "CV 聯絡方式", news: "近況", groups: "經歷", focusHeading: "關注領域標題",
   focus: "關注領域", works: "代表作", mediaList: "媒體清單列法", media: "媒體", zh: "中文", en: "英文", period: "期間",
   points: "條列說明", url: "連結", date: "日期" };
@@ -160,7 +160,9 @@ async function cvPages(site, lang) {
 
 const shots = [];
 for (const p of PAGES) for (const s of SIZES) shots.push({ id: `${p.file.replace(".html", "")}-${s.key}`, title: `${p.name}（${s.name}）`, url: `/${p.file}`, width: s.width });
-for (const c of CVS) shots.push({ id: `cv-${c.lang}`, title: c.name, url: `/cv.html?lang=${c.lang}`, width: 794, media: "print" });
+/* content.js 的 english: false（英文版先關掉）時，英文 CV 跟中文一樣，不重複拍 */
+const CVS_ON = CVS.filter(c => c.lang === "zh" || !dataAfter || dataAfter.english !== false);
+for (const c of CVS_ON) shots.push({ id: `cv-${c.lang}`, title: c.name, url: `/cv.html?lang=${c.lang}`, width: 794, media: "print" });
 
 const changed = [];
 for (const s of shots) {
@@ -181,7 +183,7 @@ for (const s of shots) {
   console.log(`畫面有變：${s.title}`);
 }
 const pages = [];
-for (const c of CVS) pages.push({ name: c.name, a: await cvPages(before, c.lang), b: await cvPages(after, c.lang) });
+for (const c of CVS_ON) pages.push({ name: c.name, a: await cvPages(before, c.lang), b: await cvPages(after, c.lang) });
 
 await browser.close();
 

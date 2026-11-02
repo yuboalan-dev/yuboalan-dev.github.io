@@ -59,10 +59,10 @@
   header.innerHTML =
     '<div class="wrap"><a class="brand" href="/">' + esc(S.name.zh) + "<span>" + esc(S.name.en) + "</span></a>" +
     '<nav class="topnav" aria-label="' + tx("主選單", "Main") + '">' + nav +
-    '<button class="lang-btn" type="button" id="langBtn">' + (EN ? "中文" : "EN") + "</button>" +
+    (U.ENGLISH ? '<button class="lang-btn" type="button" id="langBtn">' + (EN ? "中文" : "EN") + "</button>" : "") +
     '<a class="btn" href="' + CV_PDF.href + '" download="' + esc(CV_PDF.name) + '">' + tx("下載 CV", "Download CV") + "</a></nav></div>";
   document.body.insertBefore(header, document.body.firstChild);
-  document.getElementById("langBtn").onclick = function () { U.setLang(EN ? "zh" : "en"); };
+  if (U.ENGLISH) document.getElementById("langBtn").onclick = function () { U.setLang(EN ? "zh" : "en"); };
 
   var main = document.getElementById("main");
 
