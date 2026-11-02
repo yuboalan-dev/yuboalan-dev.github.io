@@ -6,7 +6,8 @@
    ・三條路線＝三個關注領域，各一個顏色（content.js 的 line）：
        student 學生自治（藍）／research 研究與教學（金）／transport 人本交通（綠）
    ・紅點只有一個意思：「現在位置」。
-   ・字型：昭源圓黑（Chiron GoRound TC），字形的圓角和圓點同一個語言。
+   ・字型：標題、姓名、站名用昭源圓黑（Chiron GoRound TC，字形的圓角和圓點同一個語言）；
+     內文用思源黑體（Noto Sans TC），長段落比較穩重好讀（2026-11-02）。
    ・按鈕、標籤一律膠囊形。
 
    ★ 想換顏色、字型、寬度：只改第 0 段。
@@ -35,7 +36,7 @@
     --line-none:      #a3a3b5;   /* 沒有指定路線 */
 
     --round: "Chiron GoRound TC", "Noto Sans TC", -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
-    --sans:  var(--round);
+    --sans:  "Noto Sans TC", -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
 
     --page-w:  1120px;
     --gutter:  clamp(16px, 4vw, 40px);
@@ -47,10 +48,12 @@
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 body {
     margin: 0; background: var(--page-bg); color: var(--text);
-    font-family: var(--round); font-size: 16px; line-height: 1.8; letter-spacing: .01em;
+    font-family: var(--sans); font-size: 16px; line-height: 1.8; letter-spacing: .01em;
     overflow-x: hidden;
 }
 h1, h2, h3, h4, p, ul, ol, dl { margin: 0; }
+/* 圓體只用在標題、姓名、站名、按鈕：有個性，又不影響長段落的閱讀 */
+h1, h2, h3, .brand, .station .n, .go-btn, .contact-mail { font-family: var(--round); }
 a { color: inherit; }
 img { display: block; max-width: 100%; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 999px; }
