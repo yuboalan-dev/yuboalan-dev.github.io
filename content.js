@@ -208,7 +208,10 @@ window.SITE = {
         org: { zh: "政大指南路交通改善小組", en: "NCCU Zhinan Road Traffic Improvement Task Force" },
         roles: [
           { role: { zh: "召集人", en: "Convener" }, period: "2025.01 – 今",
-            station: { zh: "指南路小組", en: "Zhinan Rd." } }
+            station: { zh: "指南路小組", en: "Zhinan Rd." },
+            /* CV 上的一行成果（網站經歷頁不顯示，細節在代表作） */
+            points: [ { zh: "文山區參與式預算兩案提案通過，促成新工處辦理指南路二段人行道改善工程",
+                        en: "Two participatory-budget proposals adopted, leading to city sidewalk works on Zhinan Rd. Sec. 2" } ] }
         ] },
       { minor: true, mark: "預算", logo: "",
         org: { zh: "臺北市參與式預算", en: "Taipei Participatory Budgeting" },
