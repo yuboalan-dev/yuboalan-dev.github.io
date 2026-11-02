@@ -122,8 +122,10 @@ window.SITE = {
           { role: { zh: "議長", en: "Speaker" }, period: "2026.02 – 今",
             station: { zh: "議長", en: "Speaker" },
             points: [
-              { zh: "主持常會與議事程序；推動議事影音紀錄與直播", en: "Presides over sessions; introduced recorded and live-streamed proceedings" },
-              { cv: false, zh: "主導議會官網由 Google 協作平台遷移至學校平台，建立法規資料庫", en: "Led the website migration to the university CMS with a regulations database" }
+              { zh: "2026 年 8 月連任議長", en: "Re-elected Speaker in August 2026" },
+              { cv: false, zh: "主持常會與議事程序；推動議事影音紀錄與直播，會議影音統一放議會 YouTube 頻道並建立會議資料庫", en: "Presides over sessions; introduced recorded and live-streamed proceedings, with recordings on the Congress YouTube channel and a meeting database" },
+              { zh: "主導議會官網遷移至學校平台，建立法規資料庫：41 部法規、242 個歷史版本逐版對照會議紀錄查證", en: "Led the website migration to the university platform and built a regulations database: 41 regulations and 242 historical versions verified against meeting minutes" },
+              { cv: false, zh: "主導出版修正版法規彙編（2026.07）", en: "Led publication of the revised compilation of regulations (July 2026)" }
             ] },
           { role: { zh: "預算委員會召集委員", en: "Convener, Budget Committee" }, period: "2025.02 – 2025.07" },
           { role: { zh: "學生議員", en: "Student Legislator" }, period: "2024.08 – 今",
