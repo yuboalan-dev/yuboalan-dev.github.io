@@ -131,7 +131,7 @@ window.SITE = {
         org: { zh: "國立政治大學學生會", en: "NCCU Student Association" },
         roles: [
           { role: { zh: "校務諮詢委員會總召集人", en: "Chief Convener, Advisory Committee on University Affairs" }, period: "2026.02 – 今" },
-          { role: { zh: "校務諮詢委員會副召集人", en: "Deputy Convener, Advisory Committee on University Affairs" }, period: "2025.09 – 2026.01", cv: false },
+          { role: { zh: "校務諮詢委員會副召集人", en: "Deputy Convener, Advisory Committee on University Affairs" }, period: "2025.04 – 2025.07", cv: false },
           { role: { zh: "權益部部員", en: "Member, Student Rights Department" }, period: "2022.09 – 2023.07", cv: false }
         ] },
       /* 以學生代表身分參加的學校校級、院級會議與委員會 */
@@ -141,7 +141,7 @@ window.SITE = {
           { role: { zh: "校務會議（兼任學生議員）", en: "University Council (ex officio Student Legislator)" }, period: "2024.08 – 今" },
           { role: { zh: "校務基金管理委員會", en: "University Endowment Fund Management Committee" }, period: "2026.11 – 今" },
           { role: { zh: "總務會議", en: "General Affairs Council" }, period: "2026.01 – 今", cv: false },
-          { role: { zh: "學務會議", en: "Student Affairs Council" }, period: "2025.09 – 今", cv: false },
+          { role: { zh: "學務會議", en: "Student Affairs Council" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "社會科學學院院務會議", en: "College of Social Sciences Council" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "校園規劃與建設委員會", en: "Campus Planning & Construction Committee" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "教務會議（學院代表）", en: "Academic Affairs Council (college representative)" }, period: "2025.02 – 2025.07", cv: false },
