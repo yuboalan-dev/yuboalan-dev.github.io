@@ -107,11 +107,14 @@ window.SITE = {
     location: { zh: "臺北市", en: "Taipei, Taiwan" }
   },
 
-  /* ---------- 2-3. 近況（新的寫在最上面，網站自動照日期排；用簡稱） ----------
-     url 可以留空。只寫路線圖上沒有的事（受訪、提案、活動、發表）；
-     已經是路線圖站點的就職不用再寫，免得重複。全部 show: false 時「最近」整段不顯示。
-     下面三則跟路線圖重複，先藏起來（2026-11-02）。 */
+  /* ---------- 2-3. 近況：首頁路線圖上的「小站」 ----------
+     依 date（YYYY-MM）自動插進經歷站點之間，和歷程是同一條線（2026-11-02 整合）。
+     text 要短（十個字內，路線圖上空間小）；url 可以留空；line 決定顏色，不寫就沿用前一站的路線色。
+     只寫路線圖上沒有的事（成果、受訪、提案、發表）；就職已經是大站，不用再寫。
+     show: false 的不顯示。 */
   news: [
+    { date: "2025-10", line: "transport", text: { zh: "西側門行人號誌啟用", en: "Campus-gate pedestrian signal opens" } },
+    { date: "2025-06", line: "transport", text: { zh: "入選國土署街道醫生", en: "Selected for national Street Doctor program" } },
     { show: false, date: "2026-11", text: { zh: "接任臺灣學生聯合會理事", en: "Joined the board of the National Students' Union of Taiwan" } },
     { show: false, date: "2026-02", text: { zh: "擔任下一代人本交通促進會副秘書長", en: "Became Deputy Secretary-General, Next Generation People-Oriented Transport Association" } },
     { show: false, date: "2026-02", text: { zh: "就任政大學生議會議長", en: "Took office as Speaker of the NCCU Student Congress" } }
