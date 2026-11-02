@@ -5,7 +5,7 @@
      home        首頁：首屏、關注領域、歷程（路線圖＋最新近況）
      experience  經歷
      work        代表作
-     media       媒體與評論
+     media       媒體
      notfound    找不到頁面（404.html）
    頁首（導覽、語言、CV）與頁尾（聯絡）所有分頁共用，只寫在這裡一份。
 
@@ -283,21 +283,23 @@
        "summary" 每個節目一行（名稱、年份、一集一個點），"full" 逐集列出。
      新聞受訪逐則列出；已在上方精選出現的不重複。 */
   function renderMedia() {
-    var title = tx("媒體與評論", "Media");
+    var title = tx("媒體", "Media");
     setTitle(title);
     var media = U.visible(S.media, "web"), full = S.mediaList === "full";
     function src(m) { return t(m.kind === "show" ? m.program : m.outlet, L); }
     function vurl(m) { return m.url || ("https://www.youtube.com/watch?v=" + m.id); }
     function byDate(a, b) { return String(b.date).localeCompare(String(a.date)); }
+    /* 日期顯示和全站一致：「2025-05-05」→「2025.05」；只知道年份就只寫年份 */
+    function day(m) { return String(m.date || "").replace(/^(\d{4})-(\d{2}).*$/, "$1.$2"); }
     function row(m, label) {
-      return '<li><a href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><span class="d">' + esc(m.date || "") +
+      return '<li><a href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><span class="d">' + esc(day(m)) +
         "</span><span>" + (label ? "<b>" + esc(label) + "</b>　" : "") + esc(t(m.title, L)) + "</span></a></li>";
     }
     var feat = media.filter(function (m) { return m.featured; });
     var html = feat.length ? '<div class="media-feat">' + feat.map(function (m) {
       var thumb = m.id ? '<img loading="lazy" alt="" onerror="this.remove()" src="https://i.ytimg.com/vi/' + esc(m.id) + '/hqdefault.jpg">' : "";
       return '<a class="vid" data-reveal href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><div class="thumb">' + thumb + "</div>" +
-        '<div class="src">' + esc(src(m)) + '</div><div class="vt">' + esc(t(m.title, L)) + '</div><div class="vd">' + esc(m.date || "") + "</div></a>";
+        '<div class="src">' + esc(src(m)) + '</div><div class="vt">' + esc(t(m.title, L)) + '</div><div class="vd">' + esc(day(m)) + "</div></a>";
     }).join("") + "</div>" : "";
 
     var shows = {}, order = [], news = [];
