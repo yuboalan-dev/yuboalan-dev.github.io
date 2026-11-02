@@ -42,9 +42,9 @@ body {
   var LINE = { student: "#2b3a8c", research: "#c98a0b", transport: "#12925a" }, NONE = "#a3a3b5";
   document.getElementById("name").textContent = S.name.zh;
   document.getElementById("en").textContent = S.name.en;
-  /* 身分（首頁第一個身分）與求職狀態：分享到 LINE、FB 時對方一眼看懂 */
+  /* 身分（content.js 的 headline；沒寫才用首頁第一個身分）與求職狀態：分享到 LINE、FB 時對方一眼看懂 */
   var r0 = (S.roles || []).filter(function (r) { return r.show !== false && r.web !== false; })[0];
-  document.getElementById("role").textContent = r0 ? r0.zh : "";
+  document.getElementById("role").textContent = (S.headline && S.headline.zh) || (r0 ? r0.zh : "");
   document.getElementById("seek").textContent = (S.seeking && S.seeking.zh) || "";
   document.getElementById("photo").src = "/" + String(S.photo || "").replace(/^\//, "");
   function key(p) { var m = String(p || "").match(/(\d{4})(?:\.(\d{1,2}))?/); return m ? (+m[1]) * 100 + (+(m[2] || 0)) : 0; }
