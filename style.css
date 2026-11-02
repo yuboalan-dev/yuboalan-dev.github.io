@@ -296,6 +296,9 @@ main > .block:first-child { border-top: 0; }
 /* =========================================
    5. 近況
    ========================================= */
+/* 歷程：路線圖下面接最新近況 */
+.history-news { margin-top: 44px; }
+.history-sub { font-size: 16px; font-weight: 900; color: var(--navy); margin-bottom: 10px; }
 .news { list-style: none; padding: 0; position: relative; max-width: 760px; }
 .news::before { content: ""; position: absolute; left: 6px; top: 14px; bottom: 14px; width: 2px;
     background: repeating-linear-gradient(180deg, var(--line) 0 6px, transparent 6px 12px); }

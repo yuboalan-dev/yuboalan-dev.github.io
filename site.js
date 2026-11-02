@@ -2,7 +2,7 @@
    site.js ── 各分頁共用的版面程式（平常不用改；文字請改 content.js）
    ---------------------------------------------------------
    每個分頁的 <body data-page="..."> 決定要畫哪些區塊：
-     home        首頁：桌牌首屏、關注領域、近況
+     home        首頁：首屏、關注領域、歷程（路線圖＋最新近況）
      experience  經歷
      work        代表作
      media       媒體與評論
@@ -163,30 +163,24 @@
       return '<p class="go" data-reveal><a class="go-btn" href="' + href + '"><span class="go-dot" aria-hidden="true"></span>' + esc(tx(zh, en)) + "</a></p>";
     }
 
-    /* 首頁順序：關注領域 → 一路走來（路線圖）→ 近況 */
+    /* 首頁順序：關注領域 → 歷程（路線圖＋最新三則近況） */
     var focus = U.visible(S.focus, "web");
     if (focus.length) html += block("focus", t(S.focusHeading, L), '<div class="focus">' + focus.map(function (i) {
       return '<div class="focus-item" data-reveal data-line="' + lineOf(i) + '"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
     }).join("") + "</div>" + goto("/work.html", "看代表作", "See selected work"), true);
 
-    if (route) html += block("route", tx("一路走來", "The route so far"), route + goto("/experience.html", "看完整經歷", "See full experience"));
-
-    /* 近況：先顯示 5 筆；最新一筆是紅點 */
-    var news = U.visible(S.news, "web").slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
-    if (news.length) {
-      html += '<section class="block" id="news"><div class="wrap"><div class="block-head" data-reveal><h2 class="block-title">' + tx("近況", "Latest") + '</h2></div><ul class="news" id="newsBody">' + news.map(function (n, i) {
-        var txt = esc(t(n.text, L));
-        if (n.url) txt = '<a href="' + esc(n.url) + '" target="_blank" rel="noopener">' + txt + "</a>";
-        return "<li data-reveal" + (i >= 5 ? ' class="is-more"' : "") + ' style="--i:' + i + '">' + dot(n, false) + '<span class="d">' + esc(n.date || "") + "</span><span>" + txt + "</span></li>";
-      }).join("") + "</ul>" +
-      (news.length > 5 ? '<button class="more-btn" type="button" id="newsMore">' + tx("顯示全部", "Show all") + "</button>" : "") +
-      goto("/media.html", "看媒體與評論", "See media appearances") + "</div></section>";
-    }
+    /* 歷程：上面是路線圖（從起點到現在位置），下面接最新三則近況，當成路線的延續。
+       近況只顯示最新 NEWS_SHOWN 則；更早的留在 content.js 不刪 */
+    var NEWS_SHOWN = 3;
+    var news = U.visible(S.news, "web").slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); }).slice(0, NEWS_SHOWN);
+    var newsHtml = news.length ? '<div class="history-news" data-reveal><h3 class="history-sub">' + tx("最近", "Latest") + '</h3><ul class="news">' + news.map(function (n, i) {
+      var txt = esc(t(n.text, L));
+      if (n.url) txt = '<a href="' + esc(n.url) + '" target="_blank" rel="noopener">' + txt + "</a>";
+      return '<li data-reveal style="--i:' + i + '">' + dot(n, false) + '<span class="d">' + esc(n.date || "") + "</span><span>" + txt + "</span></li>";
+    }).join("") + "</ul></div>" : "";
+    if (route || newsHtml) html += block("history", tx("歷程", "Journey"), route + newsHtml + goto("/experience.html", "看完整經歷", "See full experience"));
 
     main.innerHTML = html;
-
-    var nm = document.getElementById("newsMore");
-    if (nm) nm.onclick = function () { document.getElementById("newsBody").classList.add("show-all"); nm.remove(); };
 
     /* 相片：找不到檔案就換成姓氏字樣 */
     var pw = document.getElementById("photoWrap");
