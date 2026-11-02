@@ -141,7 +141,7 @@ window.SITE = {
   groups: [
 
     { key: "student", line: "student", title: { zh: "學生自治", en: "Student Government" }, items: [
-      { mark: "議會", logo: "",
+      { mark: "議會", logo: "assets/logos/nccusc.png",
         org: { zh: "國立政治大學學生會學生議會", en: "NCCU Student Congress" },
         roles: [
           { role: { zh: "議長", en: "Speaker" }, period: "2026.02 – 今",
@@ -150,7 +150,7 @@ window.SITE = {
           { role: { zh: "學生議員", en: "Student Legislator" }, period: "2024.08 – 今",
             station: { zh: "學生議員", en: "Legislator" } }
         ] },
-      { mark: "學生會", logo: "",
+      { mark: "學生會", logo: "assets/logos/nccusa.png",
         org: { zh: "國立政治大學學生會", en: "NCCU Student Association" },
         roles: [
           { role: { zh: "校務諮詢委員會總召集人", en: "Chief Convener, Advisory Committee on University Affairs" }, period: "2026.02 – 今" },
@@ -180,7 +180,7 @@ window.SITE = {
     ] },
 
     { key: "research", line: "research", title: { zh: "研究與教學", en: "Research & Teaching" }, items: [
-      { mark: "國關", logo: "",
+      { mark: "國關", logo: "assets/logos/iir.png",
         org: { zh: "國立政治大學國際關係研究中心", en: "Institute of International Relations, NCCU" },
         roles: [
           { role: { zh: "研究計畫助理：大陸委員會、國科會委託研究", en: "Research Assistant: Mainland Affairs Council and NSTC projects" }, period: "2023.09 – 2026.01",
@@ -230,7 +230,7 @@ window.SITE = {
 
     { key: "education", line: "", title: { zh: "學歷", en: "Education" }, items: [
       /* 一個學位、學程一行；fold: false＝職務超過三個也全部展開 */
-      { mark: "政大", logo: "", fold: false,
+      { mark: "政大", logo: "assets/logos/nccu.png", fold: false,
         org: { zh: "國立政治大學", en: "National Chengchi University" },
         roles: [
           { role: { zh: "學士：政治學系", en: "B.A.: Political Science" }, period: "2022.09 – 2027.06（預計）",
