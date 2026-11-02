@@ -270,7 +270,9 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
     });
 
     var first = L === "en" ? S.name.en : S.name.zh, second = L === "en" ? S.name.zh : S.name.en;
-    var headline = t(S.tagline, L) || t((U.visible(S.roles, "cv")[0]) || "", L);
+    /* CV 標題用正式全名（content.js roles 的 formal），首頁才用簡稱 */
+    var r0 = U.visible(S.roles, "cv")[0] || "";
+    var headline = t(S.tagline, L) || (L !== "en" && r0.formal ? r0.formal : t(r0, L));
 
     var html =
       '<header class="cv-head"><div>' +

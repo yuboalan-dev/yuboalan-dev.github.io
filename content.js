@@ -43,11 +43,12 @@ window.SITE = {
   /* 首頁大標下面那一句定位。留空 "" 就不顯示。【待決定】 */
   tagline: { zh: "", en: "" },
 
-  /* 首頁姓名下方的三個身分（對應議長頁的 roles-area） */
+  /* 首頁姓名下方的三個身分。首頁用好讀的簡稱（不寫「社團法人」等）；
+     formal 是正式全名，CV 標題用它（沒寫就用 zh） */
   roles: [
-    { line: "student", zh: "國立政治大學學生議會　議長",       en: "Speaker, NCCU Student Congress" },
-    { line: "transport", zh: "社團法人下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" },
-    { line: "student", zh: "社團法人臺灣學生聯合會　理事", en: "Board Member, National Students' Union of Taiwan" }
+    { line: "student", zh: "政大學生議會　議長", formal: "國立政治大學學生會學生議會　議長", en: "Speaker, NCCU Student Congress" },
+    { line: "transport", zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" },
+    { line: "student", zh: "臺灣學生聯合會　理事", en: "Board Member, National Students' Union of Taiwan" }
   ],
 
   /* 照片：命名 photo.jpg 放進 assets 資料夾。沒放時顯示姓氏字樣。 */
@@ -90,12 +91,12 @@ window.SITE = {
     location: { zh: "臺北市", en: "Taipei, Taiwan" }
   },
 
-  /* ---------- 2-3. 近況（新的寫在最上面，網站自動照日期排） ----------
+  /* ---------- 2-3. 近況（新的寫在最上面，網站自動照日期排；用簡稱） ----------
      url 可以留空。建議每月補一行，網站看起來才是活的。 */
   news: [
-    { date: "2026-11", text: { zh: "接任社團法人臺灣學生聯合會理事", en: "Joined the board of the National Students' Union of Taiwan" } },
-    { date: "2026-02", text: { zh: "擔任社團法人下一代人本交通促進會副秘書長", en: "Became Deputy Secretary-General, Next Generation People-Oriented Transport Association" } },
-    { date: "2026-02", text: { zh: "就任國立政治大學學生議會議長", en: "Took office as Speaker of the NCCU Student Congress" } }
+    { date: "2026-11", text: { zh: "接任臺灣學生聯合會理事", en: "Joined the board of the National Students' Union of Taiwan" } },
+    { date: "2026-02", text: { zh: "擔任下一代人本交通促進會副秘書長", en: "Became Deputy Secretary-General, Next Generation People-Oriented Transport Association" } },
+    { date: "2026-02", text: { zh: "就任政大學生議會議長", en: "Took office as Speaker of the NCCU Student Congress" } }
   ],
 
   /* ---------- 3. 經歷（經歷頁＋CV） ----------
@@ -116,7 +117,7 @@ window.SITE = {
 
     { key: "student", line: "student", title: { zh: "學生自治", en: "Student Government" }, items: [
       { mark: "議會", logo: "",
-        org: { zh: "國立政治大學學生議會", en: "NCCU Student Congress" },
+        org: { zh: "國立政治大學學生會學生議會", en: "NCCU Student Congress" },
         roles: [
           { role: { zh: "議長", en: "Speaker" }, period: "2026.02 – 今",
             station: { zh: "議長", en: "Speaker" },
