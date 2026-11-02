@@ -198,7 +198,7 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
     .station .y { margin: 0; min-width: 3em; }
     /* 「現在位置」的紅環和水波不要被左邊切掉、也不要蓋到年份 */
     .route-track { padding-left: 10px; }
-    .station.is-here a { gap: 20px; }
+    .station a { gap: 18px; }
 }
 
 
