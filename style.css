@@ -166,22 +166,29 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 .route { margin-top: 4px; }
 .route-legend { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13.5px; color: var(--muted); margin-bottom: 18px; }
 .route-legend span { display: inline-flex; align-items: center; gap: 8px; }
-.route-legend span::before { content: ""; width: 18px; height: var(--track); border-radius: 2px; background: var(--c); }
+.route-legend span::before { content: ""; width: 22px; height: 6px; background: radial-gradient(circle, var(--c) 2.4px, transparent 2.9px) 0 50% / 8px 100% repeat-x; }
 .route-legend .now::before { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
 .route-legend .ev::before { width: 10px; height: 10px; border-radius: 50%; background: #fff; border: 2.5px solid var(--muted); box-sizing: border-box; }
 .route-track { list-style: none; padding: 0; display: flex; position: relative; }
 .station { flex: 1; position: relative; min-width: 0; padding-right: 8px; }
 /* 通往這一站的那一段線，用這一站的路線色（分段上色，像捷運圖） */
 .station .seg {
-    position: absolute; top: 9px; right: calc(100% - 11px); width: 100%; height: var(--track); border-radius: 2px;
-    /* 虛線：一段一段的水滴，會往「現在」的方向流 */
-    background: repeating-linear-gradient(90deg, var(--c) 0 9px, transparent 9px 16px);
-    background-size: 16px 100%; transform-origin: left center;
+    position: absolute; top: 8px; right: calc(100% - 11px); width: 100%; height: 6px;
+    /* 一顆一顆的圓點（水滴），平常是淡色；光點依序滑過，像水在路線上往「現在」流 */
+    background: radial-gradient(circle, color-mix(in srgb, var(--c) 42%, #fff) 2.4px, transparent 2.9px) 0 50% / 11px 100% repeat-x;
+    transform-origin: left center;
+}
+/* 亮起來的那一層：同樣的圓點、深色，只露出光點經過的那一小段（圓點本身不動） */
+.station .seg::after {
+    content: ""; position: absolute; inset: 0; opacity: 0;
+    background: radial-gradient(circle, var(--c) 2.9px, transparent 3.4px) 0 50% / 11px 100% repeat-x;
+    -webkit-mask: linear-gradient(90deg, transparent, #000 45%, #000 55%, transparent) no-repeat; mask: linear-gradient(90deg, transparent, #000 45%, #000 55%, transparent) no-repeat;
+    -webkit-mask-size: 55% 100%; mask-size: 55% 100%;
 }
 /* 最後一站之後：虛線，往還沒走到的地方 */
 .station.is-here::after {
-    content: ""; position: absolute; top: 9px; left: 22px; right: 0; height: var(--track);
-    background: repeating-linear-gradient(90deg, var(--line) 0 8px, transparent 8px 14px);
+    content: ""; position: absolute; top: 8px; left: 22px; right: 0; height: 6px;
+    background: radial-gradient(circle, var(--line) 2.2px, transparent 2.7px) 0 50% / 11px 100% repeat-x;
 }
 .station a { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; text-decoration: none; border-radius: 12px; }
 .station .dot { --dot: 22px; border-width: 4px; position: relative; }
@@ -190,11 +197,10 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 .station a:hover .n { color: var(--accent); }
 .station.is-here .dot { box-shadow: 0 0 0 4px #fff, 0 0 0 7px var(--accent); }
 /* 小站（近況）：小一號的點、字小一號，夾在大站之間 */
-.station.is-event { flex: .8; }
+.station.is-event { flex: 1; }
 .station .stop { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
 .station.is-event .dot { --dot: 12px; border-width: 3px; margin: 5px 0 5px 5px; }
 .station.is-event .n { font-size: 13px; font-weight: 500; color: var(--text); }
-.station.is-event .y { margin-top: 0; }
 
 @media (max-width: 860px) {
     .hero-grid { grid-template-columns: 1fr; }
@@ -204,15 +210,20 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 @media (max-width: 640px) {
     .route-track { flex-direction: column; }
     .station { flex: none; height: 40px; padding: 0; }
-    .station .seg { right: auto; left: 9px; top: -29px; width: var(--track); height: 40px; transform-origin: center top;
-        background: repeating-linear-gradient(180deg, var(--c) 0 7px, transparent 7px 12px); background-size: 100% 12px; }
+    .station .seg { right: auto; left: 8px; top: -29px; width: 6px; height: 40px; transform-origin: center top;
+        background: radial-gradient(circle, color-mix(in srgb, var(--c) 42%, #fff) 2.4px, transparent 2.9px) 50% 0 / 100% 10px repeat-y; }
+    .station .seg::after {
+        background: radial-gradient(circle, var(--c) 2.9px, transparent 3.4px) 50% 0 / 100% 10px repeat-y;
+        -webkit-mask-image: linear-gradient(180deg, transparent, #000 45%, #000 55%, transparent); mask-image: linear-gradient(180deg, transparent, #000 45%, #000 55%, transparent);
+        -webkit-mask-size: 100% 70%; mask-size: 100% 70%; }
     .station.is-here::after { display: none; }
     .station a, .station .stop { flex-direction: row; align-items: center; gap: 12px; }
+    .station.is-event { flex: none; }
     .station.is-event .dot { margin: 0 5px; }
     .station .y { margin: 0; min-width: 4.4em; }
     /* 「現在位置」的紅環和水波不要被左邊切掉、也不要蓋到年份 */
     .route-track { padding-left: 10px; }
-    .station a { gap: 18px; }
+    .station a, .station .stop { gap: 18px; }
 }
 
 
@@ -239,7 +250,7 @@ main > .block:first-child { border-top: 0; }
 .exp-group.is-folded:not(.show-all) .exp-list::before { display: none; }
 .exp-list { list-style: none; padding: 0; position: relative; }
 .exp-list::before { content: ""; position: absolute; left: 21px; top: 24px; bottom: 24px; width: 2px;
-    background: repeating-linear-gradient(180deg, var(--line) 0 6px, transparent 6px 12px); background-size: 2px 12px; }
+    background: radial-gradient(circle, var(--line) 1.8px, transparent 2.3px) 50% 0 / 100% 10px repeat-y; width: 6px; margin-left: -2px; }
 .exp-item { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 0 16px; padding: 12px 0; border-radius: 18px; }
 /* 組織圓章：外圈是路線色；有標誌就放標誌，沒有就放簡稱 */
 .org-mark {
@@ -259,8 +270,8 @@ main > .block:first-child { border-top: 0; }
 .exp-role { position: relative; padding: 4px 0 6px; }
 .exp-roles.is-multi .exp-role { padding-left: 18px; }
 .exp-roles.is-multi::before {
-    content: ""; position: absolute; left: 3px; top: 14px; bottom: 14px; width: 2px;
-    background: repeating-linear-gradient(180deg, var(--c, var(--line-none)) 0 4px, transparent 4px 8px); opacity: .55;
+    content: ""; position: absolute; left: 1px; top: 14px; bottom: 14px; width: 6px;
+    background: radial-gradient(circle, var(--c, var(--line-none)) 1.4px, transparent 1.9px) 50% 0 / 100% 7px repeat-y; opacity: .6;
 }
 .exp-roles.is-multi .exp-role::before {
     content: ""; position: absolute; left: 0; top: .78em; width: 8px; height: 8px; border-radius: 50%;
@@ -332,7 +343,7 @@ main > .block:first-child { border-top: 0; }
 .focus { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 36px clamp(24px, 3vw, 44px); }
 .focus-item { position: relative; padding-top: 30px; }
 .focus-item::before { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: var(--track); border-radius: 2px;
-    background: repeating-linear-gradient(90deg, var(--c) 0 10px, transparent 10px 17px); background-size: 17px 100%; }
+    background: radial-gradient(circle, var(--c) 2.4px, transparent 2.9px) 0 50% / 11px 100% repeat-x; height: 6px; top: 6px; }
 .focus-item::after { content: ""; position: absolute; left: 0; top: 0; width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 4px solid var(--c); }
 .focus-item h3 { font-size: 21px; font-weight: 900; color: var(--navy); margin-bottom: 10px; }
 .focus-item p { font-size: 15px; line-height: 1.9; }
@@ -359,7 +370,7 @@ main > .block:first-child { border-top: 0; }
 /* 時間軸：先後順序的站點 */
 .steps { list-style: none; padding: 0; position: relative; }
 .steps::before { content: ""; position: absolute; left: 10px; top: 12px; bottom: 12px; width: var(--track); border-radius: 2px;
-    background: repeating-linear-gradient(180deg, var(--c, var(--navy)) 0 7px, transparent 7px 12px); background-size: 100% 12px; }
+    background: radial-gradient(circle, var(--c, var(--navy)) 2.4px, transparent 2.9px) 50% 0 / 100% 10px repeat-y; width: 6px; left: 9px; }
 .steps li { position: relative; padding: 0 0 18px 40px; font-size: 15px; line-height: 1.65; }
 .steps li:last-child { padding-bottom: 0; }
 .steps li::before {
@@ -505,14 +516,31 @@ main > .block:first-child { border-top: 0; }
 
 
 /* -----------------------------------------
-   10-2. 只留一個持續的動態：路線圖「最新一站」的水波
+   10-2. 持續的動態只有兩個：路線圖「最新一站」的水波、路線圓點上的呼吸光
    2026-11-02 起拿掉其他循環效果（虛線流動、圓點呼吸、照片漂浮、底紋漂移、簡介模糊淡入）：
    招募者多半只看 30 秒，畫面一直在動會分散注意力。進場的水滴、漣漪、浮現都保留。
    ----------------------------------------- */
-.station.is-here::after { background-size: 14px 100%; }
 .anim .station.is-here .dot::after { animation: ripple 1s ease-out both, here-wave 2.6s ease-out infinite;
     animation-delay: calc(var(--i) * var(--stagger) + 200ms + var(--drop-dur) * .55), 2.4s; border-color: var(--accent); }
 @keyframes here-wave { 0% { opacity: .9; transform: scale(.8); } 100% { opacity: 0; transform: scale(3.2); } }
+/* 路線上的呼吸光（2026-11-02 使用者要求）：圓點不動，光點從第一段依序亮到「最新一站」，
+   每段亮起時由暗轉亮再轉暗，像呼吸燈；一輪走完停一下再重來。 */
+.anim .station .seg::after { opacity: 1; animation: glow-x calc(var(--n, 8) * .32s + 2.6s) linear calc(var(--i) * .32s + 1.4s) infinite both; }
+@keyframes glow-x {
+    0%        { -webkit-mask-position: -120% 0; mask-position: -120% 0; opacity: 0; }
+    3%        { opacity: 1; }
+    11%       { opacity: 1; }
+    14%, 100% { -webkit-mask-position: 220% 0; mask-position: 220% 0; opacity: 0; }
+}
+@media (max-width: 640px) {
+    .anim .station .seg::after { animation-name: glow-y; }
+    @keyframes glow-y {
+        0%        { -webkit-mask-position: 0 -120%; mask-position: 0 -120%; opacity: 0; }
+        3%        { opacity: 1; }
+        11%       { opacity: 1; }
+        14%, 100% { -webkit-mask-position: 0 220%; mask-position: 0 220%; opacity: 0; }
+    }
+}
 @media (max-width: 640px) { @keyframes here-wave { 0% { opacity: .9; transform: scale(.8); } 100% { opacity: 0; transform: scale(2); } } }
 
 /* 連結底線從左邊長出來 */
