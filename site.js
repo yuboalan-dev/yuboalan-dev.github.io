@@ -295,11 +295,16 @@
       return '<li><a href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><span class="d">' + esc(day(m)) +
         "</span><span>" + (label ? "<b>" + esc(label) + "</b>　" : "") + esc(t(m.title, L)) + "</span></a></li>";
     }
+    /* 精選：文字卡（2026-11-02 起不用 YouTube 自動縮圖——縮圖裡多半是別人、標題字聳動，看不出你的角色）。
+       content.js 可寫 note（你在片中的角色或觀點，一句話）；真的要縮圖就寫 thumb: true */
     var feat = media.filter(function (m) { return m.featured; });
     var html = feat.length ? '<div class="media-feat">' + feat.map(function (m) {
-      var thumb = m.id ? '<img loading="lazy" alt="" onerror="this.remove()" src="https://i.ytimg.com/vi/' + esc(m.id) + '/hqdefault.jpg">' : "";
-      return '<a class="vid" data-reveal href="' + esc(vurl(m)) + '" target="_blank" rel="noopener"><div class="thumb">' + thumb + "</div>" +
-        '<div class="src">' + esc(src(m)) + '</div><div class="vt">' + esc(t(m.title, L)) + '</div><div class="vd">' + esc(day(m)) + "</div></a>";
+      var thumb = m.thumb && m.id ? '<div class="thumb"><img loading="lazy" alt="" onerror="this.remove()" src="https://i.ytimg.com/vi/' + esc(m.id) + '/hqdefault.jpg"></div>' : "";
+      var note = t(m.note, L);
+      return '<a class="vid' + (thumb ? "" : " is-card") + '" data-reveal href="' + esc(vurl(m)) + '" target="_blank" rel="noopener">' + thumb +
+        '<div class="src">' + esc(src(m)) + '</div><div class="vt">' + esc(t(m.title, L)) + "</div>" +
+        (note ? '<div class="vn">' + esc(note) + "</div>" : "") +
+        '<div class="vd">' + esc(day(m)) + '<span class="watch">' + tx("看影片", "Watch") + " ↗</span></div></a>";
     }).join("") + "</div>" : "";
 
     var shows = {}, order = [], news = [];

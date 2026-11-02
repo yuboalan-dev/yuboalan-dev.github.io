@@ -323,7 +323,9 @@ window.SITE = {
 
   /* ---------- 6. 媒體 ----------
      kind: "show" 政論節目 / "news" 新聞受訪
-     featured: true 會出現在網站最上面、可以直接點開播放
+     featured: true 會出現在網站最上面（文字卡）
+     note       精選卡片上的一句話：你在片中的角色或觀點（選填）
+     thumb: true 精選卡片改用 YouTube 縮圖（預設不用：縮圖多半是別人、標題字聳動）
      YouTube 影片只要填 id（網址 watch?v= 後面那 11 碼）
      date 不確定日的只寫年份或年月                                    */
   /* 網站下方媒體清單的列法："summary" 政論節目只列節目名與集數；"full" 逐集列出 */
