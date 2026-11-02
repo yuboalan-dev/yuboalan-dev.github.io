@@ -219,7 +219,8 @@
       var more = it.more ? '<a class="exp-more" href="' + esc(it.more) + '">' + tx("完整過程見代表作", "See the full story") + " →</a>" : "";
       return '<li class="exp-item' + (it.minor ? " is-more is-minor" : "") + '" id="' + idOf(it) + '" data-reveal data-line="' + lineOf(it) + '" style="--i:' + i + '">' + orgMark(it) +
         '<div><div class="exp-head"><div class="item-main">' + esc(t(it.org, L)) + "</div></div>" +
-        '<ul class="exp-roles' + (rs.length > 1 ? " is-multi" : "") + '">' + rolesHtml + "</ul>" +
+        /* 只有一個職務也用同樣的圓點樣式，全頁每一行職務看起來一致 */
+        '<ul class="exp-roles is-multi">' + rolesHtml + "</ul>" +
         (rs.length > ROLES_SHOWN ? '<button class="roles-more" type="button">' + tx("還有 " + (rs.length - ROLES_SHOWN) + " 個職務", (rs.length - ROLES_SHOWN) + " more roles") + "</button>" : "") +
         more + "</div></li>";
     }

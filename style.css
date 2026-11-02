@@ -246,7 +246,8 @@ main > .block:first-child { border-top: 0; }
     background: #fff; border: 2px solid var(--c, var(--line-none));
 }
 .exp-roles.is-multi .exp-role.is-now::before { background: var(--c, var(--line-none)); }
-.exp-role-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 14px; flex-wrap: wrap; }
+/* 職稱在左、期間固定靠右同一行；職稱太長時在自己的欄裡換行，期間不會被擠到下一行 */
+.exp-role-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 0 14px; }
 .role-name { font-size: 15px; color: var(--text); font-weight: 500; }
 .item-main { font-weight: 700; color: var(--navy); font-size: 16.5px; line-height: 1.5; }
 .item-sub { font-size: 14.5px; color: var(--muted); white-space: pre-line; margin-top: 2px; }
@@ -265,7 +266,8 @@ main > .block:first-child { border-top: 0; }
 .exp-also { position: relative; padding: 10px 0 10px 60px; font-size: 14.5px; line-height: 1.6; }
 .exp-also::before { content: ""; position: absolute; left: 15px; top: 50%; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%;
     border: 2.5px dashed var(--c, var(--line-none)); background: #fff; box-sizing: border-box; }
-.exp-also a { color: var(--text); }
+.exp-also a { color: var(--muted); text-decoration: none; }
+.exp-also a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
 .exp-also-note { margin-left: 8px; font-size: 13px; color: var(--muted); white-space: nowrap; }
 .exp-group.show-all .is-more { display: grid; }
 
