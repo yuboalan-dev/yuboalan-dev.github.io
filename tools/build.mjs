@@ -61,7 +61,7 @@ const overflow = [];  /* 超過一頁的 CV，例：「中文 2 頁」 */
 
 /* 資源網址加上內容雜湊（例：/site.js?v=3f9a1c2d），檔案一改網址就變，
    讀者的瀏覽器就不會拿暫存的舊版（GitHub Pages 預設暫存約 10 分鐘） */
-const ASSETS = ["style.css", "content.js", "common.js", "site.js"];
+const ASSETS = ["style.css", "content.js", "common.js", "site.js", "motion.js"];
 const VER = Object.fromEntries(ASSETS.map(a => [a, crypto.createHash("sha1").update(fs.readFileSync(path.join(ROOT, a))).digest("hex").slice(0, 8)]));
 function bust(html) {
   for (const a of ASSETS) html = html.split(`"/${a}"`).join(`"/${a}?v=${VER[a]}"`).split(`"${a}"`).join(`"${a}?v=${VER[a]}"`);

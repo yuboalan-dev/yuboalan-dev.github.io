@@ -562,6 +562,92 @@ main > .block:first-child { border-top: 0; }
 .anim .is-off, .anim .is-off *, .anim .is-off *::before, .anim .is-off *::after { animation-play-state: paused !important; }
 
 /* =========================================
+   12. 互動效果（行為在 motion.js；2026-11-02 使用者要求）
+   原則：只在訪客捲動、移動、點擊時才動；「減少動態效果」或沒有 JavaScript 時，內容照樣完整顯示。
+   ========================================= */
+
+/* 12-1. 路線隨捲動畫出：motion.js 在 .route 加 is-scroll 後，改由捲動進度決定走到哪一站 */
+.route.is-scroll .station a, .route.is-scroll .station .stop, .route.is-scroll .station .dot, .route.is-scroll .station .seg { animation: none; }
+.route.is-scroll .station .seg { transform: scaleX(0); transition: transform .45s ease-out; }
+.route.is-scroll .station .dot { transform: scale(.55); opacity: .3; transition: transform .45s cubic-bezier(.34, 1.56, .64, 1) .18s, opacity .3s ease .18s; }
+.route.is-scroll .station .y, .route.is-scroll .station .n { opacity: .3; transition: opacity .4s ease .2s; }
+.route.is-scroll .station.is-reached .seg { transform: none; }
+.route.is-scroll .station.is-reached .dot, .route.is-scroll .station.is-reached .y, .route.is-scroll .station.is-reached .n { transform: none; opacity: 1; }
+.route.is-scroll .station.is-front .dot::after { animation: ripple 1s ease-out; }
+@media (max-width: 640px) { .route.is-scroll .station .seg { transform: scaleY(0); } }
+
+/* 12-2. 首屏點陣水面：motion.js 用 canvas 畫點陣，取代 CSS 點陣底紋（只在桌機、有滑鼠時） */
+.hero-dots { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.hero.has-dots { background-image: none; }
+.hero > .wrap { position: relative; z-index: 1; }
+
+/* 12-3. 站點預覽小卡：滑過（手機點一下）出現 */
+.stop-card {
+    position: absolute; left: -10px; bottom: calc(100% + 12px); z-index: 6; width: 268px;
+    display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; text-align: left;
+    background: #fff; border: 2px solid var(--c, var(--line)); border-radius: 18px; box-shadow: 0 14px 34px rgba(0, 0, 36, .14);
+    opacity: 0; visibility: hidden; transform: translateY(6px); pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease, visibility .2s;
+}
+.stop-card.is-flip { left: auto; right: -10px; }
+@media (hover: hover) { .station a:hover .stop-card { opacity: 1; visibility: visible; transform: none; } }
+.station a:focus-visible .stop-card, .station.is-open .stop-card { opacity: 1; visibility: visible; transform: none; }
+/* 打開小卡的那一站疊在其他站上面，小卡才不會被後面的站名蓋住 */
+.station a:hover, .station a:focus-visible, .station.is-open a { z-index: 7; }
+.stop-card .org-mark { width: 40px; height: 40px; flex-shrink: 0; }
+.sc-body { display: flex; flex-direction: column; gap: 1px; font-size: 13px; line-height: 1.45; color: var(--text); font-family: var(--sans); font-weight: 400; }
+.sc-body b { font-size: 14px; font-weight: 700; color: var(--navy); }
+.sc-p { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.sc-go { display: none; margin-top: 4px; font-weight: 700; color: var(--c, var(--navy)); }
+.station.is-open .sc-go { display: block; }
+@media (max-width: 640px) {
+    .stop-card, .stop-card.is-flip { left: 30px; right: auto; bottom: auto; top: calc(100% + 2px); width: min(280px, calc(100vw - 90px)); }
+}
+
+/* 12-4. 求職那一行：職缺類型輪播 */
+.seek-rot { display: none; }
+.anim .seek-rot { display: inline; }
+.anim .seek-static { display: none; }   /* seek-static 只在有輪播時才會出現 */
+.rot { display: inline-grid; vertical-align: bottom; overflow: hidden; justify-items: start; transition: width .45s cubic-bezier(.2, .7, .2, 1); color: var(--accent); }
+.rot-w { grid-area: 1 / 1; white-space: nowrap; opacity: 0; transform: translateY(70%); transition: transform .45s cubic-bezier(.2, .7, .2, 1), opacity .35s ease; }
+.rot-w.is-on { opacity: 1; transform: none; }
+.rot-w.is-out { opacity: 0; transform: translateY(-70%); }
+
+/* 12-5. 代表作數字：捲到時從 0 累加（motion.js） */
+.work-stats { display: flex; flex-wrap: wrap; gap: 14px 32px; margin: 18px 0 0; }
+.work-stats div { display: flex; flex-direction: column; }
+.work-stats dt { font-family: var(--round); font-size: clamp(30px, 3.4vw, 38px); font-weight: 900; color: var(--c, var(--navy)); line-height: 1.05; font-variant-numeric: tabular-nums; }
+.work-stats dt small { font-size: 15px; font-weight: 700; color: var(--navy); margin-left: 4px; }
+.work-stats dd { margin: 4px 0 0; font-size: 13px; color: var(--muted); max-width: 17em; line-height: 1.5; }
+
+/* 12-6. 簡介關鍵字螢光筆：motion.js 加 hl-ready 後先藏起來，進畫面（is-lit）依序劃過 */
+mark.hl { color: inherit; background: linear-gradient(transparent 56%, rgba(230, 0, 18, .16) 56%) no-repeat 0 0 / 100% 100%; padding: 0 .08em; }
+.summary.hl-ready mark.hl { background-size: 0% 100%; transition: background-size .8s cubic-bezier(.2, .7, .2, 1); transition-delay: calc(.6s + var(--h, 0) * .45s); }
+.summary.hl-ready.is-lit mark.hl { background-size: 100% 100%; }
+
+/* 12-7. 頁尾掛繩識別證（只在寬螢幕；motion.js 加上去並負責甩動） */
+.contact .wrap { position: relative; }
+.badge-rig { position: absolute; top: 0; right: var(--gutter); width: 200px; height: 330px; pointer-events: none; }
+.badge-swing { position: absolute; inset: 0; transform-origin: 50% 0; will-change: transform; }
+.badge-strap { position: absolute; left: 50%; top: 0; width: 6px; height: 78px; margin-left: -3px;
+    background: radial-gradient(circle, var(--accent) 2.6px, transparent 3.1px) 50% 0 / 100% 9px repeat-y; }
+.badge-card {
+    position: absolute; left: 6px; right: 6px; top: 74px; padding: 26px 16px 18px; pointer-events: auto; cursor: grab; touch-action: none; user-select: none;
+    background: #fff; color: var(--navy); border-radius: 20px; text-align: center; box-shadow: 0 18px 40px rgba(0, 0, 0, .35);
+}
+.badge-card:active { cursor: grabbing; }
+.badge-card::before { content: ""; position: absolute; top: 10px; left: 50%; width: 34px; height: 7px; margin-left: -17px; border-radius: 999px; background: var(--wash); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .15); }
+.badge-photo { width: 76px; height: 76px; margin: 0 auto; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 4px #fff, 0 0 0 6px var(--accent); }
+.badge-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+.badge-name { margin-top: 14px; font-family: var(--round); font-size: 24px; font-weight: 900; letter-spacing: .06em; line-height: 1.1; }
+.badge-en { font-size: 12.5px; color: var(--muted); font-weight: 700; }
+.badge-line { height: 6px; margin: 12px 0 10px; background: radial-gradient(circle, var(--line) 2px, transparent 2.5px) 0 50% / 9px 100% repeat-x; }
+.badge-org { font-size: 12.5px; color: var(--text); }
+.badge-tag { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 3px 12px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 12.5px; font-weight: 700; }
+.badge-tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+@media (max-width: 899px) { .badge-rig { display: none; } }
+
+/* =========================================
    11. 減少動態：全部關掉（.anim 不會掛上，這裡再保險一次）
    ========================================= */
 @media (prefers-reduced-motion: reduce) {

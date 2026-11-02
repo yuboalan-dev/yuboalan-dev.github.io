@@ -18,6 +18,9 @@
      cv: false     網站顯示、CV 不放        web: false   CV 放、網站不顯示
      points        條列說明（網站卡片不顯示，CV 和代表作會用）
      seeking       求職狀態（首頁、CV 抬頭、分享圖），留空就不顯示
+     seekingRotate 首頁求職那一行的輪播（{} 換成輪流出現的詞）
+     highlights    首頁簡介要劃螢光筆的詞
+     stats         代表作的數字（捲到時累加）
      headline      身分一句（CV 抬頭、分享圖），寫學校科系這種不會因卸任失效的身分
      line          路線（決定圓點顏色）："student" 學生自治（藍）、"research" 研究與教學（金）、
                    "transport" 人本交通（綠）；不寫就是灰色。經歷的每一筆自動用所屬那一組的 line
@@ -52,6 +55,13 @@ window.SITE = {
     en: "Graduating June 2027; seeking staff roles in legislative offices, political parties and think tanks."
   },
 
+  /* 首頁求職那一行的輪播（只有網站用；CV 和分享圖照樣用上面的 seeking）：
+     text 裡的 {} 會換成 words 輪流出現。不要輪播就整段刪掉或 words 留空 []。 */
+  seekingRotate: {
+    text:  { zh: "2027 年 6 月畢業，尋找{}的幕僚工作。", en: "Graduating June 2027; seeking staff roles in {}." },
+    words: { zh: ["國會辦公室", "地方議會", "政黨", "智庫"], en: ["legislative offices", "city councils", "political parties", "think tanks"] }
+  },
+
   /* 身分一句：CV 抬頭與分享預覽圖用。寫不會因職務異動而失效的身分（學校科系），
      任何職務卸任都不用改這裡。留空 "" 就改用下面 roles 的第一個身分。 */
   headline: { zh: "國立政治大學政治學系", en: "Department of Political Science, National Chengchi University" },
@@ -73,6 +83,9 @@ window.SITE = {
     zh: "國立政治大學政治學系學生，修讀哲學、政治學與經濟學專長。現任學生議會議長、臺灣學生聯合會理事與下一代人本交通促進會副秘書長；曾任國關中心研究計畫助理，參與陸委會與國科會的中共政治研究，並以參與式預算推動指南路的人本交通改善。",
     en: "Political science (PPE) student at NCCU; Speaker of its Student Congress; board member, National Students' Union of Taiwan; former research assistant on CCP elite politics; won participatory-budget funding for safer streets."
   },
+
+  /* 簡介裡要用螢光筆劃記的詞（照順序劃，每個詞只劃第一次出現的地方；要和 summary 的字一模一樣） */
+  highlights: { zh: ["學生議會議長", "中共政治研究", "參與式預算"], en: [] },
 
   /* 專長（CV 抬頭＋給搜尋引擎的結構化資料）
      每一項都要在經歷或代表作找得到佐證，招募者才會信；和網站的三個關注領域對得上。
@@ -315,6 +328,11 @@ window.SITE = {
         { label: { zh: "參與式預算提案頁", en: "Proposal page" }, url: "https://taipei.join.gov.tw/pb/proposal/detail/976fc32f-0556-45b2-bf56-fd3e64851789" },
         { label: { zh: "工程地區說明會", en: "Public works briefing" }, url: "https://nco.gov.taipei/News_Content.aspx?n=F36AA8E9D896DF42&sms=59AD6E6606F6002F&s=EEC0122512A38BD8" },
         { label: { zh: "論壇成果海報", en: "Forum poster" }, url: "https://twxdb.org/2026-forum/" }
+      ],
+      /* 數字：網站上捲到時從 0 累加（num 只能寫數字） */
+      stats: [
+        { num: 498, unit: { zh: "萬元", en: "×10k NTD" }, label: { zh: "爭取改善與規劃經費（市府 117 萬＋國土署 381 萬）", en: "Funding secured for works and planning" } },
+        { num: 2, unit: { zh: "案", en: "" }, label: { zh: "文山區參與式預算提案通過", en: "Participatory-budget proposals adopted" } }
       ],
       /* 作品圖：放在 assets/work/，網站上顯示縮圖，點開看原圖 */
       image: { src: "assets/work/zhinan-poster.webp",

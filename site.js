@@ -112,6 +112,23 @@
     return items ? '<div class="' + cls + '">' + items + (cls === "route-legend" ? (withEvents ? '<span class="ev">' + tx("近況", "Updates") + "</span>" : "") + '<span class="now">' + tx("最新一站", "Latest") + "</span>" : "") + "</div>" : "";
   }
 
+  /* 求職狀態輪播：content.js 的 seekingRotate 有寫時，「{}」換成輪流出現的職缺類型。
+     沒有動畫（減少動態效果、搜尋引擎）時照樣顯示完整的 seeking 句子 */
+  function seekingHtml(seek) {
+    var rot = t(S.seekingRotate && S.seekingRotate.text ? S.seekingRotate.text : null, L);
+    var words = S.seekingRotate && S.seekingRotate.words ? (S.seekingRotate.words[L] || S.seekingRotate.words.zh || []) : [];
+    if (!rot || rot.indexOf("{}") < 0 || !words.length) return esc(seek);
+    var parts = rot.split("{}");
+    return '<span class="seek-static">' + esc(seek) + '</span><span class="seek-rot" aria-hidden="true">' + esc(parts[0]) +
+      '<span class="rot">' + words.map(function (w, i) { return '<span class="rot-w' + (i ? "" : " is-on") + '">' + esc(w) + "</span>"; }).join("") + "</span>" + esc(parts[1] || "") + "</span>";
+  }
+  /* 簡介關鍵字：content.js 的 highlights 裡的詞，包成螢光筆劃記（第一次出現的那一處） */
+  function highlight(text) {
+    var out = esc(text), hs = (S.highlights && (S.highlights[L] || S.highlights.zh)) || [];
+    hs.forEach(function (h, i) { var e = esc(h); var k = out.indexOf(e); if (h && k >= 0) out = out.slice(0, k) + '<mark class="hl" style="--h:' + i + '">' + e + "</mark>" + out.slice(k + e.length); });
+    return out;
+  }
+
   /* ---------- 首頁 ---------- */
   function renderHome() {
     setTitle("");
@@ -132,7 +149,7 @@
       if (g.show === false || g.web === false) return;
       U.visible(g.items, "web").forEach(function (it) {
         rolesOf(it).forEach(function (r) {
-          if (r.station) stations.push({ org: it.org, line: it.line, item: it, station: r.station, period: r.period, k: startKey(r.period) });
+          if (r.station) stations.push({ org: it.org, line: it.line, item: it, station: r.station, role: r.role, period: r.period, k: startKey(r.period) });
         });
       });
     });
@@ -154,9 +171,13 @@
         return '<li class="' + cls + '" style="--i:' + i + '">' + seg +
           (ev.url ? '<a href="' + esc(ev.url) + '" target="_blank" rel="noopener">' + label + "</a>" : '<span class="stop">' + label + "</span>") + "</li>";
       }
+      /* 站點預覽小卡：滑過（手機點一下）顯示組織標誌、全名、職稱與期間；最右邊兩站往左對齊，不超出畫面 */
+      var card = '<span class="stop-card' + (i >= stops.length - 2 ? " is-flip" : "") + '" aria-hidden="true">' + orgMark(it.item) +
+        '<span class="sc-body"><b>' + esc(t(it.org, L)) + "</b><span>" + esc(t(it.role, L)) + '</span><span class="sc-p">' + esc(U.period(it.period, L)) +
+        (lineName(it.line) ? "　" + esc(lineName(it.line)) : "") + '</span><span class="sc-go">' + tx("看經歷 →", "See experience →") + "</span></span></span>";
       return '<li class="' + cls + '" style="--i:' + i + '">' + seg +
-        '<a href="/experience.html#' + idOf(it.item) + '" title="' + esc(t(it.org, L) + (lineName(it.line) ? "（" + lineName(it.line) + "）" : "")) + '">' +
-        dot(it, /今/.test(it.period || "")) + '<span class="y">' + String(it.k).slice(0, 4) + '</span><span class="n">' + esc(t(it.station, L)) + "</span></a></li>";
+        '<a href="/experience.html#' + idOf(it.item) + '" aria-label="' + esc(t(it.station, L) + "：" + t(it.org, L) + "　" + t(it.role, L) + "　" + U.period(it.period, L)) + '">' +
+        dot(it, /今/.test(it.period || "")) + '<span class="y">' + String(it.k).slice(0, 4) + '</span><span class="n">' + esc(t(it.station, L)) + "</span>" + card + "</a></li>";
     }
     var route = stops.length ? '<div class="route" data-reveal aria-label="' + tx("經歷路線圖", "Career route") + '">' + legend("route-legend", events.length) +
       '<ol class="route-track" style="--n:' + stops.length + '">' + stops.map(stopHtml).join("") + "</ol></div>" : "";
@@ -167,8 +188,8 @@
           '<div class="hero-name"><h1>' + esc(EN ? S.name.en : S.name.zh) + '</h1><span class="en">' + esc(EN ? S.name.zh : S.name.en) + "</span></div>" +
           '<div class="intro">' +
             (tl ? '<p class="tagline">' + esc(tl) + "</p>" : "") +
-            (seek ? '<p class="seeking"><span class="seeking-dot" aria-hidden="true"></span>' + esc(seek) + "</p>" : "") +
-            '<p class="summary">' + esc(t(S.summary, L)) + "</p>" +
+            (seek ? '<p class="seeking"><span class="seeking-dot" aria-hidden="true"></span>' + seekingHtml(seek) + "</p>" : "") +
+            '<p class="summary">' + highlight(t(S.summary, L)) + "</p>" +
             (roles ? '<ul class="roles">' + roles + "</ul>" : "") +
           "</div></div>" +
           '<div class="photo" id="photoWrap"></div>' +
@@ -278,6 +299,10 @@
       }).join("");
       var steps = (w.steps || []).map(function (s) { return "<li>" + esc(t(s, L)) + "</li>"; }).join("");
       return '<article class="work" data-reveal data-line="' + lineOf(w) + '"><div><h3>' + dot(w, true) + esc(t(w.title, L)) + '</h3><p class="desc">' + esc(t(w.text, L)) + "</p>" +
+        /* 數字（content.js 的 stats）：捲到時從 0 累加；沒有動畫時直接顯示 */
+        (w.stats && w.stats.length ? '<dl class="work-stats">' + w.stats.map(function (st) {
+          return '<div><dt><span class="count" data-count-to="' + esc(st.num) + '">' + esc(st.num) + "</span><small>" + esc(t(st.unit, L)) + "</small></dt><dd>" + esc(t(st.label, L)) + "</dd></div>";
+        }).join("") + "</dl>" : "") +
         (links ? '<div class="proof">' + links + "</div>" : "") +
         /* 作品圖（content.js 的 image）：縮圖，點開看原圖 */
         (w.image && w.image.src ? '<a class="work-img" href="/' + esc(String(w.image.src).replace(/^\//, "")) + '" target="_blank" rel="noopener"><img loading="lazy" src="/' +
@@ -331,7 +356,7 @@
         return '<li class="show"><div class="show-top"><span class="show-name">' + esc(k) + '</span><span class="show-meta">' + esc(span) + "　" +
           shows[k].length + tx(" 集", " episodes") + '</span></div><div class="ep-dots" data-reveal aria-hidden="true">' + shows[k].map(function (m, n) { return '<i style="--k:' + n + '"></i>'; }).join("") + "</div></li>";
       }).join("") + "</ul></div>";
-      groups = groups.replace("__TOTAL__", total + tx(" 集", " episodes"));
+      groups = groups.replace("__TOTAL__", '<span class="count" data-count-to="' + total + '">' + total + "</span>" + tx(" 集", " episodes"));
     }
     if (order.length && full) groups += order.map(function (k) {
       return '<div class="mgroup"><h3>' + esc(k) + "<small>" + shows[k].length + tx(" 集", "") + "</small></h3><ul>" +
