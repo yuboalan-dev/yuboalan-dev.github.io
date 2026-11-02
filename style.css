@@ -306,7 +306,6 @@ main > .block:first-child { border-top: 0; }
 .go-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); flex-shrink: 0; transition: transform .25s ease, background-color .25s ease; }
 .go-btn:hover { background: var(--navy); color: #fff; }
 .go-btn:hover .go-dot { transform: scale(1.4); background: #fff; }
-.anim .go-dot { animation: breathe-dot 2.8s ease-in-out infinite; }
 
 /* 路線圖例 */
 .legend { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--muted); margin-bottom: 36px; }
@@ -467,9 +466,6 @@ main > .block:first-child { border-top: 0; }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 @media (max-width: 640px) { .anim .station .seg { animation-name: draw-y; } }
 
-/* 名字後的紅點：每隔幾秒輕輕泛一圈 */
-.anim .hero-name h1::after { animation: breathe 3.6s ease-out 1.8s infinite; }
-@keyframes breathe { 0% { box-shadow: 0 0 0 0 rgba(230, 0, 18, .45); } 70%, 100% { box-shadow: 0 0 0 .32em rgba(230, 0, 18, 0); } }
 
 /* 照片紅環：載入時像水面一樣擴開 */
 .anim .photo { animation: ring-in 1.1s cubic-bezier(.2, .7, .2, 1) .1s both; }
@@ -502,47 +498,15 @@ main > .block:first-child { border-top: 0; }
 
 
 /* -----------------------------------------
-   10-2. 讓它活起來：呼吸、流動、漂浮
-   全部是慢速循環，幅度很小；「減少動態效果」時停止。
+   10-2. 只留一個持續的動態：路線圖「最新一站」的水波
+   2026-11-02 起拿掉其他循環效果（虛線流動、圓點呼吸、照片漂浮、底紋漂移、簡介模糊淡入）：
+   招募者多半只看 30 秒，畫面一直在動會分散注意力。進場的水滴、漣漪、浮現都保留。
    ----------------------------------------- */
-/* 虛線往「現在」流：路線、關注領域、步驟、經歷與近況的虛線 */
-.anim .station .seg { animation: draw .35s ease-out both, flow-x 1.1s linear infinite; animation-delay: calc(var(--i) * var(--stagger) + 120ms), 0s; }
-.anim .focus-item.is-in::before { animation: draw .7s ease-out .35s both, flow-x 1.4s linear infinite; }
-.anim .steps::before, .anim .exp-roles.is-multi::before { animation: flow-y 1.6s linear infinite reverse; }
-.anim .exp-list::before, .anim .news::before { animation: flow-y 2.4s linear infinite reverse; }
-@media (max-width: 640px) { .anim .station .seg { animation: draw-y .35s ease-out both, flow-y 1.1s linear infinite; animation-delay: calc(var(--i) * var(--stagger) + 120ms), 0s; } }
-@keyframes flow-x { from { background-position: 0 0; } to { background-position: 16px 0; } }
-@keyframes flow-y { from { background-position: 0 0; } to { background-position: 0 12px; } }
 .station.is-here::after { background-size: 14px 100%; }
-.anim .station.is-here::after { animation: flow-x 2s linear infinite; }
-
-/* 呼吸：進行中的站點、圓章、職務點，像水滴在呼吸 */
-@keyframes breathe-dot { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.14); } }
-@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c, var(--accent)) 45%, transparent); } 80%, 100% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--c, var(--accent)) 0%, transparent); } }
-.anim .station .dot.is-now { animation: drop var(--drop-dur) cubic-bezier(.33, 0, .2, 1) both, breathe-dot 3.2s ease-in-out infinite;
-    animation-delay: calc(var(--i) * var(--stagger) + 200ms), calc(var(--i) * 260ms + 1.6s); }
 .anim .station.is-here .dot::after { animation: ripple 1s ease-out both, here-wave 2.6s ease-out infinite;
     animation-delay: calc(var(--i) * var(--stagger) + 200ms + var(--drop-dur) * .55), 2.4s; border-color: var(--accent); }
 @keyframes here-wave { 0% { opacity: .9; transform: scale(.8); } 100% { opacity: 0; transform: scale(3.2); } }
 @media (max-width: 640px) { @keyframes here-wave { 0% { opacity: .9; transform: scale(.8); } 100% { opacity: 0; transform: scale(2); } } }
-.anim .exp-item.is-in .org-mark.is-now { animation: drop var(--drop-dur) cubic-bezier(.33, 0, .2, 1) both, pulse-ring 2.8s ease-out infinite;
-    animation-delay: calc(var(--i, 0) * 70ms + 80ms), calc(var(--i, 0) * 300ms + 1.2s); }
-.anim .exp-roles.is-multi .exp-role.is-now::before, .anim .roles .dot, .anim .news li:first-child .dot { animation: breathe-dot 2.8s ease-in-out infinite; }
-.anim .roles li:nth-child(2) .dot { animation-delay: .5s; }
-.anim .roles li:nth-child(3) .dot { animation-delay: 1s; }
-.anim .brand::before, .anim .navlink.is-current::before, .anim .block-head.is-in::before { animation: breathe-dot 3.4s ease-in-out infinite; }
-.anim .block-head[data-reveal].is-in::before { animation: drop var(--drop-dur) cubic-bezier(.33, 0, .2, 1) both, breathe-dot 3.4s ease-in-out 1.2s infinite; }
-.anim .ep-dots.is-in i:last-child { animation: drop .55s cubic-bezier(.33, 0, .2, 1) both, breathe-dot 2.6s ease-in-out infinite; animation-delay: calc(var(--k) * 55ms), calc(var(--k) * 55ms + .8s); }
-
-/* 漂浮：照片緩緩上下浮、點陣底紋慢慢漂移 */
-.anim .photo { animation: ring-in 1.1s cubic-bezier(.2, .7, .2, 1) .1s both, float 7s ease-in-out 1.3s infinite; }
-@keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
-.anim .hero { animation: grid-drift 40s linear infinite; }
-@keyframes grid-drift { from { background-position: 0 0; } to { background-position: 22px 44px; } }
-
-/* 逐行淡入：簡介從微微模糊變清楚 */
-.anim .hero .summary { animation: soft-in 1.2s ease-out .3s both; }
-@keyframes soft-in { from { opacity: 0; filter: blur(6px); } to { opacity: 1; filter: none; } }
 
 /* 連結底線從左邊長出來 */
 .news a, .footnote a, .nf-links a { text-decoration: none; background: linear-gradient(currentColor, currentColor) left bottom / 0 1.5px no-repeat; transition: background-size .35s ease; }
