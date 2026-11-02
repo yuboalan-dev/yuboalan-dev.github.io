@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 換網域時，這個檔案、robots.txt、各 html 開頭的 canonical／og:url／og:image、site.js 的 SITE_URL 要一起改 -->
+<!-- 換網域時，這個檔案、robots.txt、各 html 開頭的 canonical／og:url／og:image、common.js 的 SITE_URL 要一起改 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://yuboalan-dev.github.io/</loc></url>
   <url><loc>https://yuboalan-dev.github.io/experience.html</loc></url>

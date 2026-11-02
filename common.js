@@ -98,8 +98,12 @@
     return (S.links || []).filter(function (l) { return l.url && l.show !== false; });
   }
 
+  /* 網站正式網址（唯一一份）：CV 上的「網站」欄、首頁結構化資料都用這個。
+     換網域時要一起改：這裡、sitemap.xml、robots.txt、各 html 開頭的 canonical／og:url／og:image */
+  var SITE_URL = "https://yuboalan-dev.github.io/";
+
   window.UTIL = {
-    S: S, ENGLISH: ENGLISH, getLang: getLang, setLang: setLang, t: t, period: period, esc: esc,
+    S: S, SITE_URL: SITE_URL, ENGLISH: ENGLISH, getLang: getLang, setLang: setLang, t: t, period: period, esc: esc,
     visible: visible, href: href, prettyUrl: prettyUrl, icon: icon, activeLinks: activeLinks
   };
 })();

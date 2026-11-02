@@ -102,7 +102,11 @@ img { display: block; max-width: 100%; }
     font-size: 14.5px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s ease; white-space: nowrap;
 }
 .navlink::before { content: ""; width: 9px; height: 9px; border-radius: 50%; border: 2px solid currentColor; transition: background-color .2s ease; }
+.navlink { min-height: 44px; }   /* 手機上好點：點擊區至少 44px 高 */
 .navlink:hover { color: var(--navy); }
+/* 跳到主要內容：平常藏著，用鍵盤 Tab 進來才出現 */
+.skip { position: absolute; left: 12px; top: -60px; z-index: 30; background: var(--navy); color: #fff; padding: 8px 16px; border-radius: 999px; font-size: 14px; font-weight: 700; text-decoration: none; }
+.skip:focus { top: 10px; }
 .navlink.is-current { color: var(--navy); font-weight: 700; }
 .navlink.is-current::before { background: var(--accent); border-color: var(--accent); }
 @media (max-width: 720px) { .brand span { display: none; } }
@@ -192,6 +196,9 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
     .station.is-here::after { display: none; }
     .station a { flex-direction: row; align-items: center; gap: 12px; }
     .station .y { margin: 0; min-width: 3em; }
+    /* 「現在位置」的紅環和水波不要被左邊切掉、也不要蓋到年份 */
+    .route-track { padding-left: 10px; }
+    .station a { gap: 18px; }
 }
 
 
@@ -251,6 +258,11 @@ main > .block:first-child { border-top: 0; }
 .role-name { font-size: 15px; color: var(--text); font-weight: 500; }
 .item-main { font-weight: 700; color: var(--navy); font-size: 16.5px; line-height: 1.5; }
 .item-sub { font-size: 14.5px; color: var(--muted); white-space: pre-line; margin-top: 2px; }
+/* 手機：職稱太擠時，期間改放到下一行，職稱不再被擠成三行 */
+@media (max-width: 480px) {
+    .exp-role-head { grid-template-columns: minmax(0, 1fr); }
+    .exp-role-head .exp-period { line-height: 1.5; }
+}
 .exp-period { font-size: 13px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .item-points { list-style: none; padding: 0; margin-top: 6px; font-size: 14.5px; line-height: 1.75; }
 .item-points li { position: relative; padding-left: 14px; }
@@ -507,6 +519,7 @@ main > .block:first-child { border-top: 0; }
 .anim .station.is-here .dot::after { animation: ripple 1s ease-out both, here-wave 2.6s ease-out infinite;
     animation-delay: calc(var(--i) * var(--stagger) + 200ms + var(--drop-dur) * .55), 2.4s; border-color: var(--accent); }
 @keyframes here-wave { 0% { opacity: .9; transform: scale(.8); } 100% { opacity: 0; transform: scale(3.2); } }
+@media (max-width: 640px) { @keyframes here-wave { 0% { opacity: .9; transform: scale(.8); } 100% { opacity: 0; transform: scale(2); } } }
 .anim .exp-item.is-in .org-mark.is-now { animation: drop var(--drop-dur) cubic-bezier(.33, 0, .2, 1) both, pulse-ring 2.8s ease-out infinite;
     animation-delay: calc(var(--i, 0) * 70ms + 80ms), calc(var(--i, 0) * 300ms + 1.2s); }
 .anim .exp-roles.is-multi .exp-role.is-now::before, .anim .roles .dot, .anim .news li:first-child .dot { animation: breathe-dot 2.8s ease-in-out infinite; }
