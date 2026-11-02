@@ -103,7 +103,7 @@ window.SITE = {
   /* ---------- 3. 經歷（經歷頁＋CV） ----------
      每一組（group）是經歷頁的一段，也是一條路線：
        student 學生自治（藍）、research 研究與教學（金）、transport 人本交通（綠）、
-       education 學歷、other 其他（灰）
+       education 學歷、honors 榮譽與獎學金、other 其他（灰）
      組裡每一筆的圓點顏色自動用該組的 line，不用每筆寫。
      一個組織一筆，同一組織的不同職務放在 roles 裡（新的寫上面）：
        { org, mark, logo, minor, also, more,
@@ -144,11 +144,11 @@ window.SITE = {
         org: { zh: "國立政治大學校、院級會議", en: "NCCU University and College Councils" },
         roles: [
           { role: { zh: "校務會議學生代表（兼任學生議員）", en: "Student Representative, University Council (ex officio Student Legislator)" }, period: "2024.08 – 今" },
-          { role: { zh: "總務會議學生代表", en: "Student Representative, General Affairs Council" }, period: "2026.01 – 今", cv: false },
           { role: { zh: "校務基金管理委員會委員", en: "Member, University Endowment Fund Management Committee" }, period: "2026.11 – 今" },
+          { role: { zh: "總務會議學生代表", en: "Student Representative, General Affairs Council" }, period: "2026.01 – 今", cv: false },
           { role: { zh: "學務會議學生代表", en: "Student Representative, Student Affairs Council" }, period: "2025.09 – 今", cv: false },
-          { role: { zh: "校園規劃與建設委員會委員", en: "Member, Campus Planning & Construction Committee" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "社會科學學院院務會議學生代表", en: "Student Representative, College of Social Sciences Council" }, period: "2025.08 – 今", cv: false },
+          { role: { zh: "校園規劃與建設委員會委員", en: "Member, Campus Planning & Construction Committee" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "教務會議學院學生代表", en: "College Student Representative, Academic Affairs Council" }, period: "2025.02 – 2025.07", cv: false },
           { role: { zh: "校務考核委員會委員", en: "Member, University Evaluation Committee" }, period: "2024.09 – 2025.07", cv: false }
         ] },
@@ -216,7 +216,7 @@ window.SITE = {
         ] }
     ] },
 
-    { key: "education", line: "", title: { zh: "學歷與榮譽", en: "Education & Honors" }, items: [
+    { key: "education", line: "", title: { zh: "學歷", en: "Education" }, items: [
       { mark: "政治", logo: "",
         org: { zh: "國立政治大學政治學系", en: "Department of Political Science, NCCU" },
         roles: [
@@ -227,14 +227,22 @@ window.SITE = {
               { zh: "輔修經濟學系、哲學系", en: "Minors in Economics and Philosophy" },
               { zh: "人文領袖榮譽學分學程", en: "Humanities Leadership Honors Program" },
               { zh: "中國大陸與兩岸關係研究跨領域學分學程", en: "Interdisciplinary Program in China and Cross-Strait Studies" }
-            ] },
-          { role: { zh: "馮麗華傑出系友獎學金", en: "Feng Li-hua Distinguished Alumni Scholarship" }, period: "2025" }
+            ] }
         ] },
       /* 建中：網站顯示、CV 不放 */
       { cv: false, mark: "建中", logo: "",
         org: { zh: "臺北市立建國高級中學", en: "Taipei Municipal Jianguo High School" },
         roles: [
           { role: { zh: "畢業", en: "Graduated" }, period: "2019.08 – 2022.06", station: { zh: "建中", en: "Jianguo HS" } }
+        ] }
+    ] },
+
+    /* 榮譽與獎學金：一個獎項一筆，org 寫頒發單位，role 寫獎項名稱，新的寫上面 */
+    { key: "honors", line: "", title: { zh: "榮譽與獎學金", en: "Honors & Scholarships" }, items: [
+      { mark: "獎", logo: "",
+        org: { zh: "國立政治大學政治學系", en: "Department of Political Science, NCCU" },
+        roles: [
+          { role: { zh: "馮麗華傑出系友獎學金", en: "Feng Li-hua Distinguished Alumni Scholarship" }, period: "2025" }
         ] }
     ] },
 
