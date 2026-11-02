@@ -158,7 +158,7 @@ window.SITE = {
           { role: { zh: "總務會議", en: "General Affairs Council" }, period: "2026.01 – 今", cv: false },
           { role: { zh: "學務會議", en: "Student Affairs Council" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "社會科學學院院務會議", en: "College of Social Sciences Council" }, period: "2025.08 – 今", cv: false },
-          { role: { zh: "校園規劃與建設委員會", en: "Campus Planning & Construction Committee" }, period: "2025.08 – 今", cv: false },
+          { role: { zh: "校園規劃及興建委員會", en: "Campus Planning & Construction Committee" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "教務會議（學院代表）", en: "Academic Affairs Council (college representative)" }, period: "2025.02 – 2025.07", cv: false },
           { role: { zh: "校務考核委員會", en: "University Evaluation Committee" }, period: "2024.09 – 2025.07", cv: false }
         ] },
