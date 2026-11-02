@@ -46,8 +46,8 @@
      download 是對方存檔時看到的檔名。 */
   var CV_PDF = EN ? { href: "/cv/alan-yu-cv-en.pdf", name: "Alan_Yu_CV.pdf" }
                   : { href: "/cv/yuboan-cv-zh.pdf", name: "游博安_CV.pdf" };
-  /* 完整版 CV（含 content.js 標 cv: false 的次要經歷，可能超過一頁）只從頁尾連結 */
-  var CV_FULL = EN ? "/cv/alan-yu-cv-en-full.pdf" : "/cv/yuboan-cv-zh-full.pdf";
+  /* CV 的定位（2026-11-02）：CV 就是投履歷時附的那份 PDF，網站只提供最新版（頁首「下載 CV」）。
+     可勾選選項的 cv.html 是使用者自己的工具，網站上不連結（網址 /cv.html 仍可用，不給搜尋引擎收錄）。 */
 
   /* ---------- 頁首 ---------- */
   var nav = PAGES.map(function (p) {
@@ -243,14 +243,14 @@
         '<h3 class="exp-title">' + esc(t(g.title, L)) + '</h3><ul class="exp-list">' + items.map(item).join("") + alsoLines(g) + "</ul>" +
         (minorN ? '<button class="more-btn" type="button" data-g="g-' + esc(g.key || "") + '">' +
           (allMinor ? tx("顯示 " + minorN + " 筆", "Show " + minorN) : tx("顯示其他 " + minorN + " 筆", "Show " + minorN + " more")) + "</button>" : "") +
-    main.querySelectorAll(".roles-more").forEach(function (b) {
-      b.onclick = function () { b.previousElementSibling.classList.add("show-extra"); b.remove(); };
-    });
       "</div>";
     }).join("") + "</div>";
     main.innerHTML = block("experience", title, inner);
     main.querySelectorAll(".more-btn[data-g]").forEach(function (b) {
       b.onclick = function () { document.getElementById(b.dataset.g).classList.add("show-all"); b.remove(); };
+    });
+    main.querySelectorAll(".roles-more").forEach(function (b) {
+      b.onclick = function () { b.previousElementSibling.classList.add("show-extra"); b.remove(); };
     });
   }
 
@@ -339,9 +339,7 @@
     f.innerHTML = '<div class="wrap"><div class="block-head"><h2 class="block-title">' + tx("聯絡", "Contact") + "</h2></div>" +
       (mail ? '<a class="contact-mail" href="' + esc(U.href(mail)) + '">' + esc(mail.url.replace(/^mailto:/, "")) + "</a>" : "") +
       (social ? '<div class="social">' + social + "</div>" : "") +
-      '<p class="footnote">' + esc(S.name.zh + " " + S.name.en) + "　" + tx("最後更新 ", "Last updated ") + esc(S.updated || "") +
-      '　<a href="/cv.html?lang=' + L + '">' + tx("CV 網頁版（可選附照片等）", "CV builder") + "</a>" +
-      '　<a href="' + CV_FULL + '" download>' + tx("完整版 CV", "Full CV") + "</a></p></div>";
+      '<p class="footnote">' + esc(S.name.zh + " " + S.name.en) + "　" + tx("最後更新 ", "Last updated ") + esc(S.updated || "") + "</p></div>";
     document.body.appendChild(f);
   }
 
