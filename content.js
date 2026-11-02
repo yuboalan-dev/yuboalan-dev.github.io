@@ -101,11 +101,13 @@ window.SITE = {
   },
 
   /* ---------- 2-3. 近況（新的寫在最上面，網站自動照日期排；用簡稱） ----------
-     url 可以留空。建議每月補一行，網站看起來才是活的。 */
+     url 可以留空。只寫路線圖上沒有的事（受訪、提案、活動、發表）；
+     已經是路線圖站點的就職不用再寫，免得重複。全部 show: false 時「最近」整段不顯示。
+     下面三則跟路線圖重複，先藏起來（2026-11-02）。 */
   news: [
-    { date: "2026-11", text: { zh: "接任臺灣學生聯合會理事", en: "Joined the board of the National Students' Union of Taiwan" } },
-    { date: "2026-02", text: { zh: "擔任下一代人本交通促進會副秘書長", en: "Became Deputy Secretary-General, Next Generation People-Oriented Transport Association" } },
-    { date: "2026-02", text: { zh: "就任政大學生議會議長", en: "Took office as Speaker of the NCCU Student Congress" } }
+    { show: false, date: "2026-11", text: { zh: "接任臺灣學生聯合會理事", en: "Joined the board of the National Students' Union of Taiwan" } },
+    { show: false, date: "2026-02", text: { zh: "擔任下一代人本交通促進會副秘書長", en: "Became Deputy Secretary-General, Next Generation People-Oriented Transport Association" } },
+    { show: false, date: "2026-02", text: { zh: "就任政大學生議會議長", en: "Took office as Speaker of the NCCU Student Congress" } }
   ],
 
   /* ---------- 3. 經歷（經歷頁＋CV） ----------
@@ -136,7 +138,7 @@ window.SITE = {
             station: { zh: "議長", en: "Speaker" } },
           { role: { zh: "預算委員會召集委員", en: "Convener, Budget Committee" }, period: "2025.02 – 2025.07" },
           { role: { zh: "學生議員", en: "Student Legislator" }, period: "2024.08 – 今",
-            station: { zh: "議員", en: "Legislator" } }
+            station: { zh: "學生議員", en: "Legislator" } }
         ] },
       { mark: "學生會", logo: "",
         org: { zh: "國立政治大學學生會", en: "NCCU Student Association" },
@@ -198,13 +200,13 @@ window.SITE = {
         org: { zh: "社團法人下一代人本交通促進會", en: "Next Generation People-Oriented Transport Association" },
         roles: [
           { role: { zh: "副秘書長、北部分會會長", en: "Deputy Secretary-General; Chair, Northern Chapter" }, period: "2026.02 – 今",
-            station: { zh: "人本交通", en: "Transport NGO" } }
+            station: { zh: "人本促進會", en: "Transport NGO" } }
         ] },
       { mark: "指南", logo: "", more: "/work.html",
         org: { zh: "政大指南路交通改善小組", en: "NCCU Zhinan Road Traffic Improvement Task Force" },
         roles: [
           { role: { zh: "召集人", en: "Convener" }, period: "2025.01 – 今",
-            station: { zh: "指南路", en: "Zhinan Rd." } }
+            station: { zh: "指南路小組", en: "Zhinan Rd." } }
         ] },
       { minor: true, mark: "預算", logo: "",
         org: { zh: "臺北市參與式預算", en: "Taipei Participatory Budgeting" },
@@ -219,7 +221,7 @@ window.SITE = {
         org: { zh: "國立政治大學", en: "National Chengchi University" },
         roles: [
           { role: { zh: "學士：政治學系", en: "B.A.: Political Science" }, period: "2022.09 – 2027.06（預計）",
-            station: { zh: "政大", en: "NCCU" } },
+            station: { zh: "政大政治系", en: "NCCU" } },
           { role: { zh: "校學士：哲學、政治學與經濟學專長", en: "University Bachelor track: Philosophy, Politics and Economics" }, period: "" },
           { role: { zh: "輔修：經濟學系", en: "Minor: Economics" }, period: "" },
           { role: { zh: "輔修：哲學系", en: "Minor: Philosophy" }, period: "" },
@@ -230,7 +232,7 @@ window.SITE = {
       { cv: false, mark: "建中", logo: "",
         org: { zh: "臺北市立建國高級中學", en: "Taipei Municipal Jianguo High School" },
         roles: [
-          { role: { zh: "畢業", en: "Graduated" }, period: "2019.08 – 2022.06", station: { zh: "建中", en: "Jianguo HS" } }
+          { role: { zh: "畢業", en: "Graduated" }, period: "2019.08 – 2022.06" }
         ] }
     ] },
 
@@ -259,7 +261,7 @@ window.SITE = {
         org: { zh: "國立政治大學野火陣線社", en: "NCCU Wildfire Front Club" },
         roles: [
           { role: { zh: "總務", en: "Treasurer" }, period: "2024.08 – 2025.07" },
-          { role: { zh: "副社長", en: "Vice President" }, period: "2023.02 – 2024.07", station: { zh: "野火", en: "Wildfire Front" } }
+          { role: { zh: "副社長", en: "Vice President" }, period: "2023.02 – 2024.07", station: { zh: "野火陣線", en: "Wildfire Front" } }
         ] }
     ] }
   ],

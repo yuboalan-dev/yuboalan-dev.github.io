@@ -109,7 +109,7 @@
     var items = U.visible(S.focus, "web").filter(function (f) { return f.line; }).map(function (f) {
       return '<span data-line="' + f.line + '">' + (cls === "route-legend" ? "" : dot(f, true)) + esc(t(f.title, L)) + "</span>";
     }).join("");
-    return items ? '<div class="' + cls + '">' + items + (cls === "route-legend" ? '<span class="now">' + tx("現在位置", "Now") + "</span>" : "") + "</div>" : "";
+    return items ? '<div class="' + cls + '">' + items + (cls === "route-legend" ? '<span class="now">' + tx("最新一站", "Latest") + "</span>" : "") + "</div>" : "";
   }
 
   /* ---------- 首頁 ---------- */
