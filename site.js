@@ -46,7 +46,7 @@
      download 是對方存檔時看到的檔名。 */
   var CV_PDF = EN ? { href: "/cv/alan-yu-cv-en.pdf", name: "Alan_Yu_CV.pdf" }
                   : { href: "/cv/yuboan-cv-zh.pdf", name: "游博安_CV.pdf" };
-  /* CV 的定位（2026-11-02）：CV 就是投履歷時附的那份 PDF，網站只提供最新版（頁首「下載 CV」）。
+  /* CV 的定位（2026-11-02）：CV 就是投履歷時附的那份 PDF，網站只提供最新版（經歷頁上方「下載正式 CV」）。
      可勾選選項的 cv.html 是使用者自己的工具，網站上不連結（網址 /cv.html 仍可用，不給搜尋引擎收錄）。 */
 
   /* ---------- 頁首 ---------- */
@@ -60,7 +60,7 @@
     '<div class="wrap"><a class="brand" href="/">' + esc(S.name.zh) + "<span>" + esc(S.name.en) + "</span></a>" +
     '<nav class="topnav" aria-label="' + tx("主選單", "Main") + '">' + nav +
     (U.ENGLISH ? '<button class="lang-btn" type="button" id="langBtn">' + (EN ? "中文" : "EN") + "</button>" : "") +
-    '<a class="btn" href="' + CV_PDF.href + '" download="' + esc(CV_PDF.name) + '">' + tx("下載 CV", "Download CV") + "</a></nav></div>";
+    "</nav></div>";
   document.body.insertBefore(header, document.body.firstChild);
   if (U.ENGLISH) document.getElementById("langBtn").onclick = function () { U.setLang(EN ? "zh" : "en"); };
 
@@ -206,7 +206,8 @@
     }
     function roleLine(r) { return esc(t(r.role, L)) + (r.period ? "　" + esc(U.period(r.period, L)) : ""); }
     function item(it, i) {
-      var rs = rolesOf(it), ROLES_SHOWN = 3;  /* 一個組織職務超過三個時，先顯示三個，其餘收合 */
+      /* 一個組織職務超過三個時，先顯示三個，其餘收合；content.js 寫 fold: false 的全部展開 */
+      var rs = rolesOf(it), ROLES_SHOWN = it.fold === false ? 99 : 3;
       var rolesHtml = rs.map(function (r, ri) {
         var p = U.period(r.period, L), now = /今/.test(r.period || "");
         var pts = (r.points || []).filter(function (x) { return x.show !== false && x.web !== false; })
@@ -218,7 +219,8 @@
       var more = it.more ? '<a class="exp-more" href="' + esc(it.more) + '">' + tx("完整過程見代表作", "See the full story") + " →</a>" : "";
       return '<li class="exp-item' + (it.minor ? " is-more is-minor" : "") + '" id="' + idOf(it) + '" data-reveal data-line="' + lineOf(it) + '" style="--i:' + i + '">' + orgMark(it) +
         '<div><div class="exp-head"><div class="item-main">' + esc(t(it.org, L)) + "</div></div>" +
-        '<ul class="exp-roles' + (rs.length > 1 ? " is-multi" : "") + '">' + rolesHtml + "</ul>" +
+        /* 只有一個職務也用同樣的圓點樣式，全頁每一行職務看起來一致 */
+        '<ul class="exp-roles is-multi">' + rolesHtml + "</ul>" +
         (rs.length > ROLES_SHOWN ? '<button class="roles-more" type="button">' + tx("還有 " + (rs.length - ROLES_SHOWN) + " 個職務", (rs.length - ROLES_SHOWN) + " more roles") + "</button>" : "") +
         more + "</div></li>";
     }
@@ -236,7 +238,9 @@
       });
       return out.join("");
     }
-    var inner = '<div class="exp-grid">' + groups.map(function (g) {
+    /* 正式 CV 的下載只放在經歷頁（2026-11-02 使用者決定，頁首不放） */
+    var cvBtn = '<p class="exp-cv"><a class="go-btn" href="' + CV_PDF.href + '" download="' + esc(CV_PDF.name) + '"><span class="go-dot" aria-hidden="true"></span>' + tx("下載正式 CV（PDF）", "Download CV (PDF)") + "</a></p>";
+    var inner = cvBtn + '<div class="exp-grid">' + groups.map(function (g) {
       var items = ordered(U.visible(g.items, "web"));
       var minorN = items.filter(function (it) { return it.minor; }).length, allMinor = minorN === items.length;
       return '<div class="exp-group' + (allMinor ? " is-folded" : "") + '" id="g-' + esc(g.key || "") + '" data-line="' + esc(g.line || "") + '">' +

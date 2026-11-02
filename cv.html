@@ -159,7 +159,8 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
   function W() { return opt.full ? "all" : "cv"; }
 
   /* CV 段落：網站按領域分段，CV 按傳統分段（同一份 content.js）
-     學歷與榮譽 ← groups 的 education
+     學歷       ← groups 的 education
+     榮譽與獎學金 ← groups 的 honors
      經歷       ← 三條路線（PATHS）裡的主要經歷，現職在前、過去在後，其餘照 content.js 順序
      其他經歷與研習 ← 三條路線裡標 minor 的，加上 groups 的 other */
   var PATHS = ["student", "research", "transport"];
@@ -299,6 +300,7 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
     main = main.filter(isNow).concat(main.filter(function (it) { return !isNow(it); }));
     if (grp("other")) minor = minor.concat(grp("other").items || []);
     if (grp("education")) html += section(t(grp("education").title, L), entries(grp("education").items));
+    if (grp("honors")) html += section(t(grp("honors").title, L), entries(grp("honors").items));
     html += section(TX.exp, entries(main));
     html += section(t((grp("other") || {}).title || { zh: "其他經歷與研習", en: "Other Experience & Training" }, L), entries(minor));
 
