@@ -141,7 +141,7 @@ window.SITE = {
   groups: [
 
     { key: "student", line: "student", title: { zh: "學生自治", en: "Student Government" }, items: [
-      { mark: "議會", logo: "",
+      { mark: "議會", logo: "assets/logos/nccusc.png",
         org: { zh: "國立政治大學學生會學生議會", en: "NCCU Student Congress" },
         roles: [
           { role: { zh: "議長", en: "Speaker" }, period: "2026.02 – 今",
@@ -150,7 +150,7 @@ window.SITE = {
           { role: { zh: "學生議員", en: "Student Legislator" }, period: "2024.08 – 今",
             station: { zh: "學生議員", en: "Legislator" } }
         ] },
-      { mark: "學生會", logo: "",
+      { mark: "學生會", logo: "assets/logos/nccusa.png",
         org: { zh: "國立政治大學學生會", en: "NCCU Student Association" },
         roles: [
           { role: { zh: "校務諮詢委員會總召集人", en: "Chief Convener, Advisory Committee on University Affairs" }, period: "2026.02 – 今" },
@@ -170,7 +170,7 @@ window.SITE = {
           { role: { zh: "教務會議（學院代表）", en: "Academic Affairs Council (college representative)" }, period: "2025.02 – 2025.07", cv: false },
           { role: { zh: "校務考核委員會", en: "University Evaluation Committee" }, period: "2024.09 – 2025.07", cv: false }
         ] },
-      { mark: "學聯", logo: "",
+      { mark: "學聯", logo: "assets/logos/nsut.png",
         org: { zh: "社團法人臺灣學生聯合會", en: "National Students' Union of Taiwan" },
         roles: [
           { role: { zh: "理事", en: "Board Member" }, period: "2026.11 – 今",
@@ -180,7 +180,7 @@ window.SITE = {
     ] },
 
     { key: "research", line: "research", title: { zh: "研究與教學", en: "Research & Teaching" }, items: [
-      { mark: "國關", logo: "",
+      { mark: "國關", logo: "assets/logos/iir.png",
         org: { zh: "國立政治大學國際關係研究中心", en: "Institute of International Relations, NCCU" },
         roles: [
           { role: { zh: "研究計畫助理：大陸委員會、國科會委託研究", en: "Research Assistant: Mainland Affairs Council and NSTC projects" }, period: "2023.09 – 2026.01",
@@ -206,7 +206,7 @@ window.SITE = {
     ] },
 
     { key: "transport", line: "transport", title: { zh: "人本交通", en: "People-Oriented Transport" }, items: [
-      { mark: "人本", logo: "",
+      { mark: "人本", logo: "assets/logos/ngtu.png",
         org: { zh: "社團法人下一代人本交通促進會", en: "Next Generation People-Oriented Transport Association" },
         roles: [
           { role: { zh: "副秘書長、北部分會會長", en: "Deputy Secretary-General; Chair, Northern Chapter" }, period: "2026.02 – 今",
@@ -230,7 +230,7 @@ window.SITE = {
 
     { key: "education", line: "", title: { zh: "學歷", en: "Education" }, items: [
       /* 一個學位、學程一行；fold: false＝職務超過三個也全部展開 */
-      { mark: "政大", logo: "", fold: false,
+      { mark: "政大", logo: "assets/logos/nccu.png", fold: false,
         org: { zh: "國立政治大學", en: "National Chengchi University" },
         roles: [
           { role: { zh: "學士：政治學系", en: "B.A.: Political Science" }, period: "2022.09 – 2027.06（預計）",
@@ -270,7 +270,7 @@ window.SITE = {
         roles: [
           { role: { zh: "結業：公共事務人才培力基礎入門課程", en: "Completed: Public Affairs Talent Foundation Course" }, period: "2025.03" }
         ] },
-      { minor: true, cv: false, mark: "野火", logo: "",
+      { minor: true, cv: false, mark: "野火", logo: "assets/logos/wildfire.png",
         org: { zh: "國立政治大學野火陣線社", en: "NCCU Wildfire Front Club" },
         roles: [
           { role: { zh: "總務", en: "Treasurer" }, period: "2024.08 – 2025.07" },
