@@ -14,6 +14,7 @@
             node tools/preview.mjs /tmp/base . /tmp/preview-out
    ========================================================= */
 import fs from "node:fs";
+import vm from "node:vm";
 import path from "node:path";
 import { chromium } from "playwright";
 import { PNG } from "pngjs";
@@ -58,11 +59,13 @@ async function open(site, url, width, media) {
 }
 
 /* ---------- 1. 文字差異 ---------- */
-async function siteData(site) {
-  const { ctx, page, ok } = await open(site, "/index.html", 1280);
-  const data = ok ? await page.evaluate(() => window.SITE ? JSON.parse(JSON.stringify(window.SITE)) : null).catch(() => null) : null;
-  await ctx.close();
-  return data;
+/* 直接讀 content.js 檔案本身（不經過網頁程式，網頁程式會替資料補上 group 等內部欄位，比較時變成雜訊） */
+function siteData(site) {
+  try {
+    const sandbox = { window: {} };
+    vm.runInNewContext(fs.readFileSync(path.join(site.dir, "content.js"), "utf8"), sandbox, { timeout: 2000 });
+    return sandbox.window.SITE ? JSON.parse(JSON.stringify(sandbox.window.SITE)) : null;
+  } catch (e) { return null; }
 }
 /* 陣列裡的一筆用它自己的名稱當標籤（例如組織名），新增一筆在最上面時才不會整串都被當成「改了」 */
 function labelOf(x) {
@@ -82,6 +85,10 @@ const KEY_NAMES = { updated: "更新日期", english: "英文版開關", name: "
   expertise: "專長", links: "社群與連結", cvContact: "CV 聯絡方式", news: "近況", groups: "經歷", focusHeading: "關注領域標題",
   focus: "關注領域", works: "代表作", mediaList: "媒體清單列法", media: "媒體", zh: "中文", en: "英文", period: "期間",
   points: "條列說明", url: "連結", date: "日期" };
+const TECH = new Set(["line", "key", "collapsed"]);
+const SUB_NAMES = { items: "", roles: "", text: "", zh: "", en: "英文", role: "職稱", period: "期間", points: "條列說明",
+  line: "路線色", minor: "收進「顯示其他」", also: "另見", more: "代表作連結", title: "標題", org: "組織", station: "路線圖站點",
+  cv: "放進 CV", web: "放上網站", show: "顯示", mark: "圓章簡稱", logo: "標誌", url: "連結", date: "日期", key: "代號" };
 const show = v => typeof v === "string" ? `「${v}」` : JSON.stringify(v);
 const changes = [];
 function diff(a, b, trail) {
@@ -105,7 +112,12 @@ function diff(a, b, trail) {
     return;
   }
   if (a && b && typeof a === "object" && typeof b === "object") {
-    for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) diff(a[k], b[k], [...trail, KEY_NAMES[k] || k]);
+    for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) {
+      if (TECH.has(k)) continue;  /* 只影響顏色或內部代號的欄位，看畫面截圖就好，不列在文字差異 */
+      /* 頂層欄位用 KEY_NAMES；裡面一層用 SUB_NAMES；items、roles 這種容器名稱不顯示，路徑才短 */
+      const name = trail.length === 0 ? (KEY_NAMES[k] || k) : SUB_NAMES[k];
+      diff(a[k], b[k], name === "" ? trail : [...trail, name || k]);
+    }
     return;
   }
   changes.push({ kind: "修改", where, text: `${show(a)} → ${show(b)}` });
@@ -116,7 +128,7 @@ function summarize(v) {
   return l ? `「${l}」一整筆` : "一整筆";
 }
 
-const dataBefore = await siteData(before), dataAfter = await siteData(after);
+const dataBefore = siteData(before), dataAfter = siteData(after);
 if (dataBefore && dataAfter) diff(dataBefore, dataAfter, []);
 
 /* ---------- 2. 畫面與 CV 頁數 ---------- */
