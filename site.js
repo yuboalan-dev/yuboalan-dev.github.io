@@ -349,8 +349,8 @@
 
   /* ---------- 結構化資料（schema.org Person），只放首頁 ----------
      Google 用來辨識「游博安」這個人；內容全部取自 content.js。
-     換網域時要改 SITE_URL（另見 sitemap.xml、robots.txt、各 html 的 canonical）。 */
-  var SITE_URL = "https://yuboalan-dev.github.io/";
+     網址用 common.js 的 SITE_URL（換網域只改那裡和 sitemap.xml、robots.txt、各 html 的 canonical）。 */
+  var SITE_URL = U.SITE_URL;
   function addPersonData() {
     try {
       var em = U.activeLinks().filter(function (l) { return l.type === "email"; })[0];

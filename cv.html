@@ -265,8 +265,9 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
     });
     if (S.cvContact && S.cvContact.phone) contact.push("<span>" + U.icon("phone") + esc(S.cvContact.phone) + "</span>");
     if (S.cvContact && S.cvContact.location) contact.push("<span>" + U.icon("location") + esc(t(S.cvContact.location, L)) + "</span>");
-    var site = location.href.indexOf("http") === 0 && location.hostname !== "localhost"
-      ? location.origin + location.pathname.replace(/cv\.html$/, "") : "";
+    /* 網站網址一律用正式網址（common.js 的 SITE_URL）；不能從瀏覽器網址推，
+       否則建置時會印成本機的 127.0.0.1 */
+    var site = U.SITE_URL;
     if (site) contact.push("<span>" + U.icon("website") + '<a href="' + esc(site) + '">' + esc(site.replace(/^https?:\/\//, "").replace(/\/$/, "")) + "</a></span>");
     links.filter(function (l) { return l.type !== "email" && l.type !== "youtube" && l.cv !== false; }).forEach(function (l) {
       contact.push("<span>" + U.icon(l.type) + '<a href="' + esc(l.url) + '">' + esc(U.prettyUrl(l)) + "</a></span>");
