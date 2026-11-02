@@ -129,29 +129,30 @@ window.SITE = {
           { role: { zh: "學生議員", en: "Student Legislator" }, period: "2024.08 – 今",
             station: { zh: "議員", en: "Legislator" } }
         ] },
+      { mark: "學生會", logo: "",
+        org: { zh: "國立政治大學學生會", en: "NCCU Student Association" },
+        roles: [
+          { role: { zh: "校務諮詢委員會總召集人", en: "Chief Convener, Advisory Committee on University Affairs" }, period: "2026.02 – 今" },
+          { role: { zh: "校務諮詢委員會副召集人", en: "Deputy Convener, Advisory Committee on University Affairs" }, period: "2025.09 – 2026.01", cv: false },
+          { role: { zh: "權益部部員", en: "Member, Student Rights Department" }, period: "2022.09 – 2023.07", cv: false }
+        ] },
+      /* 學校的校級會議與委員會（學生代表身分） */
+      { mark: "校務", logo: "",
+        org: { zh: "國立政治大學校級會議", en: "NCCU University Councils" },
+        roles: [
+          { role: { zh: "校務會議學生代表（兼任學生議員）", en: "Student Representative, University Council (ex officio Student Legislator)" }, period: "2024.08 – 今" },
+          { role: { zh: "總務會議學生代表", en: "Student Representative, General Affairs Council" }, period: "2026.01 – 今", cv: false },
+          { role: { zh: "學務會議學生代表", en: "Student Representative, Student Affairs Council" }, period: "2025.09 – 今", cv: false },
+          { role: { zh: "校園規劃與建設委員會委員", en: "Member, Campus Planning & Construction Committee" }, period: "2025.08 – 今", cv: false },
+          { role: { zh: "教務會議學院學生代表", en: "College Student Representative, Academic Affairs Council" }, period: "2025.02 – 2025.07", cv: false },
+          { role: { zh: "校務考核委員會委員", en: "Member, University Evaluation Committee" }, period: "2024.09 – 2025.07" }
+        ] },
       { mark: "學聯", logo: "",
         org: { zh: "社團法人臺灣學生聯合會", en: "National Students' Union of Taiwan" },
         roles: [
           { role: { zh: "理事", en: "Board Member" }, period: "2026.11 – 今",
             station: { zh: "學聯理事", en: "NSUT board" } },
           { role: { zh: "公關副秘書長", en: "Deputy Secretary-General for Public Relations" }, period: "2025.11 – 2026.10" }
-        ] },
-      { mark: "校務", logo: "",
-        org: { zh: "國立政治大學校務會議", en: "NCCU University Council" },
-        roles: [
-          { role: { zh: "學生代表（兼任學生議員）", en: "Student Representative (ex officio Student Legislator)" }, period: "2024.08 – 今" },
-          { role: { zh: "學生會校務諮詢委員會總召集人", en: "Chief Convener, Student Advisory Committee on University Affairs" }, period: "2026.02 – 今" },
-          { role: { zh: "總務會議學生代表", en: "Student Representative, General Affairs Council" }, period: "2026.01 – 今", cv: false },
-          { role: { zh: "學生會校務諮詢委員會副召集人", en: "Deputy Convener, Student Advisory Committee on University Affairs" }, period: "2025.09 – 2026.01", cv: false },
-          { role: { zh: "學務會議學生代表", en: "Student Representative, Student Affairs Council" }, period: "2025.09 – 今", cv: false },
-          { role: { zh: "校園規劃與建設委員會委員", en: "Member, Campus Planning & Construction Committee" }, period: "2025.08 – 今", cv: false },
-          { role: { zh: "教務會議學院學生代表", en: "College Student Representative, Academic Affairs Council" }, period: "2025.02 – 2025.07", cv: false },
-          { role: { zh: "校務考核委員會委員", en: "Member, University Evaluation Committee" }, period: "2024.09 – 2025.07" }
-        ] },
-      { minor: true, cv: false, mark: "權益", logo: "",
-        org: { zh: "國立政治大學學生會權益部", en: "Student Rights Department, NCCU Student Association" },
-        roles: [
-          { role: { zh: "部員", en: "Member" }, period: "2022.09 – 2023.07" }
         ] }
     ] },
 

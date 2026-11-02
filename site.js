@@ -212,19 +212,21 @@
     }
     function roleLine(r) { return esc(t(r.role, L)) + (r.period ? "　" + esc(U.period(r.period, L)) : ""); }
     function item(it, i) {
-      var rs = rolesOf(it);
-      var rolesHtml = rs.map(function (r) {
+      var rs = rolesOf(it), ROLES_SHOWN = 3;  /* 一個組織職務超過三個時，先顯示三個，其餘收合 */
+      var rolesHtml = rs.map(function (r, ri) {
         var p = U.period(r.period, L), now = /今/.test(r.period || "");
         var pts = (r.points || []).filter(function (x) { return x.show !== false && x.web !== false; })
           .map(function (x) { return "<li>" + esc(t(x, L)) + "</li>"; }).join("");
-        return '<li class="exp-role' + (now ? " is-now" : "") + '"><div class="exp-role-head"><span class="role-name">' + esc(t(r.role, L)) + "</span>" +
+        return '<li class="exp-role' + (now ? " is-now" : "") + (ri >= ROLES_SHOWN ? " is-extra" : "") + '"><div class="exp-role-head"><span class="role-name">' + esc(t(r.role, L)) + "</span>" +
           (p ? '<span class="exp-period">' + esc(p) + "</span>" : "") + "</div>" +
           (pts ? '<ul class="item-points">' + pts + "</ul>" : "") + "</li>";
       }).join("");
       var more = it.more ? '<a class="exp-more" href="' + esc(it.more) + '">' + tx("完整過程見代表作", "See the full story") + " →</a>" : "";
       return '<li class="exp-item' + (it.minor ? " is-more is-minor" : "") + '" id="' + idOf(it) + '" data-reveal data-line="' + lineOf(it) + '" style="--i:' + i + '">' + orgMark(it) +
         '<div><div class="exp-head"><div class="item-main">' + esc(t(it.org, L)) + "</div></div>" +
-        '<ul class="exp-roles' + (rs.length > 1 ? " is-multi" : "") + '">' + rolesHtml + "</ul>" + more + "</div></li>";
+        '<ul class="exp-roles' + (rs.length > 1 ? " is-multi" : "") + '">' + rolesHtml + "</ul>" +
+        (rs.length > ROLES_SHOWN ? '<button class="roles-more" type="button">' + tx("還有 " + (rs.length - ROLES_SHOWN) + " 個職務", (rs.length - ROLES_SHOWN) + " more roles") + "</button>" : "") +
+        more + "</div></li>";
     }
     /* 橫跨兩段的經歷（also）：正式放在自己那段，另一段只放一行連結 */
     function alsoLines(g) {
@@ -247,6 +249,9 @@
         '<h3 class="exp-title">' + esc(t(g.title, L)) + '</h3><ul class="exp-list">' + items.map(item).join("") + alsoLines(g) + "</ul>" +
         (minorN ? '<button class="more-btn" type="button" data-g="g-' + esc(g.key || "") + '">' +
           (allMinor ? tx("顯示 " + minorN + " 筆", "Show " + minorN) : tx("顯示其他 " + minorN + " 筆", "Show " + minorN + " more")) + "</button>" : "") +
+    main.querySelectorAll(".roles-more").forEach(function (b) {
+      b.onclick = function () { b.previousElementSibling.classList.add("show-extra"); b.remove(); };
+    });
       "</div>";
     }).join("") + "</div>";
     main.innerHTML = block("experience", title, inner);
