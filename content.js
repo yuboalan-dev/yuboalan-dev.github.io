@@ -148,7 +148,7 @@ window.SITE = {
           { role: { zh: "權益部部員", en: "Member, Student Rights Department" }, period: "2022.09 – 2023.07", cv: false }
         ] },
       /* 以學生代表身分參加的學校校級、院級會議與委員會 */
-      { mark: "代表", logo: "",
+      { mark: "會議", logo: "",
         org: { zh: "國立政治大學各級會議學生代表", en: "Student Representative, NCCU University Councils" },
         roles: [
           { role: { zh: "校務會議（兼任學生議員）", en: "University Council (ex officio Student Legislator)" }, period: "2024.08 – 今" },
@@ -238,7 +238,7 @@ window.SITE = {
 
     /* 榮譽與獎學金：一個獎項一筆，org 寫頒發單位，role 寫獎項名稱，新的寫上面 */
     { key: "honors", line: "", title: { zh: "榮譽與獎學金", en: "Honors & Scholarships" }, items: [
-      { mark: "獎", logo: "",
+      { mark: "政治", logo: "",
         org: { zh: "國立政治大學政治學系", en: "Department of Political Science, NCCU" },
         roles: [
           { role: { zh: "馮麗華傑出系友獎學金", en: "Feng Li-hua Distinguished Alumni Scholarship" }, period: "2025" }

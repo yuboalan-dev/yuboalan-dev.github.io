@@ -224,7 +224,7 @@
         '<div><div class="exp-head"><div class="item-main">' + esc(t(it.org, L)) + "</div></div>" +
         /* 只有一個職務也用同樣的圓點樣式，全頁每一行職務看起來一致 */
         '<ul class="exp-roles is-multi">' + rolesHtml + "</ul>" +
-        (rs.length > ROLES_SHOWN ? '<button class="roles-more" type="button">' + tx("還有 " + (rs.length - ROLES_SHOWN) + " 個職務", (rs.length - ROLES_SHOWN) + " more roles") + "</button>" : "") +
+        (rs.length > ROLES_SHOWN ? '<button class="roles-more" type="button">' + tx("顯示其他 " + (rs.length - ROLES_SHOWN) + " 個職務", "Show " + (rs.length - ROLES_SHOWN) + " more roles") + "</button>" : "") +
         more + "</div></li>";
     }
     /* 橫跨兩段的經歷（also）：正式放在自己那段，另一段只放一行連結 */
@@ -245,11 +245,12 @@
     var cvBtn = '<p class="exp-cv"><a class="go-btn" href="' + CV_PDF.href + '" download="' + esc(CV_PDF.name) + '"><span class="go-dot" aria-hidden="true"></span>' + tx("下載正式 CV（PDF）", "Download CV (PDF)") + "</a></p>";
     var inner = cvBtn + '<div class="exp-grid">' + groups.map(function (g) {
       var items = ordered(U.visible(g.items, "web"));
+      /* 整段都是次要經歷（例：其他經歷與研習）時直接展開，不然那一段只剩一顆按鈕、看起來是空的 */
       var minorN = items.filter(function (it) { return it.minor; }).length, allMinor = minorN === items.length;
-      return '<div class="exp-group' + (allMinor ? " is-folded" : "") + '" id="g-' + esc(g.key || "") + '" data-line="' + esc(g.line || "") + '">' +
+      return '<div class="exp-group' + (allMinor ? " show-all" : "") + '" id="g-' + esc(g.key || "") + '" data-line="' + esc(g.line || "") + '">' +
         '<h3 class="exp-title">' + esc(t(g.title, L)) + '</h3><ul class="exp-list">' + items.map(item).join("") + alsoLines(g) + "</ul>" +
-        (minorN ? '<button class="more-btn" type="button" data-g="g-' + esc(g.key || "") + '">' +
-          (allMinor ? tx("顯示 " + minorN + " 筆", "Show " + minorN) : tx("顯示其他 " + minorN + " 筆", "Show " + minorN + " more")) + "</button>" : "") +
+        (minorN && !allMinor ? '<button class="more-btn" type="button" data-g="g-' + esc(g.key || "") + '">' +
+          tx("顯示其他 " + minorN + " 筆", "Show " + minorN + " more") + "</button>" : "") +
       "</div>";
     }).join("") + "</div>";
     main.innerHTML = block("experience", title, inner);
