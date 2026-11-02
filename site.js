@@ -57,6 +57,7 @@
   var header = document.createElement("header");
   header.className = "topbar";
   header.innerHTML =
+    '<a class="skip" href="#main">' + tx("跳到主要內容", "Skip to content") + "</a>" +
     '<div class="wrap"><a class="brand" href="/">' + esc(S.name.zh) + "<span>" + esc(S.name.en) + "</span></a>" +
     '<nav class="topnav" aria-label="' + tx("主選單", "Main") + '">' + nav +
     (U.ENGLISH ? '<button class="lang-btn" type="button" id="langBtn">' + (EN ? "中文" : "EN") + "</button>" : "") +
