@@ -298,7 +298,7 @@ window.SITE = {
   ],
 
   /* ---------- 5. 代表作 ----------
-     steps 是時間軸（一步一行）；links 是佐證連結。 */
+     steps 是時間軸（一步一行）；links 是佐證連結；image 是作品圖（縮圖，點開看原圖）。 */
   works: [
     { line: "transport",
       title: { zh: "指南路人本交通改善", en: "Making Zhinan Road Walkable" },
@@ -315,7 +315,11 @@ window.SITE = {
         { label: { zh: "參與式預算提案頁", en: "Proposal page" }, url: "https://taipei.join.gov.tw/pb/proposal/detail/976fc32f-0556-45b2-bf56-fd3e64851789" },
         { label: { zh: "工程地區說明會", en: "Public works briefing" }, url: "https://nco.gov.taipei/News_Content.aspx?n=F36AA8E9D896DF42&sms=59AD6E6606F6002F&s=EEC0122512A38BD8" },
         { label: { zh: "論壇成果海報", en: "Forum poster" }, url: "https://twxdb.org/2026-forum/" }
-      ] },
+      ],
+      /* 作品圖：放在 assets/work/，網站上顯示縮圖，點開看原圖 */
+      image: { src: "assets/work/zhinan-poster.webp",
+               alt: { zh: "指南路改造成果海報", en: "Zhinan Road project poster" },
+               caption: { zh: "2026 臺灣跨領域學士論壇成果海報", en: "2026 Taiwan Interdisciplinary Bachelor Forum poster" } } },
     { line: "student",
       title: { zh: "學生議會官網改版與透明議會", en: "Student Congress Website & Transparency" },
       text:  { zh: "主導議會官網從 Google 協作平台遷移到學校平台，建立法規資料庫、歷史沿革與會議資訊，讓議事資料可查、可追溯。",
