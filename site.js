@@ -46,7 +46,7 @@
      download 是對方存檔時看到的檔名。 */
   var CV_PDF = EN ? { href: "/cv/alan-yu-cv-en.pdf", name: "Alan_Yu_CV.pdf" }
                   : { href: "/cv/yuboan-cv-zh.pdf", name: "游博安_CV.pdf" };
-  /* CV 的定位（2026-11-02）：CV 就是投履歷時附的那份 PDF，網站只提供最新版（頁首「下載 CV」）。
+  /* CV 的定位（2026-11-02）：CV 就是投履歷時附的那份 PDF，網站只提供最新版（經歷頁上方「下載正式 CV」）。
      可勾選選項的 cv.html 是使用者自己的工具，網站上不連結（網址 /cv.html 仍可用，不給搜尋引擎收錄）。 */
 
   /* ---------- 頁首 ---------- */
@@ -60,7 +60,7 @@
     '<div class="wrap"><a class="brand" href="/">' + esc(S.name.zh) + "<span>" + esc(S.name.en) + "</span></a>" +
     '<nav class="topnav" aria-label="' + tx("主選單", "Main") + '">' + nav +
     (U.ENGLISH ? '<button class="lang-btn" type="button" id="langBtn">' + (EN ? "中文" : "EN") + "</button>" : "") +
-    '<a class="btn" href="' + CV_PDF.href + '" download="' + esc(CV_PDF.name) + '">' + tx("下載 CV", "Download CV") + "</a></nav></div>";
+    "</nav></div>";
   document.body.insertBefore(header, document.body.firstChild);
   if (U.ENGLISH) document.getElementById("langBtn").onclick = function () { U.setLang(EN ? "zh" : "en"); };
 
@@ -237,7 +237,9 @@
       });
       return out.join("");
     }
-    var inner = '<div class="exp-grid">' + groups.map(function (g) {
+    /* 正式 CV 的下載只放在經歷頁（2026-11-02 使用者決定，頁首不放） */
+    var cvBtn = '<p class="exp-cv"><a class="go-btn" href="' + CV_PDF.href + '" download="' + esc(CV_PDF.name) + '"><span class="go-dot" aria-hidden="true"></span>' + tx("下載正式 CV（PDF）", "Download CV (PDF)") + "</a></p>";
+    var inner = cvBtn + '<div class="exp-grid">' + groups.map(function (g) {
       var items = ordered(U.visible(g.items, "web"));
       var minorN = items.filter(function (it) { return it.minor; }).length, allMinor = minorN === items.length;
       return '<div class="exp-group' + (allMinor ? " is-folded" : "") + '" id="g-' + esc(g.key || "") + '" data-line="' + esc(g.line || "") + '">' +
