@@ -105,11 +105,11 @@
   }
 
   /* 圖例：三條路線的名稱取自 content.js 的 focus */
-  function legend(cls) {
+  function legend(cls, withEvents) {
     var items = U.visible(S.focus, "web").filter(function (f) { return f.line; }).map(function (f) {
       return '<span data-line="' + f.line + '">' + (cls === "route-legend" ? "" : dot(f, true)) + esc(t(f.title, L)) + "</span>";
     }).join("");
-    return items ? '<div class="' + cls + '">' + items + (cls === "route-legend" ? '<span class="now">' + tx("最新一站", "Latest") + "</span>" : "") + "</div>" : "";
+    return items ? '<div class="' + cls + '">' + items + (cls === "route-legend" ? (withEvents ? '<span class="ev">' + tx("近況", "Updates") + "</span>" : "") + '<span class="now">' + tx("最新一站", "Latest") + "</span>" : "") + "</div>" : "";
   }
 
   /* ---------- 首頁 ---------- */
@@ -124,28 +124,42 @@
     var tl = t(S.tagline, L);
     var seek = t(S.seeking, L);
 
-    /* 職涯路線圖：經歷裡有 station 的條目，依開始年月排列；最後一站是「現在位置」 */
-    /* 站點：每個職務上有 station 的，都是一站（用那個職務的期間） */
+    /* 職涯路線圖（歷程與近況整合在同一條線上，2026-11-02）：
+       大站＝經歷裡有 station 的職務，依開始年月排列；
+       小站＝近況（content.js 的 news），依日期插進大站之間；最後一個點是「最新一站」 */
     var stations = [];
     (S.groups || []).forEach(function (g) {
       if (g.show === false || g.web === false) return;
       U.visible(g.items, "web").forEach(function (it) {
         rolesOf(it).forEach(function (r) {
-          if (r.station) stations.push({ org: it.org, line: it.line, item: it, station: r.station, period: r.period });
+          if (r.station) stations.push({ org: it.org, line: it.line, item: it, station: r.station, period: r.period, k: startKey(r.period) });
         });
       });
     });
-    stations.sort(function (a, b) { return startKey(a.period) - startKey(b.period); });
-    /* 路線分段上色：通往某一站的那一段，用那一站的路線色（像捷運圖）。
-       每一站都連到經歷頁的那一筆。 */
-    var route = stations.length ? '<div class="route" data-reveal aria-label="' + tx("經歷路線圖", "Career route") + '">' + legend("route-legend") +
-      '<ol class="route-track">' + stations.map(function (it, i) {
-        var here = i === stations.length - 1;
-        return '<li class="station' + (here ? " is-here" : "") + '" style="--i:' + i + '">' +
-          (i ? '<span class="seg" data-line="' + lineOf(it) + '"></span>' : "") +
-          '<a href="/experience.html#' + idOf(it.item) + '" title="' + esc(t(it.org, L) + (lineName(it.line) ? "（" + lineName(it.line) + "）" : "")) + '">' +
-          dot(it, /今/.test(it.period || "")) + '<span class="y">' + String(startKey(it.period)).slice(0, 4) + '</span><span class="n">' + esc(t(it.station, L)) + "</span></a></li>";
-      }).join("") + "</ol></div>" : "";
+    var events = U.visible(S.news, "web").map(function (n) {
+      return { ev: n, line: n.line || "", k: startKey(String(n.date || "").replace("-", ".")) };
+    });
+    var stops = stations.concat(events).sort(function (a, b) { return a.k - b.k || (a.ev ? 1 : 0) - (b.ev ? 1 : 0); });
+    /* 小站沒寫 line 時，沿用前一個大站的路線色 */
+    var lastLine = "";
+    stops.forEach(function (s) { if (s.ev) { if (!s.line) s.line = lastLine; } else lastLine = s.line; });
+    /* 路線分段上色：通往某一站的那一段，用那一站的路線色（像捷運圖）。大站都連到經歷頁的那一筆 */
+    function stopHtml(it, i) {
+      var here = i === stops.length - 1, ev = it.ev;
+      var seg = i ? '<span class="seg" data-line="' + lineOf(it) + '"></span>' : "";
+      var cls = "station" + (ev ? " is-event" : "") + (here ? " is-here" : "");
+      if (ev) {
+        var label = '<span class="dot" data-line="' + lineOf(it) + '" aria-hidden="true"></span><span class="y">' + esc(String(ev.date || "").replace("-", ".")) +
+          '</span><span class="n">' + esc(t(ev.text, L)) + "</span>";
+        return '<li class="' + cls + '" style="--i:' + i + '">' + seg +
+          (ev.url ? '<a href="' + esc(ev.url) + '" target="_blank" rel="noopener">' + label + "</a>" : '<span class="stop">' + label + "</span>") + "</li>";
+      }
+      return '<li class="' + cls + '" style="--i:' + i + '">' + seg +
+        '<a href="/experience.html#' + idOf(it.item) + '" title="' + esc(t(it.org, L) + (lineName(it.line) ? "（" + lineName(it.line) + "）" : "")) + '">' +
+        dot(it, /今/.test(it.period || "")) + '<span class="y">' + String(it.k).slice(0, 4) + '</span><span class="n">' + esc(t(it.station, L)) + "</span></a></li>";
+    }
+    var route = stops.length ? '<div class="route" data-reveal aria-label="' + tx("經歷路線圖", "Career route") + '">' + legend("route-legend", events.length) +
+      '<ol class="route-track" style="--n:' + stops.length + '">' + stops.map(stopHtml).join("") + "</ol></div>" : "";
 
     var html =
       '<section class="hero"><div class="wrap">' +
@@ -172,16 +186,8 @@
       return '<div class="focus-item" data-reveal data-line="' + lineOf(i) + '"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
     }).join("") + "</div>" + goto("/work.html", "看代表作", "See selected work"), true);
 
-    /* 歷程：上面是路線圖（從起點到現在位置），下面接最新三則近況，當成路線的延續。
-       近況只顯示最新 NEWS_SHOWN 則；更早的留在 content.js 不刪 */
-    var NEWS_SHOWN = 3;
-    var news = U.visible(S.news, "web").slice().sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); }).slice(0, NEWS_SHOWN);
-    var newsHtml = news.length ? '<div class="history-news" data-reveal><h3 class="history-sub">' + tx("最近", "Latest") + '</h3><ul class="news">' + news.map(function (n, i) {
-      var txt = esc(t(n.text, L));
-      if (n.url) txt = '<a href="' + esc(n.url) + '" target="_blank" rel="noopener">' + txt + "</a>";
-      return '<li data-reveal style="--i:' + i + '">' + dot(n, false) + '<span class="d">' + esc(n.date || "") + "</span><span>" + txt + "</span></li>";
-    }).join("") + "</ul></div>" : "";
-    if (route || newsHtml) html += block("history", tx("歷程", "Journey"), route + newsHtml + goto("/experience.html", "看完整經歷", "See full experience"));
+    /* 歷程：一條路線就是全部（近況已經是路線上的小站） */
+    if (route) html += block("history", tx("歷程", "Journey"), route + goto("/experience.html", "看完整經歷", "See full experience"));
 
     main.innerHTML = html;
 

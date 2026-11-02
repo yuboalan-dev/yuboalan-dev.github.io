@@ -168,6 +168,7 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 .route-legend span { display: inline-flex; align-items: center; gap: 8px; }
 .route-legend span::before { content: ""; width: 18px; height: var(--track); border-radius: 2px; background: var(--c); }
 .route-legend .now::before { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.route-legend .ev::before { width: 10px; height: 10px; border-radius: 50%; background: #fff; border: 2.5px solid var(--muted); box-sizing: border-box; }
 .route-track { list-style: none; padding: 0; display: flex; position: relative; }
 .station { flex: 1; position: relative; min-width: 0; padding-right: 8px; }
 /* 通往這一站的那一段線，用這一站的路線色（分段上色，像捷運圖） */
@@ -188,6 +189,12 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 .station .n { font-size: 14.5px; font-weight: 700; color: var(--navy); line-height: 1.35; transition: color .2s ease; }
 .station a:hover .n { color: var(--accent); }
 .station.is-here .dot { box-shadow: 0 0 0 4px #fff, 0 0 0 7px var(--accent); }
+/* 小站（近況）：小一號的點、字小一號，夾在大站之間 */
+.station.is-event { flex: .8; }
+.station .stop { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.station.is-event .dot { --dot: 12px; border-width: 3px; margin: 5px 0 5px 5px; }
+.station.is-event .n { font-size: 13px; font-weight: 500; color: var(--text); }
+.station.is-event .y { margin-top: 0; }
 
 @media (max-width: 860px) {
     .hero-grid { grid-template-columns: 1fr; }
@@ -200,8 +207,9 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
     .station .seg { right: auto; left: 9px; top: -29px; width: var(--track); height: 40px; transform-origin: center top;
         background: repeating-linear-gradient(180deg, var(--c) 0 7px, transparent 7px 12px); background-size: 100% 12px; }
     .station.is-here::after { display: none; }
-    .station a { flex-direction: row; align-items: center; gap: 12px; }
-    .station .y { margin: 0; min-width: 3em; }
+    .station a, .station .stop { flex-direction: row; align-items: center; gap: 12px; }
+    .station.is-event .dot { margin: 0 5px; }
+    .station .y { margin: 0; min-width: 4.4em; }
     /* 「現在位置」的紅環和水波不要被左邊切掉、也不要蓋到年份 */
     .route-track { padding-left: 10px; }
     .station a { gap: 18px; }
@@ -315,19 +323,7 @@ main > .block:first-child { border-top: 0; }
 /* =========================================
    5. 近況
    ========================================= */
-/* 歷程：路線圖下面接最新近況 */
-.history-news { margin-top: 44px; }
-.history-sub { font-size: 16px; font-weight: 900; color: var(--navy); margin-bottom: 10px; }
-.news { list-style: none; padding: 0; position: relative; max-width: 760px; }
-.news::before { content: ""; position: absolute; left: 6px; top: 14px; bottom: 14px; width: 2px;
-    background: repeating-linear-gradient(180deg, var(--line) 0 6px, transparent 6px 12px); }
-.news li { position: relative; display: grid; grid-template-columns: var(--dot) 6em minmax(0, 1fr); gap: 0 16px; padding: 8px 0; align-items: baseline; }
-.news .dot { position: relative; top: 2px; z-index: 1; }
-.news li:first-child .dot { --c: var(--accent); background: var(--accent); }
-.news .d { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
-.news a { color: var(--navy); text-underline-offset: 4px; }
-.news .is-more { display: none; }
-.news.show-all .is-more { display: grid; }
+/* 近況已整合進首頁路線圖（小站），樣式在第 2 段 */
 
 
 /* =========================================
@@ -520,9 +516,9 @@ main > .block:first-child { border-top: 0; }
 @media (max-width: 640px) { @keyframes here-wave { 0% { opacity: .9; transform: scale(.8); } 100% { opacity: 0; transform: scale(2); } } }
 
 /* 連結底線從左邊長出來 */
-.news a, .footnote a, .nf-links a { text-decoration: none; background: linear-gradient(currentColor, currentColor) left bottom / 0 1.5px no-repeat; transition: background-size .35s ease; }
-.news a, .nf-links a { background-size: 100% 1.5px; }
-.news a:hover, .footnote a:hover, .nf-links a:hover { background-size: 100% 1.5px; }
+.footnote a, .nf-links a { text-decoration: none; background: linear-gradient(currentColor, currentColor) left bottom / 0 1.5px no-repeat; transition: background-size .35s ease; }
+.nf-links a { background-size: 100% 1.5px; }
+.footnote a:hover, .nf-links a:hover { background-size: 100% 1.5px; }
 
 /* 列印時一律直接顯示，不等動畫 */
 @media print { .anim [data-reveal], .anim .ep-dots i { opacity: 1 !important; transform: none !important; animation: none !important; } }
