@@ -206,7 +206,7 @@ window.SITE = {
     ] },
 
     { key: "transport", line: "transport", title: { zh: "人本交通", en: "People-Oriented Transport" }, items: [
-      { mark: "人本", logo: "",
+      { mark: "人本", logo: "assets/logos/ngtu.png",
         org: { zh: "社團法人下一代人本交通促進會", en: "Next Generation People-Oriented Transport Association" },
         roles: [
           { role: { zh: "副秘書長、北部分會會長", en: "Deputy Secretary-General; Chair, Northern Chapter" }, period: "2026.02 – 今",
