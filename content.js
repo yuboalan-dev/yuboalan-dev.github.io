@@ -180,6 +180,7 @@ window.SITE = {
           { role: { zh: "學務會議", en: "Student Affairs Council" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "社會科學學院院務會議", en: "College of Social Sciences Council" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "校園規劃及興建委員會", en: "Campus Planning & Construction Committee" }, period: "2025.08 – 今", cv: false },
+          { role: { zh: "學生申訴評議委員會（正式代表）", en: "" }, period: "2025.08 – 2026.07", cv: false },
           { role: { zh: "教務會議（學院代表）", en: "Academic Affairs Council (college representative)" }, period: "2025.02 – 2025.07", cv: false },
           { role: { zh: "校務考核委員會", en: "University Evaluation Committee" }, period: "2024.09 – 2025.07", cv: false }
         ] },
@@ -231,8 +232,8 @@ window.SITE = {
           { role: { zh: "召集人", en: "Convener" }, period: "2025.01 – 今",
             station: { zh: "指南路小組", en: "Zhinan Rd." },
             /* CV 上的一行成果（網站經歷頁不顯示，細節在代表作） */
-            points: [ { zh: "文山區參與式預算兩案提案通過，促成新工處辦理指南路二段人行道改善工程",
-                        en: "Two participatory-budget proposals adopted, leading to city sidewalk works on Zhinan Rd. Sec. 2" } ] }
+            points: [ { zh: "「指南路二段」案獲採納，另提「政大至萬興國小」案；推動號誌、標線及人行道規劃",
+                        en: "2025 Zhinan Road proposal adopted; 2026 NCCU–Wanxing Elementary proposal submitted; pedestrian improvements continue" } ] }
         ] },
       { minor: true, mark: "預算", logo: "",
         org: { zh: "臺北市參與式預算", en: "Taipei Participatory Budgeting" },
@@ -264,6 +265,11 @@ window.SITE = {
 
     /* 榮譽與獎學金：一個獎項一筆，org 寫頒發單位，role 寫獎項名稱，新的寫上面 */
     { key: "honors", line: "", title: { zh: "榮譽與獎學金", en: "Honors & Scholarships" }, items: [
+      { mark: "醫檢", logo: "",
+        org: { zh: "社團法人台北市醫事檢驗師公會", en: "" },
+        roles: [
+          { role: { zh: "會員暨會員子女教育獎學金（審核通過）", en: "" }, period: "2026.01" }
+        ] },
       { mark: "政治", logo: "",
         org: { zh: "國立政治大學政治學系", en: "Department of Political Science, NCCU" },
         roles: [
@@ -273,6 +279,16 @@ window.SITE = {
 
     /* 其他：跟三條路線都不直接相關的經歷。整段都是次要，網站上預設收合 */
     { key: "other", line: "", title: { zh: "其他經歷與研習", en: "Other Experience & Training" }, items: [
+      { minor: true, mark: "北科", logo: "",
+        org: { zh: "國立臺北科技大學學生自治會", en: "" },
+        roles: [
+          { role: { zh: "講師：「暑期幹部籌備訓練」", en: "" }, period: "2026.07" }
+        ] },
+      { minor: true, mark: "市府", logo: "",
+        org: { zh: "臺北市政府大安、文山、松山、信義區公所", en: "" },
+        roles: [
+          { role: { zh: "提案人代表暨經驗分享講者：「參與式預算審議員推廣教育課程」", en: "" }, period: "2025.10" }
+        ] },
       { minor: true, mark: "市府", logo: "",
         org: { zh: "臺北市政府", en: "Taipei City Government" },
         roles: [
@@ -315,13 +331,14 @@ window.SITE = {
   works: [
     { line: "transport",
       title: { zh: "指南路人本交通改善", en: "Making Zhinan Road Walkable" },
-      text:  { zh: "從學生自發導護、媒體報導，到參與式預算提案通過、市府辦理人行道改善工程。",
-               en: "From student volunteers directing traffic to adopted participatory-budget proposals and city pedestrian works." },
+      text:  { zh: "從路口導護與參與式預算提案出發，推動西側門行人號誌、公車停靠區及部分標線改善，持續追蹤整體人行道規劃。",
+               en: "From crossing advocacy and participatory-budget proposals to pedestrian signals, bus-stop markings and partial street improvements; broader sidewalk planning continues." },
       steps: [
         { zh: "政大行穿道人車爭道，學生自發導護（華視新聞報導）", en: "Students volunteer as crossing guards at the campus gate (CTS News)" },
         { zh: "成立指南路交通改善小組，擔任召集人", en: "Founded and convened the Zhinan Road task force" },
-        { zh: "文山區參與式預算兩案提案並通過", en: "Two Wenshan participatory-budget proposals adopted" },
-        { zh: "新工處辦理指南路二段雙號側人行道改善工程", en: "City launches sidewalk improvement works on Zhinan Rd. Sec. 2" }
+        { zh: "2025年「指南路二段周遭道路改善計畫」提案通過", en: "2025 Zhinan Road participatory-budget proposal adopted" },
+        { zh: "2026年「政大至萬興國小周邊交通改善計劃」參與第一階段審議", en: "2026 NCCU–Wanxing Elementary proposal entered first-stage deliberation" },
+        { zh: "西側門號誌、公車停靠區與部分標線完成改善；人行道整體規劃持續推進", en: "Pedestrian signals, bus-stop zone and selected markings completed; broader sidewalk planning continues" }
       ],
       links: [
         { label: { zh: "華視新聞報導", en: "CTS News report" }, url: "https://www.youtube.com/watch?v=9rRAOUwd23w" },
@@ -332,7 +349,7 @@ window.SITE = {
       /* 數字：網站上捲到時從 0 累加（num 只能寫數字） */
       stats: [
         { num: 498, unit: { zh: "萬元", en: "×10k NTD" }, label: { zh: "爭取改善與規劃經費（市府 117 萬＋國土署 381 萬）", en: "Funding secured for works and planning" } },
-        { num: 2, unit: { zh: "案", en: "" }, label: { zh: "文山區參與式預算提案通過", en: "Participatory-budget proposals adopted" } }
+        { num: 2, unit: { zh: "案", en: "" }, label: { zh: "文山區兩件提案（2025通過；2026參與首階段審議）", en: "Two Wenshan proposals at different deliberation stages" } }
       ],
       /* 作品圖：放在 assets/work/，網站上顯示縮圖，點開看原圖 */
       image: { src: "assets/work/zhinan-poster.webp",
