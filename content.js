@@ -265,7 +265,7 @@ window.SITE = {
 
     /* 榮譽與獎學金：一個獎項一筆，org 寫頒發單位，role 寫獎項名稱，新的寫上面 */
     { key: "honors", line: "", title: { zh: "榮譽與獎學金", en: "Honors & Scholarships" }, items: [
-      { mark: "醫檢", logo: "",
+      { cv: false, mark: "醫檢", logo: "",
         org: { zh: "社團法人台北市醫事檢驗師公會", en: "" },
         roles: [
           { role: { zh: "會員暨會員子女教育獎學金（審核通過）", en: "" }, period: "2026.01" }
