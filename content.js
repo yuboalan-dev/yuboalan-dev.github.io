@@ -348,6 +348,7 @@ window.SITE = {
       ],
       links: [
         { label: { zh: "華視新聞報導", en: "CTS News report" }, url: "https://www.youtube.com/watch?v=9rRAOUwd23w" },
+        { label: { zh: "政大：人本街道校園聯盟合作報導", en: "" }, url: "https://www.nccu.edu.tw/p/406-1000-20731,r134.php?Lang=zh-tw" },
         { label: { zh: "參與式預算提案頁", en: "Proposal page" }, url: "https://taipei.join.gov.tw/pb/proposal/detail/976fc32f-0556-45b2-bf56-fd3e64851789" },
         { label: { zh: "工程地區說明會", en: "Public works briefing" }, url: "https://nco.gov.taipei/News_Content.aspx?n=F36AA8E9D896DF42&sms=59AD6E6606F6002F&s=EEC0122512A38BD8" },
         { label: { zh: "論壇成果海報", en: "Forum poster" }, url: "https://twxdb.org/2026-forum/" }
