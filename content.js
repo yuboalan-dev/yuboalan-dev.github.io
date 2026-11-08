@@ -240,6 +240,11 @@ window.SITE = {
             points: [ { zh: "「指南路二段」案獲採納，另提「政大至萬興國小」案；推動號誌、標線及人行道規劃",
                         en: "2025 Zhinan Road proposal adopted; 2026 NCCU–Wanxing Elementary proposal submitted; pedestrian improvements continue" } ] }
         ] },
+      { minor: true, cv: false, mark: "地坪", logo: "",
+        org: { zh: "國立政治大學全校地坪及空間景觀改善計畫", en: "" },
+        roles: [
+          { role: { zh: "學生代表：參與基本設計討論", en: "" }, period: "" }
+        ] },
       { minor: true, mark: "預算", logo: "",
         org: { zh: "臺北市參與式預算", en: "Taipei Participatory Budgeting" },
         roles: [
