@@ -306,6 +306,11 @@ main > .block:first-child { border-top: 0; }
 .exp-also a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
 .exp-also-note { margin-left: 8px; font-size: 13px; color: var(--muted); white-space: nowrap; }
 .exp-group.show-all .is-more { display: grid; }
+/* 社會參與（groups 的 civic）：小類標題＋每筆一行「活動｜身分」，圓點用每筆自己的路線色 */
+.civic-kind { font-size: 14px; font-weight: 700; color: var(--muted); margin: 18px 0 4px; }
+.exp-civic .exp-title + .civic-kind { margin-top: 0; }
+.civic-list { margin-bottom: 4px; }
+.civic-role { display: block; font-size: 13.5px; color: var(--muted); margin-top: 1px; }
 
 .more-btn {
     font: inherit; font-size: 14px; font-weight: 700; color: var(--navy); cursor: pointer;

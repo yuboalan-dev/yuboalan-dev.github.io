@@ -12,7 +12,7 @@
 
    ★ 每一筆共用的欄位
      zh / en       中文、英文（en 留空 "" 時，英文版會顯示中文）
-     period        期間，例如 "2025 – 今"；英文版自動把「今」換成 Present
+     period        期間，例如 "2025 – 今"；英文版自動把「今」換成 Present；學歷還在修讀的寫 "修讀中"
      url           連結，留空 "" 就不顯示
      show: false   整筆藏起來（網站和 CV 都不顯示），資料留著
      cv: false     網站顯示、CV 不放        web: false   CV 放、網站不顯示
@@ -29,6 +29,9 @@
                    放進 assets/logos/ 資料夾）；有填就用標誌、不顯示 mark
      roles         同一組織的各個職務（經歷用），每個職務有 role、period、points
      station       寫在職務上：放上首頁「路線圖」的站名（短短兩三個字）；不寫就不上路線圖
+     name / kind   社會參與（groups 的 civic）用：name 活動名稱、kind 小類（talk 受邀分享、
+                   event 合作與活動、training 研習與營隊）；每筆另寫 role 身分、period 日期
+     cv: true      社會參與預設不印在 CV，要印的那筆寫 cv: true
                    站點依期間的開始年份排列；期間有「今」的會畫成實心點
 
    ★ 標了【待確認】的是 Claude 依現有資料起的草稿，請改成你要的說法。
@@ -36,7 +39,7 @@
 
 window.SITE = {
 
-  updated: "2026-11-02",
+  updated: "2026-11-08",
 
   /* 英文版開關：false＝網站和 CV 只有中文（頁首不顯示 EN 按鈕、不產生英文 CV）。
      英文內容（各處的 en）照樣留著，英文校對完改成 true 就恢復。 */
@@ -180,6 +183,7 @@ window.SITE = {
           { role: { zh: "學務會議", en: "Student Affairs Council" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "社會科學學院院務會議", en: "College of Social Sciences Council" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "校園規劃及興建委員會", en: "Campus Planning & Construction Committee" }, period: "2025.08 – 今", cv: false },
+          { role: { zh: "學生申訴評議委員會", en: "Student Grievance Committee" }, period: "2025.08 – 2026.07", cv: false },
           { role: { zh: "教務會議（學院代表）", en: "Academic Affairs Council (college representative)" }, period: "2025.02 – 2025.07", cv: false },
           { role: { zh: "校務考核委員會", en: "University Evaluation Committee" }, period: "2024.09 – 2025.07", cv: false }
         ] },
@@ -198,8 +202,7 @@ window.SITE = {
         roles: [
           { role: { zh: "研究計畫助理：大陸委員會、國科會委託研究", en: "Research Assistant: Mainland Affairs Council and NSTC projects" }, period: "2023.09 – 2026.01",
             station: { zh: "國關中心", en: "IIR" } },
-          { role: { zh: "教學助理：「經濟全球化與台商大陸投資」", en: "Teaching Assistant: Economic Globalisation & Taiwanese Investment in China" }, period: "2024.01 – 2026.01", cv: false },
-          { role: { zh: "副召集人：政治大學夏令研習營", en: "Deputy Convener: NCCU Summer Institute" }, period: "2024.08", cv: false }
+          { role: { zh: "教學助理：「經濟全球化與台商大陸投資」", en: "Teaching Assistant: Economic Globalisation & Taiwanese Investment in China" }, period: "2024.01 – 2026.01", cv: false }
         ] },
       { minor: true, also: "transport", mark: "地政", logo: "",
         org: { zh: "國立政治大學地政學系", en: "Department of Land Economics, NCCU" },
@@ -210,11 +213,6 @@ window.SITE = {
         org: { zh: "國立政治大學傳播學院", en: "College of Communication, NCCU" },
         roles: [
           { role: { zh: "教學助理：「社會創新與未來創造」", en: "Teaching Assistant: Social Innovation & Future-Making" }, period: "2024.09 – 2025.01" }
-        ] },
-      { minor: true, cv: false, mark: "陸委會", logo: "",
-        org: { zh: "大陸委員會", en: "Mainland Affairs Council" },
-        roles: [
-          { role: { zh: "學員：臺灣青年學生兩岸關係研習營", en: "Participant: Cross-Strait Relations Workshop for Taiwanese Youth" }, period: "2022.08" }
         ] }
     ] },
 
@@ -231,14 +229,51 @@ window.SITE = {
           { role: { zh: "召集人", en: "Convener" }, period: "2025.01 – 今",
             station: { zh: "指南路小組", en: "Zhinan Rd." },
             /* CV 上的一行成果（網站經歷頁不顯示，細節在代表作） */
-            points: [ { zh: "文山區參與式預算兩案提案通過，促成新工處辦理指南路二段人行道改善工程",
-                        en: "Two participatory-budget proposals adopted, leading to city sidewalk works on Zhinan Rd. Sec. 2" } ] }
+            points: [ { zh: "「指南路二段」案獲採納，另提「政大至萬興國小」案；推動號誌、標線及人行道規劃",
+                        en: "2025 Zhinan Road proposal adopted; 2026 NCCU–Wanxing Elementary proposal submitted; pedestrian improvements continue" } ] }
         ] },
       { minor: true, mark: "預算", logo: "",
         org: { zh: "臺北市參與式預算", en: "Taipei Participatory Budgeting" },
         roles: [
           { role: { zh: "提案人：中正區「您行我也行」（獲臺北市政府感謝狀）", en: "Proposer: Zhongzheng District project (certificate of appreciation)" }, period: "2024" }
         ] }
+    ] },
+
+
+    /* 社會參與：一次性或短期的參與（演講、活動、研習、營隊），不是有任期的職務（2026-11-08 使用者定案）。
+       每筆一行：name 活動名稱、role 身分、period 日期（只寫一個時間點：YYYY.MM 或 YYYY）。
+       kind 分小類："talk" 受邀分享、"event" 合作與活動、"training" 研習與營隊；新的寫上面。
+       line 寫這筆跟哪條路線有關（決定圓點顏色）；不寫就是灰色。
+       CV 預設不印這一段，要印的那筆寫 cv: true。
+       只想留紀錄、網站和 CV 都不放的，寫 show: false（注意：repo 是公開的，私密資料不要寫在這裡）。 */
+    { key: "civic", line: "", title: { zh: "社會參與", en: "Civic Engagement" }, items: [
+      { kind: "talk", line: "student",
+        name: { zh: "國立臺北科技大學學生自治會「暑期幹部籌備訓練」", en: "" },
+        role: { zh: "講師", en: "" }, period: "2026.07" },
+      { kind: "talk", line: "transport",
+        name: { zh: "臺北市政府「參與式預算審議員推廣教育課程」", en: "" },
+        role: { zh: "分享講者", en: "" }, period: "2025.10" },
+      { kind: "event", line: "transport",
+        name: { zh: "國立政治大學全校地坪及空間景觀改善計畫", en: "" },
+        role: { zh: "基本設計顧問", en: "" }, period: "2026" },
+      { kind: "event", line: "transport",
+        name: { zh: "內政部國土管理署「人本街道校園推展聯盟」合作備忘錄簽署", en: "" },
+        role: { zh: "政大學生代表（指南路交通改善小組）", en: "" }, period: "2025.09" },
+      { kind: "event", line: "transport",
+        name: { zh: "「永續之路－指南溪與指南路走讀工作坊」", en: "" },
+        role: { zh: "合辦：國立政治大學永續發展辦公室", en: "" }, period: "2025.08" },
+      { kind: "training", line: "research",
+        name: { zh: "政治學系課程「金融政策的政經分析：數位貨幣與培養理財素養的台日比較」日本明治大學研究成果發表、早稻田大學交流工作坊", en: "" },
+        role: { zh: "學員：小組研究「日本半導體產業人才培育政策」", en: "" }, period: "2025.05" },
+      { kind: "training", line: "",
+        name: { zh: "教育部青年發展署「公共事務人才培力基礎入門課程」", en: "Public Affairs Talent Foundation Course, Youth Development Administration" },
+        role: { zh: "學員", en: "Participant" }, period: "2025.03" },
+      { kind: "training", line: "research",
+        name: { zh: "國立政治大學國際關係研究中心「政治大學夏令研習營」", en: "NCCU Summer Institute" },
+        role: { zh: "副召集人", en: "Deputy Convener" }, period: "2024.08" },
+      { kind: "training", line: "research",
+        name: { zh: "大陸委員會「臺灣青年學生兩岸關係研習營」", en: "Cross-Strait Relations Workshop for Taiwanese Youth, Mainland Affairs Council" },
+        role: { zh: "學員", en: "Participant" }, period: "2022.08" }
     ] },
 
     { key: "education", line: "", title: { zh: "學歷", en: "Education" }, items: [
@@ -248,11 +283,11 @@ window.SITE = {
         roles: [
           { role: { zh: "學士：政治學系", en: "B.A.: Political Science" }, period: "2022.09 – 2027.06（預計）",
             station: { zh: "政大政治系", en: "NCCU" } },
-          { role: { zh: "校學士：哲學、政治學與經濟學專長", en: "University Bachelor track: Philosophy, Politics and Economics" }, period: "" },
-          { role: { zh: "輔修：經濟學系", en: "Minor: Economics" }, period: "" },
-          { role: { zh: "輔修：哲學系", en: "Minor: Philosophy" }, period: "" },
-          { role: { zh: "學程：人文領袖榮譽學分學程", en: "Program: Humanities Leadership Honors Program" }, period: "" },
-          { role: { zh: "學程：中國大陸與兩岸關係研究跨領域學分學程", en: "Program: China and Cross-Strait Studies" }, period: "" }
+          { role: { zh: "校學士：哲學、政治學與經濟學專長", en: "University Bachelor track: Philosophy, Politics and Economics" }, period: "修讀中" },
+          { role: { zh: "輔系：經濟學系", en: "Minor: Economics" }, period: "修讀中" },
+          { role: { zh: "輔系：哲學系", en: "Minor: Philosophy" }, period: "修讀中" },
+          { role: { zh: "學程：人文領袖榮譽學分學程", en: "Program: Humanities Leadership Honors Program" }, period: "修讀中" },
+          { role: { zh: "學程：中國大陸與兩岸關係研究跨領域學分學程", en: "Program: China and Cross-Strait Studies" }, period: "修讀中" }
         ] },
       /* 建中：網站顯示、CV 不放 */
       { cv: false, mark: "建中", logo: "",
@@ -264,6 +299,11 @@ window.SITE = {
 
     /* 榮譽與獎學金：一個獎項一筆，org 寫頒發單位，role 寫獎項名稱，新的寫上面 */
     { key: "honors", line: "", title: { zh: "榮譽與獎學金", en: "Honors & Scholarships" }, items: [
+      { mark: "醫檢", logo: "",
+        org: { zh: "社團法人台北市醫事檢驗師公會", en: "" },
+        roles: [
+          { role: { zh: "會員暨會員子女教育獎學金", en: "" }, period: "2026.01" }
+        ] },
       { mark: "政治", logo: "",
         org: { zh: "國立政治大學政治學系", en: "Department of Political Science, NCCU" },
         roles: [
@@ -277,11 +317,6 @@ window.SITE = {
         org: { zh: "臺北市政府", en: "Taipei City Government" },
         roles: [
           { role: { zh: "暑期工讀：大專青年學生公部門", en: "Summer Intern: Public Sector Program for College Students" }, period: "2025.07" }
-        ] },
-      { minor: true, cv: false, mark: "青發署", logo: "",
-        org: { zh: "教育部青年發展署", en: "Youth Development Administration, Ministry of Education" },
-        roles: [
-          { role: { zh: "結業：公共事務人才培力基礎入門課程", en: "Completed: Public Affairs Talent Foundation Course" }, period: "2025.03" }
         ] },
       { minor: true, cv: false, mark: "野火", logo: "assets/logos/wildfire.png",
         org: { zh: "國立政治大學野火陣線社", en: "NCCU Wildfire Front Club" },
@@ -315,16 +350,20 @@ window.SITE = {
   works: [
     { line: "transport",
       title: { zh: "指南路人本交通改善", en: "Making Zhinan Road Walkable" },
-      text:  { zh: "從學生自發導護、媒體報導，到參與式預算提案通過、市府辦理人行道改善工程。",
-               en: "From student volunteers directing traffic to adopted participatory-budget proposals and city pedestrian works." },
+      text:  { zh: "從路口導護與參與式預算提案出發，推動西側門行人號誌、公車停靠區及部分標線改善，持續追蹤整體人行道規劃。",
+               en: "From crossing advocacy and participatory-budget proposals to pedestrian signals, bus-stop markings and partial street improvements; broader sidewalk planning continues." },
       steps: [
         { zh: "政大行穿道人車爭道，學生自發導護（華視新聞報導）", en: "Students volunteer as crossing guards at the campus gate (CTS News)" },
         { zh: "成立指南路交通改善小組，擔任召集人", en: "Founded and convened the Zhinan Road task force" },
-        { zh: "文山區參與式預算兩案提案並通過", en: "Two Wenshan participatory-budget proposals adopted" },
-        { zh: "新工處辦理指南路二段雙號側人行道改善工程", en: "City launches sidewalk improvement works on Zhinan Rd. Sec. 2" }
+        { zh: "2025年「指南路二段周遭道路改善計畫」提案通過", en: "2025 Zhinan Road participatory-budget proposal adopted" },
+        { zh: "2025年與政大永續發展辦公室合辦「永續之路－指南溪與指南路走讀工作坊」", en: "" },
+        { zh: "2025年代表小組參與國土署「人本街道校園推展聯盟」MOU簽署活動", en: "" },
+        { zh: "2026年「政大至萬興國小周邊交通改善計畫」參與第一階段審議", en: "2026 NCCU–Wanxing Elementary proposal entered first-stage deliberation" },
+        { zh: "西側門號誌、公車停靠區與部分標線完成改善；人行道整體規劃持續推進", en: "Pedestrian signals, bus-stop zone and selected markings completed; broader sidewalk planning continues" }
       ],
       links: [
         { label: { zh: "華視新聞報導", en: "CTS News report" }, url: "https://www.youtube.com/watch?v=9rRAOUwd23w" },
+        { label: { zh: "政大：人本街道校園聯盟合作報導", en: "" }, url: "https://www.nccu.edu.tw/p/406-1000-20731,r134.php?Lang=zh-tw" },
         { label: { zh: "參與式預算提案頁", en: "Proposal page" }, url: "https://taipei.join.gov.tw/pb/proposal/detail/976fc32f-0556-45b2-bf56-fd3e64851789" },
         { label: { zh: "工程地區說明會", en: "Public works briefing" }, url: "https://nco.gov.taipei/News_Content.aspx?n=F36AA8E9D896DF42&sms=59AD6E6606F6002F&s=EEC0122512A38BD8" },
         { label: { zh: "論壇成果海報", en: "Forum poster" }, url: "https://twxdb.org/2026-forum/" }
@@ -332,7 +371,7 @@ window.SITE = {
       /* 數字：網站上捲到時從 0 累加（num 只能寫數字） */
       stats: [
         { num: 498, unit: { zh: "萬元", en: "×10k NTD" }, label: { zh: "爭取改善與規劃經費（市府 117 萬＋國土署 381 萬）", en: "Funding secured for works and planning" } },
-        { num: 2, unit: { zh: "案", en: "" }, label: { zh: "文山區參與式預算提案通過", en: "Participatory-budget proposals adopted" } }
+        { num: 2, unit: { zh: "案", en: "" }, label: { zh: "文山區兩件提案（2025通過；2026參與首階段審議）", en: "Two Wenshan proposals at different deliberation stages" } }
       ],
       /* 作品圖：放在 assets/work/，網站上顯示縮圖，點開看原圖 */
       image: { src: "assets/work/zhinan-poster.webp",

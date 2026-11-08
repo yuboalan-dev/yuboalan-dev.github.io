@@ -38,11 +38,11 @@
     return (lang === "en" && obj.en) ? obj.en : (obj.zh || obj.en || "");
   }
 
-  /* 期間：英文版把「今」「（預計）」換掉 */
+  /* 期間：英文版把「今」「（預計）」「修讀中」換掉 */
   function period(p, lang) {
     if (!p) return "";
     if (lang !== "en") return p;
-    return p.replace(/今/g, "Present").replace(/（預計）/g, " (expected)");
+    return p.replace(/今/g, "Present").replace(/（預計）/g, " (expected)").replace(/修讀中/g, "In progress");
   }
 
   function esc(s) {

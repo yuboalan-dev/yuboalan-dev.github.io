@@ -270,7 +270,30 @@
     }
     /* 正式 CV 的下載只放在經歷頁（2026-11-02 使用者決定，頁首不放） */
     var cvBtn = '<p class="exp-cv"><a class="go-btn" href="' + CV_PDF.href + '" download="' + esc(CV_PDF.name) + '"><span class="go-dot" aria-hidden="true"></span>' + tx("下載正式 CV（PDF）", "Download CV (PDF)") + "</a></p>";
+    /* 社會參與（groups 的 civic，2026-11-08）：一次性或短期的參與，不是有任期的職務。
+       依 kind 分小類，每筆一行「活動｜身分」、日期靠右；圓點顏色用每筆自己的 line。 */
+    var CIVIC_KINDS = [
+      { k: "talk", zh: "受邀分享", en: "Invited Talks" },
+      { k: "event", zh: "合作與活動", en: "Collaborations & Events" },
+      { k: "training", zh: "研習與營隊", en: "Training & Camps" }
+    ];
+    function civicGroup(g) {
+      var items = U.visible(g.items, "web");
+      var subs = CIVIC_KINDS.map(function (c) {
+        var rows = items.filter(function (it) { return it.kind === c.k; });
+        if (!rows.length) return "";
+        return '<h4 class="civic-kind">' + tx(c.zh, c.en) + '</h4><ul class="exp-roles is-multi civic-list">' + rows.map(function (it) {
+          var p = U.period(it.period, L);
+          return '<li class="exp-role civic-row" data-line="' + lineOf(it) + '"><div class="exp-role-head"><span class="role-name">' + esc(t(it.name, L)) +
+            (t(it.role, L) ? '<span class="civic-role">' + esc(t(it.role, L)) + "</span>" : "") + "</span>" +
+            (p ? '<span class="exp-period">' + esc(p) + "</span>" : "") + "</div></li>";
+        }).join("") + "</ul>";
+      }).join("");
+      return '<div class="exp-group exp-civic" id="g-' + esc(g.key) + '" data-line="' + esc(g.line || "") + '">' +
+        '<h3 class="exp-title">' + esc(t(g.title, L)) + "</h3>" + subs + "</div>";
+    }
     var inner = cvBtn + '<div class="exp-grid">' + groups.map(function (g) {
+      if (g.key === "civic") return civicGroup(g);
       var items = ordered(U.visible(g.items, "web"));
       /* 整段都是次要經歷（例：其他經歷與研習）時直接展開，不然那一段只剩一顆按鈕、看起來是空的 */
       var minorN = items.filter(function (it) { return it.minor; }).length, allMinor = minorN === items.length;
