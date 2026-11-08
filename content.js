@@ -202,6 +202,11 @@ window.SITE = {
           { role: { zh: "教學助理：「經濟全球化與台商大陸投資」", en: "Teaching Assistant: Economic Globalisation & Taiwanese Investment in China" }, period: "2024.01 – 2026.01", cv: false },
           { role: { zh: "副召集人：政治大學夏令研習營", en: "Deputy Convener: NCCU Summer Institute" }, period: "2024.08", cv: false }
         ] },
+      { minor: true, cv: false, mark: "明治", logo: "",
+        org: { zh: "國立政治大學政治學系與日本明治大學政治經濟學部合作課程", en: "" },
+        roles: [
+          { role: { zh: "跨國研究與成果發表：「日本半導體產業人才培育政策」", en: "" }, period: "2025.05" }
+        ] },
       { minor: true, also: "transport", mark: "地政", logo: "",
         org: { zh: "國立政治大學地政學系", en: "Department of Land Economics, NCCU" },
         roles: [
