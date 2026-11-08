@@ -12,7 +12,7 @@
 
    ★ 每一筆共用的欄位
      zh / en       中文、英文（en 留空 "" 時，英文版會顯示中文）
-     period        期間，例如 "2025 – 今"；英文版自動把「今」換成 Present
+     period        期間，例如 "2025 – 今"；英文版自動把「今」換成 Present；學歷還在修讀的寫 "修讀中"
      url           連結，留空 "" 就不顯示
      show: false   整筆藏起來（網站和 CV 都不顯示），資料留著
      cv: false     網站顯示、CV 不放        web: false   CV 放、網站不顯示
@@ -283,11 +283,11 @@ window.SITE = {
         roles: [
           { role: { zh: "學士：政治學系", en: "B.A.: Political Science" }, period: "2022.09 – 2027.06（預計）",
             station: { zh: "政大政治系", en: "NCCU" } },
-          { role: { zh: "校學士：哲學、政治學與經濟學專長", en: "University Bachelor track: Philosophy, Politics and Economics" }, period: "" },
-          { role: { zh: "輔系：經濟學系", en: "Minor: Economics" }, period: "" },
-          { role: { zh: "輔系：哲學系", en: "Minor: Philosophy" }, period: "" },
-          { role: { zh: "學程：人文領袖榮譽學分學程", en: "Program: Humanities Leadership Honors Program" }, period: "" },
-          { role: { zh: "學程：中國大陸與兩岸關係研究跨領域學分學程", en: "Program: China and Cross-Strait Studies" }, period: "" }
+          { role: { zh: "校學士：哲學、政治學與經濟學專長", en: "University Bachelor track: Philosophy, Politics and Economics" }, period: "修讀中" },
+          { role: { zh: "輔系：經濟學系", en: "Minor: Economics" }, period: "修讀中" },
+          { role: { zh: "輔系：哲學系", en: "Minor: Philosophy" }, period: "修讀中" },
+          { role: { zh: "學程：人文領袖榮譽學分學程", en: "Program: Humanities Leadership Honors Program" }, period: "修讀中" },
+          { role: { zh: "學程：中國大陸與兩岸關係研究跨領域學分學程", en: "Program: China and Cross-Strait Studies" }, period: "修讀中" }
         ] },
       /* 建中：網站顯示、CV 不放 */
       { cv: false, mark: "建中", logo: "",
