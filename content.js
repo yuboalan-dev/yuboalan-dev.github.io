@@ -260,8 +260,8 @@ window.SITE = {
           { role: { zh: "學士：政治學系", en: "B.A.: Political Science" }, period: "2022.09 – 2027.06（預計）",
             station: { zh: "政大政治系", en: "NCCU" } },
           { role: { zh: "校學士：哲學、政治學與經濟學專長", en: "University Bachelor track: Philosophy, Politics and Economics" }, period: "" },
-          { role: { zh: "輔修：經濟學系", en: "Minor: Economics" }, period: "" },
-          { role: { zh: "輔修：哲學系", en: "Minor: Philosophy" }, period: "" },
+          { role: { zh: "輔系：經濟學系", en: "Minor: Economics" }, period: "" },
+          { role: { zh: "輔系：哲學系", en: "Minor: Philosophy" }, period: "" },
           { role: { zh: "學程：人文領袖榮譽學分學程", en: "Program: Humanities Leadership Honors Program" }, period: "" },
           { role: { zh: "學程：中國大陸與兩岸關係研究跨領域學分學程", en: "Program: China and Cross-Strait Studies" }, period: "" }
         ] },
