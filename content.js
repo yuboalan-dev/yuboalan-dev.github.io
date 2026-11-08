@@ -342,6 +342,7 @@ window.SITE = {
         { zh: "政大行穿道人車爭道，學生自發導護（華視新聞報導）", en: "Students volunteer as crossing guards at the campus gate (CTS News)" },
         { zh: "成立指南路交通改善小組，擔任召集人", en: "Founded and convened the Zhinan Road task force" },
         { zh: "2025年「指南路二段周遭道路改善計畫」提案通過", en: "2025 Zhinan Road participatory-budget proposal adopted" },
+        { zh: "2025年與政大永續辦公室合辦新生走讀，並代表小組出席國土署校園聯盟簽署活動", en: "" },
         { zh: "2026年「政大至萬興國小周邊交通改善計劃」參與第一階段審議", en: "2026 NCCU–Wanxing Elementary proposal entered first-stage deliberation" },
         { zh: "西側門號誌、公車停靠區與部分標線完成改善；人行道整體規劃持續推進", en: "Pedestrian signals, bus-stop zone and selected markings completed; broader sidewalk planning continues" }
       ],
