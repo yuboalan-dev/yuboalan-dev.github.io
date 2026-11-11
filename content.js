@@ -73,9 +73,9 @@ window.SITE = {
   /* 首頁姓名下方的身分。首頁用好讀的簡稱（不寫「社團法人」等）；
      formal 是正式全名，CV 標題用它（沒寫就用 zh） */
   roles: [
-    { line: "transport", zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" },
+    { line: "transport", zh: "政大指南路交通改善小組　召集人", en: "Convener, NCCU Zhinan Road Traffic Task Force" },
     { line: "student", zh: "臺灣學生聯合會　理事", en: "Board Member, National Students' Union of Taiwan" },
-    { line: "transport", zh: "政大指南路交通改善小組　召集人", en: "Convener, NCCU Zhinan Road Traffic Task Force" }
+    { line: "transport", zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" }
   ],
 
   /* 照片：命名 photo.jpg 放進 assets 資料夾。沒放時顯示姓氏字樣。 */
@@ -112,6 +112,7 @@ window.SITE = {
     { type: "threads",   label: "Threads",   url: "https://www.threads.com/@ckfc_yu", cv: false },
     { type: "linkedin",  label: "LinkedIn",  url: "https://www.linkedin.com/in/yuboalan/" },
     { type: "line",      label: "LINE",      url: "https://line.me/ti/p/OHQbYFXC-N", cv: false },
+    { type: "github",    label: "GitHub",    url: "https://github.com/yuboalan-dev", cv: false },
     /* 「通告」播放清單含 TVBS 與侯友宜片段，精簡後先不公開連結；要放回就把網址填回來：
        https://www.youtube.com/playlist?list=PLLqs_xDeTEg37zm0b7fS2qQ03WcbV-ucn */
     { type: "youtube",   label: "YouTube",   url: "" }
