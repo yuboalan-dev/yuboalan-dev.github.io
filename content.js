@@ -39,7 +39,7 @@
 
 window.SITE = {
 
-  updated: "2026-11-08",
+  updated: "2026-11-11",
 
   /* 英文版開關：false＝網站和 CV 只有中文（頁首不顯示 EN 按鈕、不產生英文 CV）。
      英文內容（各處的 en）照樣留著，英文校對完改成 true 就恢復。 */
@@ -355,7 +355,8 @@ window.SITE = {
       steps: [
         { zh: "政大行穿道人車爭道，學生自發導護（華視新聞報導）", en: "Students volunteer as crossing guards at the campus gate (CTS News)" },
         { zh: "成立指南路交通改善小組，擔任召集人", en: "Founded and convened the Zhinan Road task force" },
-        { zh: "2025年「指南路二段周遭道路改善計畫」提案通過", en: "2025 Zhinan Road participatory-budget proposal adopted" },
+        { zh: "2025年臺北市參與式預算「指南路二段周遭交通改善計畫」以 5,827 票通過", en: "2025 Zhinan Road participatory-budget proposal adopted" },
+        { zh: "2025年國土署「街道醫生」政大周邊九個路段共 4,016 票，指南路二段獲選全國優先改善路段", en: "" },
         { zh: "2025年與政大永續發展辦公室合辦「永續之路－指南溪與指南路走讀工作坊」", en: "" },
         { zh: "2025年代表小組參與國土署「人本街道校園推展聯盟」MOU簽署活動", en: "" },
         { zh: "2026年「政大至萬興國小周邊交通改善計畫」參與第一階段審議", en: "2026 NCCU–Wanxing Elementary proposal entered first-stage deliberation" },
@@ -370,6 +371,7 @@ window.SITE = {
       ],
       /* 數字：網站上捲到時從 0 累加（num 只能寫數字） */
       stats: [
+        { num: 9843, unit: { zh: "票", en: "votes" }, label: { zh: "兩場公開投票合計（臺北市參與式預算 5,827 票＋國土署街道醫生 4,016 票）", en: "Votes across two public ballots" } },
         { num: 498, unit: { zh: "萬元", en: "×10k NTD" }, label: { zh: "爭取改善與規劃經費（市府 117 萬＋國土署 381 萬）", en: "Funding secured for works and planning" } },
         { num: 2, unit: { zh: "案", en: "" }, label: { zh: "文山區兩件提案（2025通過；2026參與首階段審議）", en: "Two Wenshan proposals at different deliberation stages" } }
       ],
