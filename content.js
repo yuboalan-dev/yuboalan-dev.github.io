@@ -73,9 +73,9 @@ window.SITE = {
   /* 首頁姓名下方的身分。首頁用好讀的簡稱（不寫「社團法人」等）；
      formal 是正式全名，CV 標題用它（沒寫就用 zh） */
   roles: [
-    { line: "transport", zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" },
+    { line: "transport", zh: "政大指南路交通改善小組　召集人", en: "Convener, NCCU Zhinan Road Traffic Task Force" },
     { line: "student", zh: "臺灣學生聯合會　理事", en: "Board Member, National Students' Union of Taiwan" },
-    { line: "transport", zh: "政大指南路交通改善小組　召集人", en: "Convener, NCCU Zhinan Road Traffic Task Force" }
+    { line: "transport", zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" }
   ],
 
   /* 照片：命名 photo.jpg 放進 assets 資料夾。沒放時顯示姓氏字樣。 */
