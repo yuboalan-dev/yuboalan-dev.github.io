@@ -158,7 +158,7 @@
     var to = +el.getAttribute("data-count-to") || 0, t0 = performance.now(), dur = 1100;
     var step = function (now) {
       var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
-      el.textContent = String(Math.round(to * e));
+      el.textContent = Math.round(to * e).toLocaleString("en-US");   /* 千分位：9,843 */
       if (p < 1) raf(step);
     };
     raf(step);
@@ -174,7 +174,7 @@
     counts.forEach(function (el) { seen.observe(el); });
     if (summary && summary.classList.contains("hl-ready")) seen.observe(summary);
   } else {
-    counts.forEach(function (el) { el.textContent = el.getAttribute("data-count-to"); });
+    counts.forEach(function (el) { el.textContent = (+el.getAttribute("data-count-to") || 0).toLocaleString("en-US"); });
     if (summary) summary.classList.add("is-lit");
   }
 
