@@ -194,6 +194,8 @@
       return { ev: n, line: n.line || "", k: startKey(String(n.date || "").replace("-", ".")) };
     });
     var stops = stations.concat(events).sort(function (a, b) { return a.k - b.k || (a.ev ? 1 : 0) - (b.ev ? 1 : 0); });
+    /* 起點（content.js 的 routeStart）：排在最前面的小站，年份欄顯示 label */
+    if (S.routeStart && t(S.routeStart.text, L)) stops.unshift({ ev: { date: t(S.routeStart.label, L), text: S.routeStart.text }, line: S.routeStart.line || "none", k: 0 });
     /* 小站沒寫 line 時，沿用前一個大站的路線色 */
     var lastLine = "";
     stops.forEach(function (s) { if (s.ev) { if (!s.line) s.line = lastLine; } else lastLine = s.line; });
@@ -226,23 +228,26 @@
     var belief = t(S.belief, L).replace(/。$/, "");   /* 句尾的句號由紅色圓點代替（style.css .belief） */
     var bi = belief.indexOf("，");
     var beliefHtml = (!EN && bi > 0) ? "<span>" + esc(belief.slice(0, bi + 1)) + "</span><span>" + esc(belief.slice(bi + 1)) + "</span>" : esc(belief);
+    /* 頭像：平常是一張圖；有動畫時 motion.js 第 8 段會讓它散成 avatarDots 個點再聚回來 */
+    var avatar = S.avatar ? '<div class="lead-avatar"><div class="avatar-big"' + (S.avatarDots ? ' data-dots="' + esc(S.avatarDots) + '"' : "") + '>' +
+        '<img src="/' + esc(String(S.avatar).replace(/^\//, "")) + '" alt="' + esc(tx("游博安的卡通頭像", "Cartoon portrait of Alan Yu")) + '" width="360" height="360"></div>' +
+        (t(S.avatarNote, L) ? '<p class="avatar-note">' + esc(t(S.avatarNote, L)) + '<span class="avatar-hint">' + tx("滑過或按住看看。", " Hover or press.") + "</span></p>" : "") + "</div>" : "";
     var html =
-      '<section class="lead"><div class="wrap">' +
-        '<div class="who">' + (S.avatar ? '<span class="avatar"><img src="/' + esc(String(S.avatar).replace(/^\//, "")) + '" alt="" width="72" height="72"></span>' : "") +
-          '<div class="who-name"><h1>' + esc(EN ? S.name.en : S.name.zh) + '</h1><span class="en">' + esc(EN ? S.name.zh : S.name.en) + "</span></div></div>" +
+      '<section class="lead"><div class="wrap"><div class="lead-grid"><div class="lead-text">' +
+        '<div class="who-name"><h1>' + esc(EN ? S.name.en : S.name.zh) + '</h1><span class="en">' + esc(EN ? S.name.zh : S.name.en) + "</span></div>" +
         (belief ? '<p class="belief">' + beliefHtml + "</p>" : "") +
         (tl ? '<p class="tagline">' + esc(tl) + "</p>" : "") +
         (seek ? '<p class="seeking"><span class="seeking-dot" aria-hidden="true"></span>' + esc(seek) + "</p>" : "") +
-      "</div></section>";
+      "</div>" + avatar + "</div></div></section>";
 
     /* 頁面內的連結按鈕：每一區看完，接到對應的分頁 */
     function goto(href, zh, en) {
       return '<p class="go" data-reveal><a class="go-btn" href="' + href + '"><span class="go-dot" aria-hidden="true"></span>' + esc(tx(zh, en)) + "</a></p>";
     }
 
-    /* 做過的事：信念句的證據。有 votes 的那一筆，下面畫「一個點是一票」（drawVotes） */
+    /* 信念句的證據：首屏下方一行（大字＋一兩句＋連結），不另加標題。有 votes 的才在下面畫整面圓點（drawVotesAll） */
     var ev = U.visible(S.evidence, "web");
-    if (ev.length) html += block("evidence", t(S.evidenceHeading, L), '<div class="evidence">' + ev.map(function (e) {
+    if (ev.length) html += '<section class="block proof" id="evidence"><div class="wrap"><div class="evidence">' + ev.map(function (e) {
       var big = e.num != null
         ? '<span class="count" data-count-to="' + esc(e.num) + '">' + esc(Number(e.num).toLocaleString("en-US")) + "</span><small>" + esc(t(e.unit, L)) + "</small>"
         : esc(t(e.big, L));
@@ -255,7 +260,7 @@
       }
       return '<article class="ev' + (votes ? " has-votes" : "") + '" data-reveal><p class="ev-big">' + big + '</p><div class="ev-body"><p class="ev-text">' + esc(t(e.text, L)) + "</p>" +
         (e.link ? '<p class="ev-link"><a href="' + esc(e.link) + '">' + esc(t(e.linkText, L) || tx("看更多", "More")) + " →</a></p>" : "") + "</div>" + votes + "</article>";
-    }).join("") + "</div>");
+    }).join("") + "</div></div></section>";
 
     /* 現在在做的事：現職（content.js 的 roles，順序照使用者排的） */
     if (roles) html += block("now", t(S.nowHeading, L), '<ul class="roles" data-reveal>' + roles + "</ul>", true);
