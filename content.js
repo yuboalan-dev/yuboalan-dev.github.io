@@ -112,6 +112,7 @@ window.SITE = {
     { type: "threads",   label: "Threads",   url: "https://www.threads.com/@ckfc_yu", cv: false },
     { type: "linkedin",  label: "LinkedIn",  url: "https://www.linkedin.com/in/yuboalan/" },
     { type: "line",      label: "LINE",      url: "https://line.me/ti/p/OHQbYFXC-N", cv: false },
+    { type: "github",    label: "GitHub",    url: "https://github.com/yuboalan-dev", cv: false },
     /* 「通告」播放清單含 TVBS 與侯友宜片段，精簡後先不公開連結；要放回就把網址填回來：
        https://www.youtube.com/playlist?list=PLLqs_xDeTEg37zm0b7fS2qQ03WcbV-ucn */
     { type: "youtube",   label: "YouTube",   url: "" }
