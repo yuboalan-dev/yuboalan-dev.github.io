@@ -72,7 +72,6 @@ window.SITE = {
   /* 首頁姓名下方的身分。首頁用好讀的簡稱（不寫「社團法人」等）；
      formal 是正式全名，CV 標題用它（沒寫就用 zh） */
   roles: [
-    { line: "student", zh: "政大學生議會　議長", formal: "國立政治大學學生會學生議會　議長", en: "Speaker, NCCU Student Congress" },
     { line: "transport", zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" },
     { line: "student", zh: "臺灣學生聯合會　理事", en: "Board Member, National Students' Union of Taiwan" },
     { line: "transport", zh: "政大指南路交通改善小組　召集人", en: "Convener, NCCU Zhinan Road Traffic Task Force" }
@@ -83,8 +82,8 @@ window.SITE = {
 
   /* 自我介紹（網站上方與 CV 簡介共用）【待確認】 */
   summary: {
-    zh: "國立政治大學政治學系學生，修讀哲學、政治學與經濟學專長。現任學生議會議長、臺灣學生聯合會理事與下一代人本交通促進會副秘書長；曾任國關中心研究計畫助理，參與陸委會與國科會的中共政治研究，並以參與式預算推動指南路的人本交通改善。",
-    en: "Political science (PPE) student at NCCU; Speaker of its Student Congress; board member, National Students' Union of Taiwan; former research assistant on CCP elite politics; won participatory-budget funding for safer streets."
+    zh: "國立政治大學政治學系學生，修讀哲學、政治學與經濟學專長。現任臺灣學生聯合會理事與下一代人本交通促進會副秘書長；曾任學生議會議長、國關中心研究計畫助理，參與陸委會與國科會的中共政治研究，並以參與式預算推動指南路的人本交通改善。",
+    en: "Political science (PPE) student at NCCU; former Speaker of its Student Congress; board member, National Students' Union of Taiwan; former research assistant on CCP elite politics; won participatory-budget funding for safer streets."
   },
 
   /* 簡介裡要用螢光筆劃記的詞（照順序劃，每個詞只劃第一次出現的地方；要和 summary 的字一模一樣） */
@@ -160,7 +159,7 @@ window.SITE = {
       { mark: "議會", logo: "assets/logos/nccusc.png",
         org: { zh: "國立政治大學學生會學生議會", en: "NCCU Student Congress" },
         roles: [
-          { role: { zh: "議長", en: "Speaker" }, period: "2026.02 – 今",
+          { role: { zh: "議長", en: "Speaker" }, period: "2026.02 – 2026.11",
             station: { zh: "議長", en: "Speaker" } },
           { role: { zh: "預算委員會召集委員", en: "Convener, Budget Committee" }, period: "2025.02 – 2025.07" },
           { role: { zh: "學生議員", en: "Student Legislator" }, period: "2024.08 – 今",
@@ -333,8 +332,8 @@ window.SITE = {
   focus: [
     { line: "student",
       title: { zh: "學生自治", en: "Student Government" },
-      text:  { zh: "擔任學生議會議長與校務會議、學務會議、總務會議學生代表，處理議事、預算與校務協商；推動議事影音紀錄與直播，讓學生自治更透明。",
-               en: "As Speaker and student representative on university councils, I work on procedure, budgets and negotiation, and pushed for recorded and live-streamed sessions." } },
+      text:  { zh: "曾任學生議會議長，並擔任校務會議、學務會議、總務會議學生代表，處理議事、預算與校務協商；推動議事影音紀錄與直播，讓學生自治更透明。",
+               en: "As former Speaker and a student representative on university councils, I work on procedure, budgets and negotiation, and pushed for recorded and live-streamed sessions." } },
     { line: "research",
       title: { zh: "研究與教學", en: "Research & Teaching" },
       text:  { zh: "在國關中心參與陸委會與國科會的中共菁英政治、反貪腐研究，並修讀中國大陸與兩岸關係研究學程；也擔任經濟全球化、人本交通等課程的教學助理。",
@@ -384,8 +383,7 @@ window.SITE = {
       text:  { zh: "主導議會官網從 Google 協作平台遷移到學校平台，建立法規資料庫、歷史沿革與會議資訊，讓議事資料可查、可追溯。",
                en: "Led the migration of the Congress website to the university CMS, with a regulations database, history and meeting records." },
       links: [
-        { label: { zh: "學生議會官網", en: "Website" }, url: "https://sc.video.nccu.edu.tw/" },
-        { label: { zh: "議長介紹頁", en: "Speaker profile" }, url: "https://sc.video.nccu.edu.tw/p/speaker-now" }
+        { label: { zh: "學生議會官網", en: "Website" }, url: "https://sc.video.nccu.edu.tw/" }
       ] },
     { line: "research",
       title: { zh: "中共菁英政治研究", en: "Research on CCP Elite Politics" },
