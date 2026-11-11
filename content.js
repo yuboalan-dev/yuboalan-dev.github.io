@@ -16,6 +16,7 @@
      url           連結，留空 "" 就不顯示
      show: false   整筆藏起來（網站和 CV 都不顯示），資料留著
      cv: false     網站顯示、CV 不放        web: false   CV 放、網站不顯示
+     home: false   只用在「關注領域」：首頁不出這張卡片，但經歷頁的段名與顏色照用
      points        條列說明（網站卡片不顯示，CV 和代表作會用）
      seeking       求職狀態（首頁、CV 抬頭、分享圖），留空就不顯示
      seekingRotate 首頁求職那一行的輪播（{} 換成輪流出現的詞）
@@ -39,7 +40,7 @@
 
 window.SITE = {
 
-  updated: "2026-11-08",
+  updated: "2026-11-11",
 
   /* 英文版開關：false＝網站和 CV 只有中文（頁首不顯示 EN 按鈕、不產生英文 CV）。
      英文內容（各處的 en）照樣留著，英文校對完改成 true 就恢復。 */
@@ -72,7 +73,6 @@ window.SITE = {
   /* 首頁姓名下方的身分。首頁用好讀的簡稱（不寫「社團法人」等）；
      formal 是正式全名，CV 標題用它（沒寫就用 zh） */
   roles: [
-    { line: "student", zh: "政大學生議會　議長", formal: "國立政治大學學生會學生議會　議長", en: "Speaker, NCCU Student Congress" },
     { line: "transport", zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" },
     { line: "student", zh: "臺灣學生聯合會　理事", en: "Board Member, National Students' Union of Taiwan" },
     { line: "transport", zh: "政大指南路交通改善小組　召集人", en: "Convener, NCCU Zhinan Road Traffic Task Force" }
@@ -83,8 +83,8 @@ window.SITE = {
 
   /* 自我介紹（網站上方與 CV 簡介共用）【待確認】 */
   summary: {
-    zh: "國立政治大學政治學系學生，修讀哲學、政治學與經濟學專長。現任學生議會議長、臺灣學生聯合會理事與下一代人本交通促進會副秘書長；曾任國關中心研究計畫助理，參與陸委會與國科會的中共政治研究，並以參與式預算推動指南路的人本交通改善。",
-    en: "Political science (PPE) student at NCCU; Speaker of its Student Congress; board member, National Students' Union of Taiwan; former research assistant on CCP elite politics; won participatory-budget funding for safer streets."
+    zh: "國立政治大學政治學系學生，修讀哲學、政治學與經濟學專長。現任臺灣學生聯合會理事與下一代人本交通促進會副秘書長；曾任學生議會議長、國關中心研究計畫助理，參與陸委會與國科會的中共政治研究，並以參與式預算推動指南路的人本交通改善。",
+    en: "Political science (PPE) student at NCCU; former Speaker of its Student Congress; board member, National Students' Union of Taiwan; former research assistant on CCP elite politics; won participatory-budget funding for safer streets."
   },
 
   /* 簡介裡要用螢光筆劃記的詞（照順序劃，每個詞只劃第一次出現的地方；要和 summary 的字一模一樣） */
@@ -160,7 +160,7 @@ window.SITE = {
       { mark: "議會", logo: "assets/logos/nccusc.png",
         org: { zh: "國立政治大學學生會學生議會", en: "NCCU Student Congress" },
         roles: [
-          { role: { zh: "議長", en: "Speaker" }, period: "2026.02 – 今",
+          { role: { zh: "議長", en: "Speaker" }, period: "2026.02 – 2026.11",
             station: { zh: "議長", en: "Speaker" } },
           { role: { zh: "預算委員會召集委員", en: "Convener, Budget Committee" }, period: "2025.02 – 2025.07" },
           { role: { zh: "學生議員", en: "Student Legislator" }, period: "2024.08 – 今",
@@ -262,15 +262,15 @@ window.SITE = {
       { kind: "event", line: "transport",
         name: { zh: "「永續之路－指南溪與指南路走讀工作坊」", en: "" },
         role: { zh: "合辦：國立政治大學永續發展辦公室", en: "" }, period: "2025.08" },
+      { kind: "event", line: "research",
+        name: { zh: "國立政治大學國際關係研究中心「政治大學夏令研習營」", en: "NCCU Summer Institute" },
+        role: { zh: "副召集人", en: "Deputy Convener" }, period: "2024.08" },
       { kind: "training", line: "research",
         name: { zh: "政治學系課程「金融政策的政經分析：數位貨幣與培養理財素養的台日比較」日本明治大學研究成果發表、早稻田大學交流工作坊", en: "" },
         role: { zh: "學員：小組研究「日本半導體產業人才培育政策」", en: "" }, period: "2025.05" },
       { kind: "training", line: "",
         name: { zh: "教育部青年發展署「公共事務人才培力基礎入門課程」", en: "Public Affairs Talent Foundation Course, Youth Development Administration" },
         role: { zh: "學員", en: "Participant" }, period: "2025.03" },
-      { kind: "training", line: "research",
-        name: { zh: "國立政治大學國際關係研究中心「政治大學夏令研習營」", en: "NCCU Summer Institute" },
-        role: { zh: "副召集人", en: "Deputy Convener" }, period: "2024.08" },
       { kind: "training", line: "research",
         name: { zh: "大陸委員會「臺灣青年學生兩岸關係研習營」", en: "Cross-Strait Relations Workshop for Taiwanese Youth, Mainland Affairs Council" },
         role: { zh: "學員", en: "Participant" }, period: "2022.08" }
@@ -333,9 +333,9 @@ window.SITE = {
   focus: [
     { line: "student",
       title: { zh: "學生自治", en: "Student Government" },
-      text:  { zh: "擔任學生議會議長與校務會議、學務會議、總務會議學生代表，處理議事、預算與校務協商；推動議事影音紀錄與直播，讓學生自治更透明。",
-               en: "As Speaker and student representative on university councils, I work on procedure, budgets and negotiation, and pushed for recorded and live-streamed sessions." } },
-    { line: "research",
+      text:  { zh: "曾任學生議會議長，並擔任校務會議、學務會議、總務會議學生代表，處理議事、預算與校務協商；推動議事影音紀錄與直播，讓學生自治更透明。",
+               en: "As former Speaker and a student representative on university councils, I work on procedure, budgets and negotiation, and pushed for recorded and live-streamed sessions." } },
+    { line: "research", home: false,   /* 2026-11-11 使用者：研究與教學不是關注領域，首頁不放；經歷頁仍是一段 */
       title: { zh: "研究與教學", en: "Research & Teaching" },
       text:  { zh: "在國關中心參與陸委會與國科會的中共菁英政治、反貪腐研究，並修讀中國大陸與兩岸關係研究學程；也擔任經濟全球化、人本交通等課程的教學助理。",
                en: "Research on CCP elite politics and anti-corruption for the Mainland Affairs Council and NSTC; teaching assistant for courses on globalisation and transport." } },
@@ -355,7 +355,8 @@ window.SITE = {
       steps: [
         { zh: "政大行穿道人車爭道，學生自發導護（華視新聞報導）", en: "Students volunteer as crossing guards at the campus gate (CTS News)" },
         { zh: "成立指南路交通改善小組，擔任召集人", en: "Founded and convened the Zhinan Road task force" },
-        { zh: "2025年「指南路二段周遭道路改善計畫」提案通過", en: "2025 Zhinan Road participatory-budget proposal adopted" },
+        { zh: "2025年臺北市參與式預算「指南路二段周遭交通改善計劃」以 5,827 票通過", en: "2025 Zhinan Road participatory-budget proposal adopted" },
+        { zh: "2025年國土署「街道醫生」政大周邊九個路段共 4,016 票，指南路二段獲選全國優先改善路段", en: "" },
         { zh: "2025年與政大永續發展辦公室合辦「永續之路－指南溪與指南路走讀工作坊」", en: "" },
         { zh: "2025年代表小組參與國土署「人本街道校園推展聯盟」MOU簽署活動", en: "" },
         { zh: "2026年「政大至萬興國小周邊交通改善計畫」參與第一階段審議", en: "2026 NCCU–Wanxing Elementary proposal entered first-stage deliberation" },
@@ -370,6 +371,7 @@ window.SITE = {
       ],
       /* 數字：網站上捲到時從 0 累加（num 只能寫數字） */
       stats: [
+        { num: 9843, unit: { zh: "票", en: "votes" }, label: { zh: "兩場公開投票合計（臺北市參與式預算 5,827 票＋國土署街道醫生 4,016 票）", en: "Votes across two public ballots" } },
         { num: 498, unit: { zh: "萬元", en: "×10k NTD" }, label: { zh: "爭取改善與規劃經費（市府 117 萬＋國土署 381 萬）", en: "Funding secured for works and planning" } },
         { num: 2, unit: { zh: "案", en: "" }, label: { zh: "文山區兩件提案（2025通過；2026參與首階段審議）", en: "Two Wenshan proposals at different deliberation stages" } }
       ],
@@ -382,8 +384,7 @@ window.SITE = {
       text:  { zh: "主導議會官網從 Google 協作平台遷移到學校平台，建立法規資料庫、歷史沿革與會議資訊，讓議事資料可查、可追溯。",
                en: "Led the migration of the Congress website to the university CMS, with a regulations database, history and meeting records." },
       links: [
-        { label: { zh: "學生議會官網", en: "Website" }, url: "https://sc.video.nccu.edu.tw/" },
-        { label: { zh: "議長介紹頁", en: "Speaker profile" }, url: "https://sc.video.nccu.edu.tw/p/speaker-now" }
+        { label: { zh: "學生議會官網", en: "Website" }, url: "https://sc.video.nccu.edu.tw/" }
       ] },
     { line: "research",
       title: { zh: "中共菁英政治研究", en: "Research on CCP Elite Politics" },

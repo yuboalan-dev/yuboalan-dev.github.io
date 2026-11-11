@@ -202,7 +202,7 @@
     }
 
     /* 首頁順序：關注領域 → 歷程（路線圖＋最新三則近況） */
-    var focus = U.visible(S.focus, "web");
+    var focus = U.visible(S.focus, "web").filter(function (f) { return f.home !== false; });   /* home: false＝首頁不出卡片，路線名稱與顏色照用 */
     if (focus.length) html += block("focus", t(S.focusHeading, L), '<div class="focus">' + focus.map(function (i) {
       return '<div class="focus-item" data-reveal data-line="' + lineOf(i) + '"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
     }).join("") + "</div>" + goto("/work.html", "看代表作", "See selected work"), true);
@@ -324,7 +324,7 @@
       return '<article class="work" data-reveal data-line="' + lineOf(w) + '"><div><h3>' + dot(w, true) + esc(t(w.title, L)) + '</h3><p class="desc">' + esc(t(w.text, L)) + "</p>" +
         /* 數字（content.js 的 stats）：捲到時從 0 累加；沒有動畫時直接顯示 */
         (w.stats && w.stats.length ? '<dl class="work-stats">' + w.stats.map(function (st) {
-          return '<div><dt><span class="count" data-count-to="' + esc(st.num) + '">' + esc(st.num) + "</span><small>" + esc(t(st.unit, L)) + "</small></dt><dd>" + esc(t(st.label, L)) + "</dd></div>";
+          return '<div><dt><span class="count" data-count-to="' + esc(st.num) + '">' + esc(Number(st.num).toLocaleString("en-US")) + "</span><small>" + esc(t(st.unit, L)) + "</small></dt><dd>" + esc(t(st.label, L)) + "</dd></div>";
         }).join("") + "</dl>" : "") +
         (links ? '<div class="proof">' + links + "</div>" : "") +
         /* 作品圖（content.js 的 image）：縮圖，點開看原圖 */
