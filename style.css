@@ -449,7 +449,7 @@ main > .block:first-child { border-top: 0; }
 /* 社群圖示（2026-11-11 使用者要求，比照學生議會官網頁尾）：不加圓框、半透明白，滑過才變全白；
    分隔線在圖示上方；點擊範圍維持 44px。margin-left 把第一個圖示的圖形對齊左邊界 */
 .contact .social {
-    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 44px; padding-top: 18px; margin-left: -12px; padding-left: 12px;
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 44px; padding-top: 18px;
     border-top: 1px solid rgba(255, 255, 255, .15);
 }
 .contact .social a {
