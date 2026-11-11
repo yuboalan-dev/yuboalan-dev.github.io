@@ -23,7 +23,7 @@ import { chromium } from "playwright";
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const OUT = path.join(ROOT, "_site");
 const SKIP = new Set([".git", ".github", "tools", "node_modules", "_site", "package.json", "package-lock.json",
-                     "CLAUDE.md", "AGENTS.md", "README.md"]  /* 給維護者看的文件不發布 */);
+                     "CLAUDE.md", "AGENTS.md", "README.md", "docs"]  /* 給維護者看的文件不發布 */);
 const PAGES = ["index.html", "experience.html", "work.html", "media.html", "404.html"];
 /* content.js 的 english: false（英文版先關掉）時，不產生英文 CV */
 const ENGLISH = !/^\s*english:\s*false\b/m.test(fs.readFileSync(path.join(ROOT, "content.js"), "utf8"));
