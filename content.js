@@ -83,31 +83,31 @@ window.SITE = {
 
   /* 首頁頭像（2026-11-11 使用者決定）：首頁不放照片，改放卡通頭像。
      照片（上面的 photo）仍用在 CV（勾「附照片」時）與分享圖。
-     目前是幾何圖形的佔位版；正式插畫畫好後，換掉 assets/avatar.svg（或改這裡的檔名）即可 */
+     目前是幾何圖形的佔位版；正式插畫畫好後，換掉 assets/avatar.svg（或改這裡的檔名）即可。
+     avatarDots：頭像由幾個點組成（訪客滑過或按住，頭像會散成這麼多個點再聚回來）＝指南路兩場投票的總票數；
+     avatarNote：頭像下面那一行說明 */
   avatar: "assets/avatar.svg",
+  avatarDots: 9843,
+  avatarNote: { zh: "這張臉由 9,843 個點組成，一個點是指南路的一票。", en: "This face is made of 9,843 dots — one for each vote for Zhinan Road." },
 
   /* 首頁主句（信念句）與下面的證據【待確認：文字由 Claude 依 Issue #13 訪談整理起草】
      evidence 每一筆：
-       big      大字（例：十八歲）；要讓數字累加就改寫 num（數字）＋ unit（單位）
+       big      大字；要讓數字累加就改寫 num（數字）＋ unit（單位）
        text     一兩句說明
-       votes    （可不寫）幾場投票各幾票；寫了就在下面畫出「一個點是一票」
-       link、linkText  （可不寫）連到哪一頁、連結文字 */
+       link、linkText  （可不寫）連到哪一頁、連結文字
+       votes    （可不寫）幾場投票各幾票，寫了就在下面畫出整面「一個點是一票」。首頁不用（太佔位置），留給故事頁 */
   belief: { zh: "即使沒有太多資源，也能改變社會。", en: "You don't need many resources to change society." },
   evidence: [
     { num: 9843, unit: { zh: "票", en: "votes" },
-      votes: [
-        { n: 5827, label: { zh: "臺北市參與式預算", en: "Taipei participatory budgeting" } },
-        { n: 4016, label: { zh: "國土署街道醫生", en: "Street Doctor (national ballot)" } }
-      ],
-      text: { zh: "指南路的人行環境，在兩場公開投票拿到近萬票支持。靠的是網路影片、借導護背心在路口模擬紅綠燈、媒體報導後的群組轉傳，和走進社區拜訪居民。",
+      text: { zh: "指南路的人行環境，在兩場公開投票拿到近萬票支持：臺北市參與式預算 5,827 票、國土署街道醫生 4,016 票。靠的是網路影片、借導護背心在路口模擬紅綠燈、媒體報導後的群組轉傳，和走進社區拜訪居民。",
               en: "Nearly ten thousand votes across two public ballots for safer walking on Zhinan Road." },
-      link: "/work.html", linkText: { zh: "看這件事怎麼發生", en: "See how it happened" } },
-    { big: { zh: "十八歲", en: "Eighteen" },
-      text: { zh: "高中時關心十八歲公民權：十八歲成年了，為什麼不能投票？隨台灣青年民主協會到立法院前，做了第一次短講。",
-              en: "In high school I asked why eighteen-year-olds could not vote, and gave my first short speech outside the Legislative Yuan." } }
+      link: "/work.html", linkText: { zh: "看這件事怎麼發生", en: "See how it happened" } }
   ],
-  evidenceHeading: { zh: "做過的事", en: "What I have done" },
   nowHeading: { zh: "現在在做的事", en: "What I do now" },
+
+  /* 歷程路線圖的起點（排在所有站點之前；不寫就沒有）【待確認：年份待補】 */
+  routeStart: { label: { zh: "高中", en: "High school" },
+                text: { zh: "關心十八歲公民權，在立法院前第一次短講", en: "First short speech, for voting at eighteen" } },
 
   /* 自我介紹（網站上方與 CV 簡介共用）【待確認】 */
   summary: {
