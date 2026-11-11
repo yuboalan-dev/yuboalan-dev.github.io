@@ -202,7 +202,7 @@
     }
 
     /* 首頁順序：關注領域 → 歷程（路線圖＋最新三則近況） */
-    var focus = U.visible(S.focus, "web");
+    var focus = U.visible(S.focus, "web").filter(function (f) { return f.home !== false; });   /* home: false＝首頁不出卡片，路線名稱與顏色照用 */
     if (focus.length) html += block("focus", t(S.focusHeading, L), '<div class="focus">' + focus.map(function (i) {
       return '<div class="focus-item" data-reveal data-line="' + lineOf(i) + '"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
     }).join("") + "</div>" + goto("/work.html", "看代表作", "See selected work"), true);

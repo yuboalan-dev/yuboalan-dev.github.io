@@ -16,6 +16,7 @@
      url           連結，留空 "" 就不顯示
      show: false   整筆藏起來（網站和 CV 都不顯示），資料留著
      cv: false     網站顯示、CV 不放        web: false   CV 放、網站不顯示
+     home: false   只用在「關注領域」：首頁不出這張卡片，但經歷頁的段名與顏色照用
      points        條列說明（網站卡片不顯示，CV 和代表作會用）
      seeking       求職狀態（首頁、CV 抬頭、分享圖），留空就不顯示
      seekingRotate 首頁求職那一行的輪播（{} 換成輪流出現的詞）
@@ -334,7 +335,7 @@ window.SITE = {
       title: { zh: "學生自治", en: "Student Government" },
       text:  { zh: "曾任學生議會議長，並擔任校務會議、學務會議、總務會議學生代表，處理議事、預算與校務協商；推動議事影音紀錄與直播，讓學生自治更透明。",
                en: "As former Speaker and a student representative on university councils, I work on procedure, budgets and negotiation, and pushed for recorded and live-streamed sessions." } },
-    { line: "research",
+    { line: "research", home: false,   /* 2026-11-11 使用者：研究與教學不是關注領域，首頁不放；經歷頁仍是一段 */
       title: { zh: "研究與教學", en: "Research & Teaching" },
       text:  { zh: "在國關中心參與陸委會與國科會的中共菁英政治、反貪腐研究，並修讀中國大陸與兩岸關係研究學程；也擔任經濟全球化、人本交通等課程的教學助理。",
                en: "Research on CCP elite politics and anti-corruption for the Mainland Affairs Council and NSTC; teaching assistant for courses on globalisation and transport." } },
