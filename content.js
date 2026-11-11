@@ -153,7 +153,7 @@ window.SITE = {
        role 只寫職稱；有特定對象時寫「職稱：對象」，課名、案名用「」，例：教學助理：「人本交通與永續校園規劃」
        不寫屆次、會期，也不寫指導教授等附註；經歷不放條列說明（points），細節放代表作
        日期一律 YYYY.MM – YYYY.MM，現職寫「今」；只知道年份才寫 YYYY
-     整理準則見 GitHub repo 的 CLAUDE.md「經歷的整理準則」。 */
+     整理準則見 GitHub repo 的 docs/experience-rules.md。 */
   groups: [
 
     { key: "student", line: "student", title: { zh: "學生自治", en: "Student Government" }, items: [
