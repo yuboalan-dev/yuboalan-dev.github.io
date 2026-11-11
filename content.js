@@ -355,7 +355,7 @@ window.SITE = {
       steps: [
         { zh: "政大行穿道人車爭道，學生自發導護（華視新聞報導）", en: "Students volunteer as crossing guards at the campus gate (CTS News)" },
         { zh: "成立指南路交通改善小組，擔任召集人", en: "Founded and convened the Zhinan Road task force" },
-        { zh: "2025年臺北市參與式預算「指南路二段周遭交通改善計畫」以 5,827 票通過", en: "2025 Zhinan Road participatory-budget proposal adopted" },
+        { zh: "2025年臺北市參與式預算「指南路二段周遭交通改善計劃」以 5,827 票通過", en: "2025 Zhinan Road participatory-budget proposal adopted" },
         { zh: "2025年國土署「街道醫生」政大周邊九個路段共 4,016 票，指南路二段獲選全國優先改善路段", en: "" },
         { zh: "2025年與政大永續發展辦公室合辦「永續之路－指南溪與指南路走讀工作坊」", en: "" },
         { zh: "2025年代表小組參與國土署「人本街道校園推展聯盟」MOU簽署活動", en: "" },
