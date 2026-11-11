@@ -81,7 +81,7 @@ function labelOf(x) {
   return null;
 }
 /* content.js 頂層欄位的中文名稱（新增欄位時順便補；沒補就顯示英文欄位名） */
-const KEY_NAMES = { updated: "更新日期", english: "英文版開關", name: "姓名", tagline: "首頁定位句", seeking: "求職狀態", seekingRotate: "求職輪播", highlights: "簡介螢光筆", headline: "身分一句", roles: "首頁身分", photo: "照片", summary: "簡介",
+const KEY_NAMES = { updated: "更新日期", avatar: "首頁頭像", belief: "首頁主句", evidence: "首頁證據", evidenceHeading: "證據區標題", nowHeading: "現職區標題", english: "英文版開關", name: "姓名", tagline: "首頁定位句", seeking: "求職狀態", seekingRotate: "求職輪播", highlights: "簡介螢光筆", headline: "身分一句", roles: "首頁身分", photo: "照片", summary: "簡介",
   expertise: "專長", links: "社群與連結", cvContact: "CV 聯絡方式", news: "近況", groups: "經歷", focusHeading: "關注領域標題",
   focus: "關注領域", works: "代表作", mediaList: "媒體清單列法", media: "媒體", zh: "中文", en: "英文", period: "期間",
   points: "條列說明", url: "連結", date: "日期" };

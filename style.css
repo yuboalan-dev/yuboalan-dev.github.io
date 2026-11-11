@@ -227,6 +227,48 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 }
 
 
+/* ---------- 2-1. 首頁首屏（2026-11-11 改版）：頭像＋姓名（小）→ 信念句（最大）→ 求職一句 ----------
+   一個畫面只說一件事；點陣底紋、照片、簡介都不放。 */
+.lead { padding: clamp(40px, 7vw, 96px) 0 clamp(44px, 7vw, 96px); }
+.who { display: flex; align-items: center; gap: 16px; }
+.avatar { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; flex-shrink: 0; box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--accent); }
+.avatar img { display: block; width: 100%; height: 100%; }
+.who-name { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 12px; }
+.who-name h1 { font-size: clamp(24px, 3vw, 30px); font-weight: 900; color: var(--navy); letter-spacing: .06em; line-height: 1.2; }
+.who-name .en { font-size: 15px; font-weight: 700; color: var(--muted); }
+.belief {
+    margin-top: clamp(28px, 4.5vw, 52px); font-family: var(--round); font-weight: 900; color: var(--navy);
+    font-size: clamp(38px, 8.2vw, 104px); line-height: 1.16; letter-spacing: .02em;
+}
+.belief span { display: block; }
+.belief span:last-child::after {   /* 句尾紅點＝句號（site.js 會拿掉文字的「。」） */
+    content: ""; display: inline-block; width: .2em; height: .2em; margin-left: .12em; border-radius: 50%; background: var(--accent);
+}
+.lead .seeking { margin-top: clamp(24px, 3.5vw, 40px); }
+
+/* ---------- 2-2. 做過的事：證據。大字在左、說明在右；有投票的那一筆，下面整排圓點 ---------- */
+.evidence { display: flex; flex-direction: column; gap: clamp(40px, 6vw, 72px); }
+.ev { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 16px clamp(24px, 5vw, 64px); align-items: center; }
+.ev-big { font-family: var(--round); font-size: clamp(52px, 9vw, 112px); font-weight: 900; line-height: 1; color: var(--navy); letter-spacing: .01em; white-space: nowrap; }
+.ev-big small { font-size: .32em; margin-left: .25em; font-weight: 900; }
+.ev-text { font-size: clamp(16.5px, 1.7vw, 18.5px); line-height: 1.9; color: var(--text); }
+.ev-link { margin-top: 12px; }
+.ev-link a { font-weight: 700; color: var(--navy); text-underline-offset: 5px; text-decoration-thickness: 2px; text-decoration-color: var(--accent); }
+.ev-link a:hover { color: var(--accent); }
+.votes { grid-column: 1 / -1; margin-top: 8px; }
+.votes canvas { display: block; width: 100%; }
+.votes-legend { list-style: none; padding: 0; margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px 24px; font-size: 14px; color: var(--muted); }
+.votes-legend b { color: var(--navy); }
+.votes-legend .vdot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; background: var(--navy); }
+.votes-legend .vdot.v1 { background: var(--accent); }
+.votes-legend .votes-note { margin-left: auto; }
+@media (max-width: 720px) {
+    .ev { grid-template-columns: 1fr; }
+    .votes-legend .votes-note { margin-left: 0; width: 100%; }
+}
+#now .roles { gap: 14px; }
+#now .roles li { font-size: clamp(16px, 1.8vw, 18px); }
+
 /* =========================================
    3. 區塊骨架
    ========================================= */
