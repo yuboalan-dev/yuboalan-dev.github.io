@@ -446,14 +446,20 @@ main > .block:first-child { border-top: 0; }
 .contact .block-head { margin-bottom: 22px; }
 .contact-mail { font-size: clamp(22px, 3.4vw, 36px); font-weight: 700; color: #fff; text-decoration: none; word-break: break-all; }
 .contact-mail:hover { color: var(--accent-light); }
-.contact .social { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
-.contact .social a {
-    width: 46px; height: 46px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
-    color: #fff; border: 2px solid rgba(255, 255, 255, .28); transition: background-color .2s ease, border-color .2s ease;
+/* 社群圖示（2026-11-11 使用者要求，比照學生議會官網頁尾）：不加圓框、半透明白，滑過才變全白；
+   分隔線在圖示上方；點擊範圍維持 44px。margin-left 把第一個圖示的圖形對齊左邊界 */
+.contact .social {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 44px; padding-top: 18px; margin-left: -12px; padding-left: 12px;
+    border-top: 1px solid rgba(255, 255, 255, .15);
 }
-.contact .social a:hover { background: var(--accent); border-color: var(--accent); }
-.contact .social svg { width: 18px; height: 18px; }
-.footnote { margin-top: 52px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, .15); font-size: 12.5px; color: rgba(255, 255, 255, .55); }
+.contact .social a {
+    width: 44px; height: 44px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    color: #fff; opacity: .55; transition: opacity .2s ease;
+}
+.contact .social a:first-child { margin-left: -12px; }
+.contact .social a:hover, .contact .social a:focus-visible { opacity: 1; }
+.contact .social svg { width: 20px; height: 20px; }
+.footnote { margin-top: 10px; font-size: 12.5px; color: rgba(255, 255, 255, .55); }
 .footnote a { color: inherit; text-underline-offset: 3px; }
 .footnote a:hover { color: #fff; }
 .nf-links { margin-top: 18px; }
