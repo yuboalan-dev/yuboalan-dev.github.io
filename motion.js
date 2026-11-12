@@ -178,6 +178,91 @@
     if (summary) summary.classList.add("is-lit");
   }
 
+  /* ---------- 8. 首頁頭像：由 N 個點組成（2026-11-11 使用者要求頭像要能互動） ----------
+     N＝content.js 的 avatarDots（指南路兩場投票的總票數）。把頭像圖縮成小格子取色，取最靠近圓心的 N 格，一格一個點。
+     平常顯示原圖；進場時點從四周聚成頭像；滑鼠滑過會把點推開，按下（手機按住）會炸開，放開後聚回來、換回原圖。
+     座標一律用「頭像邊長＝1」的單位，視窗改大小不用重算。 */
+  var avBox = document.querySelector(".avatar-big[data-dots]");
+  if (avBox && avBox.querySelector("img")) (function () {
+    var img = avBox.querySelector("img"), N = Math.round(+avBox.getAttribute("data-dots") || 0);
+    if (!N) return;
+    var boot = function () {
+      var G = Math.ceil(Math.sqrt(N / Math.PI) * 2) + 2;
+      var oc = document.createElement("canvas"); oc.width = oc.height = G;
+      var data;
+      try { var og = oc.getContext("2d"); og.drawImage(img, 0, 0, G, G); data = og.getImageData(0, 0, G, G).data; } catch (e) { return; }
+      var cells = [], x, y;
+      for (y = 0; y < G; y++) for (x = 0; x < G; x++) { var cx = x + 0.5 - G / 2, cy = y + 0.5 - G / 2; cells.push({ x: x, y: y, d: cx * cx + cy * cy }); }
+      cells.sort(function (a, b) { return a.d - b.d; });
+      if (cells.length < N) return;
+      cells.length = N;
+      /* 顏色：照原圖，量化成少數幾種好一次畫完；接近白色的改成淺灰，白底上才看得到每一個點 */
+      cells.forEach(function (c) {
+        var o = (c.y * G + c.x) * 4, r = data[o], g = data[o + 1], b = data[o + 2], al = data[o + 3];
+        if (al < 60 || (r + g + b) / 3 > 228) c.c = "#d3d3df";
+        else c.c = "rgb(" + (r >> 4 << 4) + "," + (g >> 4 << 4) + "," + (b >> 4 << 4) + ")";
+      });
+      cells.sort(function (a, b) { return a.c < b.c ? -1 : a.c > b.c ? 1 : 0; });
+      var groups = [], i;
+      for (i = 0; i < N; i++) { if (!groups.length || groups[groups.length - 1].c !== cells[i].c) groups.push({ c: cells[i].c, from: i, to: i }); groups[groups.length - 1].to = i + 1; }
+      var hx = new Float32Array(N), hy = new Float32Array(N), px = new Float32Array(N), py = new Float32Array(N), vx = new Float32Array(N), vy = new Float32Array(N);
+      for (i = 0; i < N; i++) {
+        hx[i] = (cells[i].x + 0.5) / G; hy[i] = (cells[i].y + 0.5) / G;
+        var an = Math.random() * 6.2832, rr = 0.55 + Math.random() * 0.25;      /* 進場：從頭像外面一圈飛進來 */
+        px[i] = 0.5 + Math.cos(an) * rr; py[i] = 0.5 + Math.sin(an) * rr;
+      }
+      var PAD = 0.3, cv = document.createElement("canvas"), g2 = cv.getContext("2d");
+      cv.setAttribute("aria-hidden", "true"); avBox.appendChild(cv);
+      var S0 = 0, dpr = 1;
+      var size = function () {
+        S0 = avBox.clientWidth; dpr = Math.min(2, window.devicePixelRatio || 1);
+        cv.width = cv.height = Math.round(S0 * (1 + 2 * PAD) * dpr);
+      };
+      size(); window.addEventListener("resize", size);
+      var mx = -9, my = -9, over = false, running = false, calm = 0;
+      var R = 0.17, R2 = R * R;
+      var frame = function () {
+        var maxD = 0, k = S0 * dpr, off = PAD * k, rad = Math.max(0.6 * dpr, k / G * 0.36);
+        for (var i = 0; i < N; i++) {
+          var ax = (hx[i] - px[i]) * 0.07, ay = (hy[i] - py[i]) * 0.07;
+          if (over) {
+            var dx = px[i] - mx, dy = py[i] - my, d2 = dx * dx + dy * dy;
+            if (d2 < R2) { var d = Math.sqrt(d2) || 0.001, f = (1 - d / R) * 0.016; ax += dx / d * f; ay += dy / d * f; }
+          }
+          vx[i] = (vx[i] + ax) * 0.84; vy[i] = (vy[i] + ay) * 0.84;
+          px[i] += vx[i]; py[i] += vy[i];
+          var e = Math.abs(hx[i] - px[i]) + Math.abs(hy[i] - py[i]); if (e > maxD) maxD = e;
+        }
+        g2.setTransform(1, 0, 0, 1, 0, 0); g2.clearRect(0, 0, cv.width, cv.height);
+        for (var j = 0; j < groups.length; j++) {
+          var gr = groups[j]; g2.fillStyle = gr.c; g2.beginPath();
+          for (var q = gr.from; q < gr.to; q++) { var X = off + px[q] * k, Y = off + py[q] * k; g2.moveTo(X + rad, Y); g2.arc(X, Y, rad, 0, 6.2832); }
+          g2.fill();
+        }
+        /* 都回到原位、滑鼠也離開了：換回原圖，停止計算 */
+        calm = (!over && maxD < 0.004) ? calm + 1 : 0;
+        if (calm > 12) { running = false; avBox.classList.remove("is-dots"); return; }
+        raf(frame);
+      };
+      var wake = function () { calm = 0; avBox.classList.add("is-dots"); if (!running) { running = true; raf(frame); } };
+      var at = function (e) { var r = avBox.getBoundingClientRect(); mx = (e.clientX - r.left) / r.width; my = (e.clientY - r.top) / r.height; };
+      avBox.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") { over = true; at(e); wake(); } });
+      avBox.addEventListener("pointermove", function (e) { if (over) { at(e); wake(); } });
+      avBox.addEventListener("pointerdown", function (e) {
+        at(e); over = true;
+        for (var i = 0; i < N; i++) {                                              /* 按下：從按的地方炸開 */
+          var dx = px[i] - mx, dy = py[i] - my, d = Math.sqrt(dx * dx + dy * dy) || 0.001, f = Math.max(0, 1 - d / 0.9) * 0.07 * (0.5 + Math.random());
+          vx[i] += dx / d * f; vy[i] += dy / d * f;
+        }
+        wake();
+      });
+      var out = function () { over = false; mx = my = -9; };
+      avBox.addEventListener("pointerleave", out); avBox.addEventListener("pointerup", function (e) { if (e.pointerType !== "mouse") out(); }); avBox.addEventListener("pointercancel", out);
+      wake();                                                                     /* 進場：聚成頭像 */
+    };
+    if (img.complete && img.naturalWidth) boot(); else img.addEventListener("load", boot);
+  })();
+
   /* ---------- 7. 頁尾掛繩識別證 ---------- */
   var footWrap = document.querySelector("footer.contact .wrap");
   if (footWrap && S) {

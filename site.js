@@ -129,6 +129,43 @@
     return out;
   }
 
+  /* 一個點是一票：把每場投票的票數畫成一顆顆圓點（canvas），第一場深藍、第二場紅。
+     有動畫時，捲到才從第一票畫到最後一票；沒有動畫（減少動態效果、自動化瀏覽器）時直接畫滿。
+     票數寫在旁邊的文字裡，canvas 只是圖，螢幕閱讀器不讀。 */
+  function drawVotesAll() {
+    [].forEach.call(document.querySelectorAll(".votes[data-votes]"), function (box) {
+      var cv = box.querySelector("canvas"), ns = box.getAttribute("data-votes").split(",").map(Number);
+      var total = ns.reduce(function (a, b) { return a + b; }, 0);
+      if (!cv || !cv.getContext || !total) return;
+      var css = getComputedStyle(document.documentElement);
+      var colors = [css.getPropertyValue("--navy").trim() || "#000024", css.getPropertyValue("--accent").trim() || "#e60012"];
+      var shown = total, W = 0;
+      function paint() {
+        W = box.clientWidth; if (!W) return;
+        var pitch = W >= 700 ? 6 : W / 100, cols = Math.max(1, Math.floor(W / pitch)), rows = Math.ceil(total / cols);
+        var dpr = Math.min(2, window.devicePixelRatio || 1), H = Math.ceil(rows * pitch);
+        cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.height = H + "px";
+        var g = cv.getContext("2d"); g.scale(dpr, dpr);
+        var r = pitch * 0.32, i = 0, n = Math.round(shown);
+        for (var k = 0, edge = 0; k < ns.length; k++) {
+          edge += ns[k]; g.fillStyle = colors[k % colors.length]; g.beginPath();
+          for (; i < Math.min(edge, n); i++) { var x = (i % cols + 0.5) * pitch, y = (Math.floor(i / cols) + 0.5) * pitch; g.moveTo(x + r, y); g.arc(x, y, r, 0, 6.2832); }
+          g.fill();
+        }
+      }
+      var timer; window.addEventListener("resize", function () { clearTimeout(timer); timer = setTimeout(function () { if (box.clientWidth !== W) paint(); }, 150); });
+      if (ANIM && !navigator.webdriver && "IntersectionObserver" in window) {
+        shown = 0; paint();
+        var io = new IntersectionObserver(function (es) {
+          if (!es[0].isIntersecting) return; io.disconnect();
+          var t0 = performance.now(), dur = 1800;
+          (function step(now) { var p = Math.min(1, (now - t0) / dur); shown = total * (1 - Math.pow(1 - p, 3)); paint(); if (p < 1) requestAnimationFrame(step); })(t0);
+        }, { rootMargin: "0px 0px -15% 0px" });
+        io.observe(box);
+      } else paint();
+    });
+  }
+
   /* ---------- 首頁 ---------- */
   function renderHome() {
     setTitle("");
@@ -157,6 +194,8 @@
       return { ev: n, line: n.line || "", k: startKey(String(n.date || "").replace("-", ".")) };
     });
     var stops = stations.concat(events).sort(function (a, b) { return a.k - b.k || (a.ev ? 1 : 0) - (b.ev ? 1 : 0); });
+    /* 起點（content.js 的 routeStart）：排在最前面的小站，年份欄顯示 label */
+    if (S.routeStart && t(S.routeStart.text, L)) stops.unshift({ ev: { date: t(S.routeStart.label, L), text: S.routeStart.text }, line: S.routeStart.line || "none", k: 0 });
     /* 小站沒寫 line 時，沿用前一個大站的路線色 */
     var lastLine = "";
     stops.forEach(function (s) { if (s.ev) { if (!s.line) s.line = lastLine; } else lastLine = s.line; });
@@ -182,41 +221,56 @@
     var route = stops.length ? '<div class="route" data-reveal aria-label="' + tx("經歷路線圖", "Career route") + '">' + legend("route-legend", events.length) +
       '<ol class="route-track" style="--n:' + stops.length + '">' + stops.map(stopHtml).join("") + "</ol></div>" : "";
 
+    /* 首頁（2026-11-11 改版，路線圖 Issue #30 第 1 期）：
+       首屏＝頭像＋姓名（小）→ 信念句（最大）→ 求職一句；
+       接著「做過的事」（證據）→「現在在做的事」（現職）→ 歷程。
+       照片、履歷式簡介、關注領域不再放首頁（簡介仍用在 CV 與搜尋引擎描述）。 */
+    var belief = t(S.belief, L).replace(/。$/, "");   /* 句尾的句號由紅色圓點代替（style.css .belief） */
+    var bi = belief.indexOf("，");
+    var beliefHtml = (!EN && bi > 0) ? "<span>" + esc(belief.slice(0, bi + 1)) + "</span><span>" + esc(belief.slice(bi + 1)) + "</span>" : esc(belief);
+    /* 頭像：平常是一張圖；有動畫時 motion.js 第 8 段會讓它散成 avatarDots 個點再聚回來 */
+    var avatar = S.avatar ? '<div class="lead-avatar"><div class="avatar-big"' + (S.avatarDots ? ' data-dots="' + esc(S.avatarDots) + '"' : "") + '>' +
+        '<img src="/' + esc(String(S.avatar).replace(/^\//, "")) + '" alt="' + esc(tx("游博安的卡通頭像", "Cartoon portrait of Alan Yu")) + '" width="360" height="360"></div>' +
+        (t(S.avatarNote, L) ? '<p class="avatar-note">' + esc(t(S.avatarNote, L)) + '<span class="avatar-hint">' + tx("滑過或按住看看。", " Hover or press.") + "</span></p>" : "") + "</div>" : "";
     var html =
-      '<section class="hero"><div class="wrap">' +
-        '<div class="hero-grid"><div>' +
-          '<div class="hero-name"><h1>' + esc(EN ? S.name.en : S.name.zh) + '</h1><span class="en">' + esc(EN ? S.name.zh : S.name.en) + "</span></div>" +
-          '<div class="intro">' +
-            (tl ? '<p class="tagline">' + esc(tl) + "</p>" : "") +
-            (seek ? '<p class="seeking"><span class="seeking-dot" aria-hidden="true"></span>' + seekingHtml(seek) + "</p>" : "") +
-            '<p class="summary">' + highlight(t(S.summary, L)) + "</p>" +
-            (roles ? '<ul class="roles">' + roles + "</ul>" : "") +
-          "</div></div>" +
-          '<div class="photo" id="photoWrap"></div>' +
-        "</div>" +
-      "</div></section>";
+      '<section class="lead"><div class="wrap"><div class="lead-grid"><div class="lead-text">' +
+        '<div class="who-name"><h1>' + esc(EN ? S.name.en : S.name.zh) + '</h1><span class="en">' + esc(EN ? S.name.zh : S.name.en) + "</span></div>" +
+        (belief ? '<p class="belief">' + beliefHtml + "</p>" : "") +
+        (tl ? '<p class="tagline">' + esc(tl) + "</p>" : "") +
+        (seek ? '<p class="seeking"><span class="seeking-dot" aria-hidden="true"></span>' + esc(seek) + "</p>" : "") +
+      "</div>" + avatar + "</div></div></section>";
 
     /* 頁面內的連結按鈕：每一區看完，接到對應的分頁 */
     function goto(href, zh, en) {
       return '<p class="go" data-reveal><a class="go-btn" href="' + href + '"><span class="go-dot" aria-hidden="true"></span>' + esc(tx(zh, en)) + "</a></p>";
     }
 
-    /* 首頁順序：關注領域 → 歷程（路線圖＋最新三則近況） */
-    var focus = U.visible(S.focus, "web").filter(function (f) { return f.home !== false; });   /* home: false＝首頁不出卡片，路線名稱與顏色照用 */
-    if (focus.length) html += block("focus", t(S.focusHeading, L), '<div class="focus">' + focus.map(function (i) {
-      return '<div class="focus-item" data-reveal data-line="' + lineOf(i) + '"><h3>' + esc(t(i.title, L)) + "</h3><p>" + esc(t(i.text, L)) + "</p></div>";
-    }).join("") + "</div>" + goto("/work.html", "看代表作", "See selected work"), true);
+    /* 信念句的證據：首屏下方一行（大字＋一兩句＋連結），不另加標題。有 votes 的才在下面畫整面圓點（drawVotesAll） */
+    var ev = U.visible(S.evidence, "web");
+    if (ev.length) html += '<section class="block proof" id="evidence"><div class="wrap"><div class="evidence">' + ev.map(function (e) {
+      var big = e.num != null
+        ? '<span class="count" data-count-to="' + esc(e.num) + '">' + esc(Number(e.num).toLocaleString("en-US")) + "</span><small>" + esc(t(e.unit, L)) + "</small>"
+        : esc(t(e.big, L));
+      var votes = "";
+      if (e.votes && e.votes.length) {
+        votes = '<div class="votes" data-votes="' + e.votes.map(function (v) { return +v.n || 0; }).join(",") + '"><canvas aria-hidden="true"></canvas>' +
+          '<ul class="votes-legend">' + e.votes.map(function (v, k) {
+            return '<li><span class="vdot v' + k + '" aria-hidden="true"></span>' + esc(t(v.label, L)) + "　<b>" + esc(Number(v.n).toLocaleString("en-US")) + "</b>" + tx(" 票", " votes") + "</li>";
+          }).join("") + '<li class="votes-note">' + tx("一個點是一票", "One dot is one vote") + "</li></ul></div>";
+      }
+      return '<article class="ev' + (votes ? " has-votes" : "") + '" data-reveal><p class="ev-big">' + big + '</p><div class="ev-body"><p class="ev-text">' + esc(t(e.text, L)) + "</p>" +
+        (e.link ? '<p class="ev-link"><a href="' + esc(e.link) + '">' + esc(t(e.linkText, L) || tx("看更多", "More")) + " →</a></p>" : "") + "</div>" + votes + "</article>";
+    }).join("") + "</div></div></section>";
+
+    /* 現在在做的事：現職（content.js 的 roles，順序照使用者排的） */
+    if (roles) html += block("now", t(S.nowHeading, L), '<ul class="roles" data-reveal>' + roles + "</ul>", true);
 
     /* 歷程：一條路線就是全部（近況已經是路線上的小站） */
     if (route) html += block("history", tx("歷程", "Journey"), route + goto("/experience.html", "看完整經歷", "See full experience"));
 
     main.innerHTML = html;
 
-    /* 相片：找不到檔案就換成姓氏字樣 */
-    var pw = document.getElementById("photoWrap");
-    var fallback = function () { pw.innerHTML = '<div class="photo-fallback">' + esc(S.name.zh.charAt(0)) + "</div>"; };
-    if (S.photo) { var img = new Image(); img.alt = S.name.zh; img.onerror = fallback; img.src = "/" + S.photo.replace(/^\//, ""); pw.appendChild(img); }
-    else fallback();
+    drawVotesAll();
 
     addPersonData();
   }

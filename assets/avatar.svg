@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="游博安的卡通頭像">
+  <!-- 佔位用的幾何頭像（2026-11-11）：全部由圓與圓點構成，只用深藍黑、紅、白。之後換成正式插畫時，換掉這個檔案即可 -->
+  <defs><clipPath id="c"><circle cx="120" cy="120" r="120"/></clipPath></defs>
+  <g clip-path="url(#c)">
+    <circle cx="120" cy="120" r="120" fill="#f5f5f8"/>
+    <!-- 肩膀與外套 -->
+    <ellipse cx="120" cy="252" rx="112" ry="74" fill="#000024"/>
+    <!-- 襯衫領口與紅點 -->
+    <path d="M92 186 L120 226 L148 186 Z" fill="#fff"/>
+    <circle cx="120" cy="206" r="7" fill="#e60012"/>
+    <!-- 脖子 -->
+    <rect x="102" y="150" width="36" height="44" rx="16" fill="#fff" stroke="#000024" stroke-width="6"/>
+    <!-- 耳朵 -->
+    <circle cx="62" cy="116" r="12" fill="#fff" stroke="#000024" stroke-width="6"/>
+    <circle cx="178" cy="116" r="12" fill="#fff" stroke="#000024" stroke-width="6"/>
+    <!-- 臉 -->
+    <circle cx="120" cy="112" r="58" fill="#fff" stroke="#000024" stroke-width="6"/>
+    <!-- 頭髮：上方蓬、兩側短 -->
+    <path d="M60 104 C52 58 86 30 124 32 C164 30 192 60 180 104 C172 82 150 70 122 72 C96 70 70 82 60 104 Z" fill="#000024"/>
+    <!-- 眉毛 -->
+    <path d="M88 96 q10 -7 20 -1 M132 95 q10 -6 20 1" fill="none" stroke="#000024" stroke-width="5" stroke-linecap="round"/>
+    <!-- 眼睛：兩個圓點 -->
+    <circle cx="99" cy="112" r="6.5" fill="#000024"/>
+    <circle cx="141" cy="112" r="6.5" fill="#000024"/>
+    <!-- 臉頰 -->
+    <circle cx="84" cy="132" r="8" fill="#e60012" opacity=".18"/>
+    <circle cx="156" cy="132" r="8" fill="#e60012" opacity=".18"/>
+    <!-- 微笑 -->
+    <path d="M100 136 q20 18 40 0" fill="none" stroke="#000024" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>
