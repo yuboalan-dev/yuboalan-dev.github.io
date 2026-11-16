@@ -6,13 +6,13 @@
    2. 用瀏覽器把各分頁畫好，存成「內容已經在裡面」的 HTML
       → 搜尋引擎、LINE／FB／LinkedIn 預覽不用跑程式也看得到內容
    3. 產生正式 CV 的 PDF：cv/yuboan-cv-zh.pdf、cv/alan-yu-cv-en.pdf
-      → 頁首「下載 CV」直接下載這個檔（英文版開關打開時才有英文）
+      → 經歷頁上方「下載正式 CV（PDF）」直接下載這個檔（英文版開關打開時才有英文）
    4. 產生分享預覽圖 assets/og.jpg（版型在 tools/og.html，資料讀 content.js）
    CV 超過一頁時：推上 main 照樣發布，但會自動開一個 Issue 提醒；
    在 PR 裡則讓檢查失敗，修好再合併（見 .github/workflows/pages.yml）。
 
-   本機要試跑：npm install --no-save playwright@1.48.2 && npx playwright install chromium && node tools/build.mjs
-   （版本要跟 .github/workflows/pages.yml 一致，不然排版可能有細微差異，CV 頁數會對不上）
+   本機要試跑：npm ci && npx playwright install chromium && node tools/build.mjs
+   （工具版本寫在 package.json；版本不同，排版可能有細微差異，CV 頁數會對不上）
    ========================================================= */
 import http from "node:http";
 import fs from "node:fs";
