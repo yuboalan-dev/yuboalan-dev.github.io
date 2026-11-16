@@ -204,8 +204,17 @@ for (const c of CVS_ON) shots.push({ id: `cv-${c.lang}`, title: c.name, url: `/c
 
 const changed = [];
 for (const s of shots) {
-  const a = await shot(before, s.url, s.width, s.media), b = await shot(after, s.url, s.width, s.media);
-  const band = a && b ? changedBand(a, b) : undefined;
+  let a = await shot(before, s.url, s.width, s.media), b = await shot(after, s.url, s.width, s.media);
+  let band = a && b ? changedBand(a, b) : undefined;
+  /* 看起來有變時重拍一次再比：網頁字型偶爾有一小塊沒下載到，會讓某一行字差一個像素，
+     兩份一模一樣的網站也會被判成「有變」（2026-11-17 在只改說明文件的 PR 上發現）。
+     真的有改的地方重拍還是不一樣；重拍後一樣的就當作沒變 */
+  if (band) {
+    const a2 = await shot(before, s.url, s.width, s.media), b2 = await shot(after, s.url, s.width, s.media);
+    const band2 = a2 && b2 ? changedBand(a2, b2) : undefined;
+    if (band2 === null) { console.log(`重拍後相同，不算有變：${s.title}`); continue; }
+    a = a2; b = b2; band = band2;
+  }
   if (band === null) continue;
   if (a) fs.writeFileSync(path.join(OUT, `${s.id}-before.png`), a);
   if (b) fs.writeFileSync(path.join(OUT, `${s.id}-after.png`), b);
