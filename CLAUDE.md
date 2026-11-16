@@ -28,7 +28,7 @@
 
 - **AI 一律開分支、發 PR，不直接推 `main`**。PR 會自動跑兩件事：
   - 建置檢查：頁面程式出錯或預設 CV 超過一頁就失敗；沒過就先修，不要請使用者確認。
-  - **前後對照**（`tools/preview.mjs`）：自動在 PR 貼一則留言，列出 `content.js` 的文字差異、CV 頁數、有變的畫面（各分頁桌機／手機、中英文 CV）新舊並排。截圖存在 `previews` 分支（不進 `main`、不發布），PR 關閉後自動刪除。新增分頁時，`tools/preview.mjs` 的 `PAGES` 要一起改；`content.js` 新增頂層欄位時，順便補 `KEY_NAMES` 的中文名稱。
+  - **前後對照**（`tools/preview.mjs`）：自動在 PR 貼一則留言，列出 `content.js` 的文字差異、CV 頁數、有變的畫面（各分頁桌機／手機、中英文 CV）新舊並排。截圖存在 `previews` 分支（不進 `main`、不發布），PR 關閉後自動刪除。留言另有一段「搜尋與分享預覽的文字」，比各頁的標題與說明（不在畫面上、截圖比不出來）。新增分頁時對照會自己找到，不用改 `tools/preview.mjs`；`content.js` 新增頂層欄位時，順便補 `KEY_NAMES` 的中文名稱。
 - **使用者看過前後對照、表示同意才合併**。使用者在對話裡明確說可以時，AI 可以代為合併（`gh api -X PUT repos/yuboalan-dev/yuboalan-dev.github.io/pulls/<編號>/merge`）；使用者也可以自己按 Merge。請使用者確認時，附上 PR 連結並用一兩句話說明對照裡最該看的地方。
 - **使用者自己在 GitHub 網頁上小改 `content.js`，照舊直接改 `main`**，不用走 PR。
 - **一個 commit 只做一件事**（改內容、改動畫、改 CV 版面分開），方便日後單獨退回。PR 也盡量一個主題一個。
@@ -54,7 +54,7 @@
 | 檔案 | 內容 | 誰改 |
 |---|---|---|
 | `content.js` | 網站和 CV 上的**所有文字與資料**（唯一一份） | 使用者自己會在 GitHub 網頁上改 |
-| `index.html`、`experience.html`、`work.html`、`media.html` | 各分頁的 `<head>`（標題、描述、canonical）；內容由 `site.js` 依 `data-page` 畫出 | AI |
+| `index.html`、`experience.html`、`work.html`、`media.html` | 各分頁的外殼（`<title>`、字型、`data-page`）；內容由 `site.js` 依 `data-page` 畫出。說明、canonical、og:* 不寫在這裡：`site.js` 依 `content.js` 的 `pageInfo` 與 `common.js` 的 `SITE_URL` 填上，建置時寫進發布的 HTML。新增分頁的步驟在 `site.js` 檔頭 | AI |
 | `site.js` | 所有分頁共用的版面程式：頁首導覽、各區塊、頁尾聯絡；分頁清單 `PAGES` 只在這裡 | AI |
 | `cv.html` | 產生正式 CV 的工具（A4、可勾選選項、列印存 PDF）；網站不連結，正式 CV 是建置產生的 PDF | AI |
 | `style.css` | 樣式；顏色、尺寸等參數只在第 0 段 | AI |
@@ -68,7 +68,7 @@
 
 ## 規則
 
-- **同一個資料只維護一份**：文字只放 `content.js`，不要寫死在 HTML。必須重複時（例：網域出現在 `sitemap.xml`、`robots.txt`、`index.html` 開頭），寫註解說明要一起改哪幾處。
+- **同一個資料只維護一份**：文字只放 `content.js`，不要寫死在 HTML。網域只寫在 `common.js` 的 `SITE_URL`；分頁清單只在 `site.js` 的 `PAGES`（建置、前後對照、`sitemap.xml` 都是掃 `data-page` 自己找分頁）；`sitemap.xml`、`robots.txt` 由建置產生，repo 裡不存。真的必須重複時，寫註解說明要一起改哪幾處。
 - **`content.js` 要讓不懂程式的人改得動**：欄位名稱不改、每段有中文註解；新增欄位要在檔頭說明，並更新 `README.md`。
 - **個資**：repo 是公開的。電話、住址、身分證號不得進 repo。Email、社群帳號使用者已同意公開。
 - **CV 預設要剛好一頁 A4**（中、英文都是）。完整版（`cv.html?full=1`）會列出 `cv: false` 的次要經歷，不限頁數；聯絡方式仍照 `cv: false`。動到 `content.js` 文字量或 `cv.html` 樣式後要實測：用 Playwright 以 `preferCSSPageSize` 輸出 PDF，確認頁數。
