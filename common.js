@@ -99,7 +99,8 @@
   }
 
   /* 網站正式網址（唯一一份）：CV 上的「網站」欄、首頁結構化資料都用這個。
-     換網域時要一起改：這裡、sitemap.xml、robots.txt、各 html 開頭的 canonical／og:url／og:image */
+     換網域只改這裡：各頁的 canonical／og:url／og:image（site.js）、sitemap.xml、robots.txt（tools/build.mjs 產生）、
+     前後對照（tools/preview.mjs）都讀這個值。這一行的寫法不要改（建置工具用文字比對讀它）。 */
   var SITE_URL = "https://yuboalan-dev.github.io/";
 
   window.UTIL = {
