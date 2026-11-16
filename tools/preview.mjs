@@ -56,7 +56,16 @@ async function open(site, url, width, media) {
   const page = await ctx.newPage();
   if (media) await page.emulateMedia({ media });
   const res = await page.goto(site.url + url, { waitUntil: "networkidle" }).catch(() => null);
-  await page.evaluate(() => document.fonts.ready).catch(() => {});
+  /* 等字型真的載完再拍：網頁字型是分塊下載的，換上一塊後重新排版，可能又要下載另一塊；
+     只等一次 fonts.ready 有時會拍到換到一半的畫面，兩次拍出來差一個像素，被誤判成「畫面有變」。
+     所以要連續三次（間隔 150 毫秒）都是「載完」才算數，最多等 6 秒 */
+  await page.evaluate(async () => {
+    for (let i = 0, calm = 0; i < 40 && calm < 3; i++) {
+      await document.fonts.ready;
+      await new Promise(r => requestAnimationFrame(() => setTimeout(r, 150)));
+      calm = document.fonts.status === "loaded" ? calm + 1 : 0;
+    }
+  }).catch(() => {});
   return { ctx, page, ok: !!res && res.ok() };
 }
 
