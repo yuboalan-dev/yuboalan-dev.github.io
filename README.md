@@ -52,9 +52,10 @@ AI 的改動會開成 PR（Pull request），PR 裡會自動出現一則「前�
 
 ## 讓 Google 搜得到
 
-- 網站已經有 `sitemap.xml`、`robots.txt`，首頁會自動產生 schema.org 的個人資料（取自 `content.js`）。
+- 網站有 `sitemap.xml`、`robots.txt`（每次發布時自動產生，repo 裡看不到這兩個檔），首頁會自動產生 schema.org 的個人資料（取自 `content.js`）。
+- **搜尋結果和分享預覽顯示的那一句說明**在 `content.js` 的 `pageInfo`，每個分頁一句。卸任、換工作後記得回來看一眼，不要寫「現任○○」。
 - 到 [Google Search Console](https://search.google.com/search-console) 新增資源 → 網址前置字元填 `https://yuboalan-dev.github.io/` → 驗證方式選「HTML 標記」，把那行 `<meta name="google-site-verification" ...>` 給 Claude 放進 `index.html`，驗證後在「Sitemap」提交 `sitemap.xml`。
-- 換網域時，`sitemap.xml`、`robots.txt`、`index.html` 開頭的 canonical／og:url／og:image 要一起改。
+- 換網域時，只要改 `common.js` 的 `SITE_URL` 一處（請 AI 改），其他地方會自動跟著變。
 - **改完整頁空白**：多半是少了逗號或引號。到 `content.js` 的 **History** 找上一版，或把檔案貼給 AI 問「哪裡語法錯了」。
 
 ## 正式 CV
