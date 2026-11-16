@@ -3,6 +3,8 @@
 # - 對 main 開的 PR：只建置當檢查、不發布；頁面程式出錯或 CV 超過一頁，檢查就失敗，修好再合併
 #   另外產生「前後對照」（tools/preview.mjs）：文字差異、CV 頁數、有變的畫面新舊並排，貼成 PR 留言；
 #   截圖存在 previews 分支的 pr-編號/ 資料夾（不進 main、不發布），PR 關閉後自動刪掉
+# 每次建置前先跑 tools/check.mjs：個資、圖片 EXIF、不該放的檔案類型，有問題就不建置、不發布
+# 發布後自動確認線上的 version.txt 等於這次的 commit
 # 前提：repo 的 Settings → Pages → Source 要選「GitHub Actions」
 name: 建置並發布網站
 
@@ -31,11 +33,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+      - name: 公開前檢查（個資、EXIF、不該放的檔案類型）
+        run: node tools/check.mjs
       - name: 安裝中文字型（PDF 的備用字型）
         run: sudo apt-get update -q && sudo apt-get install -y -q fonts-noto-cjk
+      # 工具版本只寫在 package.json／package-lock.json（Playwright 版本會影響排版與 CV 頁數）
+      - name: 安裝建置工具
+        run: npm ci
+      - name: 瀏覽器快取（版本沒變就不用重新下載）
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
       - name: 安裝瀏覽器
-        # 版本改這裡時，CLAUDE.md「改完怎麼驗收」和 tools/build.mjs 檔頭的本機指令要一起改
-        run: npm install --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium
       - name: 建置
         id: build
         run: node tools/build.mjs
@@ -63,6 +75,10 @@ jobs:
             gh issue close "$open" --repo "$GITHUB_REPOSITORY" --comment "已回到一頁（$RUN_URL），自動關閉。"
           fi
 
+      - name: 記下這次發布的版本（發布後用來確認線上真的換成新版）
+        if: github.event_name != 'pull_request'
+        run: echo "$GITHUB_SHA" > _site/version.txt
+
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name != 'pull_request'
         with:
@@ -70,7 +86,8 @@ jobs:
 
   # ---------- PR 的前後對照 ----------
   preview:
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    # Dependabot 的 PR 拿不到寫入權限，貼不了留言，所以跳過（建置檢查照跑）
+    if: github.event_name == 'pull_request' && github.event.action != 'closed' && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     permissions:
       contents: write        # 把截圖推到 previews 分支
@@ -96,11 +113,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: 安裝中文字型與瀏覽器
+          cache: npm
+          cache-dependency-path: head/package-lock.json
+      - name: 瀏覽器快取（版本沒變就不用重新下載）
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('head/package-lock.json') }}
+      - name: 安裝中文字型、建置工具與瀏覽器
         working-directory: head
         run: |
           sudo apt-get update -q && sudo apt-get install -y -q fonts-noto-cjk
-          npm install --no-save playwright@1.48.2 pngjs@7 && npx playwright install --with-deps chromium
+          npm ci && npx playwright install --with-deps chromium
       - name: 拍照比較
         run: node head/tools/preview.mjs base head out
       - name: 截圖推到 previews 分支
@@ -153,3 +177,15 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+      # 發布完自動確認：線上的 version.txt 要等於這次的 commit。
+      # 這一步只確認「新版已經在線上」；畫面對不對仍要用瀏覽器看（CLAUDE.md「改完怎麼驗收」）
+      - name: 確認線上已經換成這一版
+        env:
+          URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          for i in $(seq 1 12); do
+            got=$(curl -fsS -H 'Cache-Control: no-cache' "${URL}version.txt?t=$(date +%s)" || true)
+            [ "$got" = "$GITHUB_SHA" ] && { echo "線上版本：$got"; exit 0; }
+            echo "第 $i 次：線上是「${got:-讀不到}」，等 10 秒"; sleep 10
+          done
+          echo "::error::發布完成兩分鐘後，線上的 version.txt 仍不是這次的 commit（$GITHUB_SHA）"; exit 1

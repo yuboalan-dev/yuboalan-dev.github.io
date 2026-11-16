@@ -1,0 +1,14 @@
+{
+  "name": "yuboalan-dev.github.io",
+  "private": true,
+  "description": "建置與檢查用的工具版本（網站本身不需要安裝任何東西）。版本只寫在這裡；GitHub 與本機都用 npm ci 安裝，排版才會一致。",
+  "scripts": {
+    "check": "node tools/check.mjs",
+    "build": "node tools/build.mjs",
+    "browser": "playwright install chromium"
+  },
+  "devDependencies": {
+    "playwright": "1.48.2",
+    "pngjs": "7.0.0"
+  }
+}
