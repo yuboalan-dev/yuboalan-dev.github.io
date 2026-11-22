@@ -1,0 +1,14 @@
+# Dependabot：工具有新版時自動開 PR（一個月一次，避免太吵）。
+# PR 一樣會跑建置檢查（CV 是否仍為一頁）；Playwright 升版可能讓排版有細微差異，合併前看檢查結果。
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    labels: [程式]
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    labels: [程式]

@@ -59,6 +59,8 @@
 | `common.js` | 共用工具、語言切換、社群圖示 | AI |
 | `motion.js` | 互動效果（路線隨捲動畫出、首屏點陣水面、站點預覽小卡、求職輪播、數字累加、螢光筆、頁尾識別證）；減少動態效果與自動化瀏覽器時不執行，樣式在 `style.css` 第 12 段 | AI |
 | `tools/build.mjs` | 建置：預先產生各分頁 HTML（給搜尋引擎與社群預覽）、資源網址加內容版本號（`?v=雜湊`，避免讀者瀏覽器拿到舊檔）、產生 CV PDF（`cv/yuboan-cv-zh.pdf`；英文版開關打開時另有 `cv/alan-yu-cv-en.pdf`）、檢查 CV 頁數、依 `tools/og.html` 產生分享圖 `assets/og.jpg` | AI |
+| `tools/check.mjs` | 公開前檢查：個資樣式、圖片 EXIF、不該放的檔案類型；沒過就不建置、不發布。誤判時寫進檔案裡的 `ALLOW` | AI |
+| `package.json`、`package-lock.json` | 建置工具的版本（Playwright、pngjs）；網站本身不需要安裝。要升版只改這裡 | AI（Dependabot 每月會自動開 PR） |
 | `tools/og.html` | 分享圖版型（讀 `content.js` 的姓名、照片、站點）；路線色要與 `style.css` 第 0 段一致 | AI |
 | `404.html` | 找不到頁面；資源路徑一律 `/` 開頭 | AI |
 | `docs/` | 給維護者與 AI 看的文件：`decisions.md` 已決定的事、`design.md` 設計與互動的細節、`experience-rules.md` 經歷的整理準則；不發布到網站 | AI（使用者同意後） |
@@ -68,7 +70,7 @@
 
 - **同一個資料只維護一份**：文字只放 `content.js`，不要寫死在 HTML。必須重複時（例：網域出現在 `sitemap.xml`、`robots.txt`、`index.html` 開頭），寫註解說明要一起改哪幾處。
 - **`content.js` 要讓不懂程式的人改得動**：欄位名稱不改、每段有中文註解；新增欄位要在檔頭說明，並更新 `README.md`。
-- **個資**：repo 是公開的。電話、住址、身分證號不得進 repo。Email、社群帳號使用者已同意公開。
+- **個資**：repo 是公開的。電話、住址、身分證號不得進 repo。Email、社群帳號使用者已同意公開。每次建置前 `tools/check.mjs` 會自動擋手機號碼、身分證字號、圖片 EXIF 與文件類檔案（PDF、Word 等）；它只擋得住格式明顯的，住址和其他私密內容仍要自己把關。
 - **CV 預設要剛好一頁 A4**（中、英文都是）。完整版（`cv.html?full=1`）會列出 `cv: false` 的次要經歷，不限頁數；聯絡方式仍照 `cv: false`。動到 `content.js` 文字量或 `cv.html` 樣式後要實測：用 Playwright 以 `preferCSSPageSize` 輸出 PDF，確認頁數。
 - **圖示**用 Bootstrap Icons（MIT，內嵌在 `common.js`，授權在 `assets/LICENSE-bootstrap-icons.txt`），不要自己畫，也不要改成外部 CDN。
 - **照片**上傳前要縮圖並移除 EXIF（可能含拍攝地點）。
@@ -79,7 +81,7 @@
 
 1. 本機：`python3 -m http.server` 開起來，用 Playwright 看桌機（1280）與手機（390）寬度，確認沒有 console 錯誤、沒有水平捲軸。
 2. CV：中英文各輸出一次 PDF，確認一頁。
-3. 本機試跑建置：`npm install --no-save playwright@1.48.2 && npx playwright install chromium && node tools/build.mjs`（Playwright 版本要和 `.github/workflows/pages.yml` 一致，否則排版有細微差異、CV 頁數可能對不上），確認 `_site/` 各頁只有一份頁首頁尾、CV PDF 都是一頁。`_site/` 不要提交。
-4. 發 PR 後等建置檢查通過、前後對照留言出來，自己先看過對照（確認改到的就是要改的、沒有誤傷別頁），再請使用者確認；合併後等「建置並發布網站」workflow 跑完（`gh api repos/yuboalan-dev/yuboalan-dev.github.io/actions/runs`）。
+3. 本機試跑建置：`npm ci && npx playwright install chromium && node tools/check.mjs && node tools/build.mjs`（工具版本只寫在 `package.json`／`package-lock.json`，GitHub 和本機都用 `npm ci`；Playwright 版本不同，排版有細微差異、CV 頁數可能對不上），確認 `_site/` 各頁只有一份頁首頁尾、CV PDF 都是一頁。`_site/` 不要提交。
+4. 發 PR 後等建置檢查通過、前後對照留言出來，自己先看過對照（確認改到的就是要改的、沒有誤傷別頁），再請使用者確認；合併後等「建置並發布網站」workflow 跑完（`gh api repos/yuboalan-dev/yuboalan-dev.github.io/actions/runs`）；最後一步會自動確認線上的 `version.txt` 等於這次的 commit，沒過代表新版沒換上去。
 5. 用瀏覽器開正式網址確認。GitHub Pages 會快取約 10 分鐘，要強制重新載入（`fetch(url, {cache:'reload'})` 後再 reload）。
 6. **沒在瀏覽器實際看過正式網址，就寫「未驗證」**，不要寫「已上線」。
