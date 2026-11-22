@@ -24,7 +24,12 @@ const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..")
 const OUT = path.join(ROOT, "_site");
 const SKIP = new Set([".git", ".github", "tools", "node_modules", "_site", "package.json", "package-lock.json",
                      "CLAUDE.md", "AGENTS.md", "README.md", "docs"]  /* 給維護者看的文件不發布 */);
-const PAGES = ["index.html", "experience.html", "work.html", "media.html", "404.html"];
+/* 分頁清單不用維護：資料夾裡有 <body data-page="..."> 的 html 都是分頁（含 404.html）。
+   新增分頁只要照 site.js 檔頭的步驟做，這裡、sitemap.xml、前後對照都會自己找到 */
+const PAGES = fs.readdirSync(ROOT).filter(f => f.endsWith(".html") && /<body[^>]*\sdata-page="/.test(fs.readFileSync(path.join(ROOT, f), "utf8"))).sort();
+/* 正式網址只寫在 common.js 的 SITE_URL */
+const SITE_URL = (fs.readFileSync(path.join(ROOT, "common.js"), "utf8").match(/var SITE_URL = "(https?:\/\/[^"]+\/)"/) || [])[1];
+if (!SITE_URL) { console.log("::error file=common.js::讀不到 SITE_URL（那一行的寫法要是 var SITE_URL = \"https://…/\";）"); process.exit(1); }
 /* content.js 的 english: false（英文版先關掉）時，不產生英文 CV */
 const ENGLISH = !/^\s*english:\s*false\b/m.test(fs.readFileSync(path.join(ROOT, "content.js"), "utf8"));
 const CVS = [
@@ -44,7 +49,7 @@ for (const name of fs.readdirSync(ROOT)) {
 
 /* 用一個小伺服器把原始檔案開起來給瀏覽器讀 */
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8",
-                ".jpg": "image/jpeg", ".png": "image/png", ".svg": "image/svg+xml", ".xml": "application/xml", ".txt": "text/plain; charset=utf-8" };
+                ".jpg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".svg": "image/svg+xml", ".xml": "application/xml", ".txt": "text/plain; charset=utf-8" };
 const server = http.createServer((req, res) => {
   const p = decodeURIComponent(new URL(req.url, "http://x").pathname);
   const file = path.join(ROOT, p === "/" ? "index.html" : p);
@@ -55,9 +60,11 @@ const server = http.createServer((req, res) => {
 await new Promise(r => server.listen(0, "127.0.0.1", r));
 const BASE = `http://127.0.0.1:${server.address().port}`;
 
-const browser = await chromium.launch();
+/* 本機沒有裝 Playwright 的瀏覽器時，可用 CHROME_PATH 指定已安裝的 Chrome（排版可能有細微差異，頁數以 GitHub 上的為準） */
+const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
 let failed = false;
 const overflow = [];  /* 超過一頁的 CV，例：「中文 2 頁」 */
+const indexable = []; /* 要給搜尋引擎的分頁網址（寫進 sitemap.xml） */
 
 /* 資源網址加上內容雜湊（例：/site.js?v=3f9a1c2d），檔案一改網址就變，
    讀者的瀏覽器就不會拿暫存的舊版（GitHub Pages 預設暫存約 10 分鐘） */
@@ -76,8 +83,22 @@ for (const f of PAGES) {
   page.on("pageerror", e => errors.push(e.message));
   await page.goto(`${BASE}/${f}`, { waitUntil: "networkidle" });
   if (errors.length) { console.log(`::error file=${f}::頁面程式錯誤：${errors.join(" / ")}`); failed = true; }
+  /* 給搜尋引擎與分享預覽看的資料（site.js 的 setHead 填的）有沒有齊；noindex 的頁（404）不用 */
+  const head = await page.evaluate(() => {
+    const g = (sel, attr) => (document.head.querySelector(sel) || { getAttribute: () => "" }).getAttribute(attr) || "";
+    return { noindex: /noindex/.test(g('meta[name="robots"]', "content")), desc: g('meta[name="description"]', "content"),
+             canonical: g('link[rel="canonical"]', "href"), ogImage: g('meta[property="og:image"]', "content") };
+  });
+  if (!head.noindex) {
+    if (!head.desc) { console.log(`::error file=content.js::${f} 沒有說明文字：請在 content.js 的 pageInfo 補上這一頁`); failed = true; }
+    if (!head.canonical.startsWith(SITE_URL) || !head.ogImage.startsWith(SITE_URL)) { console.log(`::error file=site.js::${f} 的正式網址或分享圖網址不對（${head.canonical}）`); failed = true; }
+    if (/現任/.test(head.desc)) console.log(`::warning file=content.js::${f} 的說明寫了「現任」，卸任後會過期：${head.desc}`);
+    indexable.push(head.canonical);
+  }
   const html = await page.evaluate(() => {
     document.body.setAttribute("data-prerendered", "zh");
+    /* 內容已經畫好寫進檔案了，「請開啟 JavaScript」的備用文字不用再留（留著的話，沒開 JavaScript 的讀者會看到兩份） */
+    document.querySelectorAll("noscript").forEach(el => el.remove());
     /* 動畫狀態不要存進檔案：沒有 JavaScript 的讀者（搜尋引擎、社群預覽）要直接看到內容 */
     document.documentElement.classList.remove("anim");
     document.querySelectorAll(".is-in, .flash, .is-off").forEach(el => el.classList.remove("is-in", "flash", "is-off"));
@@ -92,6 +113,12 @@ for (const f of PAGES) {
 }
 
 fs.writeFileSync(path.join(OUT, "cv.html"), bust(fs.readFileSync(path.join(ROOT, "cv.html"), "utf8")));
+
+/* sitemap.xml、robots.txt：依上面實際產生的分頁寫出來（repo 裡不存這兩個檔，避免跟分頁清單、網域對不上） */
+fs.writeFileSync(path.join(OUT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+  indexable.sort().map(u => `  <url><loc>${u}</loc></url>\n`).join("") + `</urlset>\n`);
+fs.writeFileSync(path.join(OUT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}sitemap.xml\n`);
+console.log(`已產生 sitemap.xml（${indexable.length} 頁）、robots.txt`);
 
 /* 3. 產生 CV PDF，並檢查是不是一頁 */
 fs.mkdirSync(path.join(OUT, "cv"), { recursive: true });

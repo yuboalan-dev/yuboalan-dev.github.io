@@ -23,19 +23,21 @@ const [BASE_DIR, HEAD_DIR, OUT] = process.argv.slice(2).map(p => p && path.resol
 if (!OUT) { console.error("用法：node tools/preview.mjs <改之前> <改之後> <輸出資料夾>"); process.exit(2); }
 fs.mkdirSync(OUT, { recursive: true });
 
-/* 要拍的畫面。分頁清單改了（site.js 的 PAGES）要一起改這裡 */
-const PAGES = [
-  { file: "index.html", name: "首頁" },
-  { file: "experience.html", name: "經歷" },
-  { file: "work.html", name: "代表作" },
-  { file: "media.html", name: "媒體" }
-];
+/* 要拍的畫面：改之後那份資料夾裡有 <body data-page="..."> 的 html（404 頁不拍）。
+   分頁清單不用維護，新增分頁會自己出現；名稱取 <title> 的「｜」前面那一段 */
+const PAGES = fs.readdirSync(HEAD_DIR).filter(f => f.endsWith(".html")).map(f => {
+  const html = fs.readFileSync(path.join(HEAD_DIR, f), "utf8");
+  const id = (html.match(/<body[^>]*\sdata-page="([^"]+)"/) || [])[1];
+  const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || f;
+  return id && id !== "notfound" ? { file: f, id, name: id === "home" ? "首頁" : title.split("｜")[0] } : null;
+}).filter(Boolean).sort((a, b) => (a.id === "home" ? -1 : b.id === "home" ? 1 : a.file.localeCompare(b.file)));
 const SIZES = [{ key: "desktop", name: "桌機", width: 1280 }, { key: "mobile", name: "手機", width: 390 }];
 const CVS = [{ lang: "zh", name: "中文 CV" }, { lang: "en", name: "英文 CV" }];
 
 /* ---------- 兩份網站都假裝在正式網址上開（CV 會印出網址，用假埠號會讓每張 CV 都被當成「有變」）。
    請求正式網址的檔案時直接從資料夾讀；Google 字型等外部資源照常連線 ---------- */
-const ORIGIN = "https://yuboalan-dev.github.io";
+/* 正式網址只寫在 common.js 的 SITE_URL；讀不到（很舊的版本）才用預設值 */
+const ORIGIN = ((fs.readFileSync(path.join(HEAD_DIR, "common.js"), "utf8").match(/var SITE_URL = "(https?:\/\/[^"]+)\/"/) || [])[1]) || "https://yuboalan-dev.github.io";
 const before = { dir: BASE_DIR, url: ORIGIN }, after = { dir: HEAD_DIR, url: ORIGIN };
 const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
 async function mount(ctx, root) {
@@ -54,7 +56,16 @@ async function open(site, url, width, media) {
   const page = await ctx.newPage();
   if (media) await page.emulateMedia({ media });
   const res = await page.goto(site.url + url, { waitUntil: "networkidle" }).catch(() => null);
-  await page.evaluate(() => document.fonts.ready).catch(() => {});
+  /* 等字型真的載完再拍：網頁字型是分塊下載的，換上一塊後重新排版，可能又要下載另一塊；
+     只等一次 fonts.ready 有時會拍到換到一半的畫面，兩次拍出來差一個像素，被誤判成「畫面有變」。
+     所以要連續三次（間隔 150 毫秒）都是「載完」才算數，最多等 6 秒 */
+  await page.evaluate(async () => {
+    for (let i = 0, calm = 0; i < 40 && calm < 3; i++) {
+      await document.fonts.ready;
+      await new Promise(r => requestAnimationFrame(() => setTimeout(r, 150)));
+      calm = document.fonts.status === "loaded" ? calm + 1 : 0;
+    }
+  }).catch(() => {});
   return { ctx, page, ok: !!res && res.ok() };
 }
 
@@ -81,12 +92,12 @@ function labelOf(x) {
   return null;
 }
 /* content.js 頂層欄位的中文名稱（新增欄位時順便補；沒補就顯示英文欄位名） */
-const KEY_NAMES = { updated: "更新日期", avatar: "首頁頭像", avatarDots: "頭像點數", avatarNote: "頭像說明", routeStart: "歷程起點", belief: "首頁主句", evidence: "首頁證據", evidenceHeading: "證據區標題", nowHeading: "現職區標題", english: "英文版開關", name: "姓名", tagline: "首頁定位句", seeking: "求職狀態", seekingRotate: "求職輪播", highlights: "簡介螢光筆", headline: "身分一句", roles: "首頁身分", photo: "照片", summary: "簡介",
+const KEY_NAMES = { pageInfo: "各頁說明（搜尋與分享用）", updated: "更新日期", avatar: "首頁頭像", avatarDots: "頭像點數", avatarNote: "頭像說明", routeStart: "歷程起點", belief: "首頁主句", evidence: "首頁證據", evidenceHeading: "證據區標題", nowHeading: "現職區標題", english: "英文版開關", name: "姓名", tagline: "首頁定位句", seeking: "求職狀態", seekingRotate: "求職輪播", highlights: "簡介螢光筆", headline: "身分一句", roles: "首頁身分", photo: "照片", summary: "簡介",
   expertise: "專長", links: "社群與連結", cvContact: "CV 聯絡方式", news: "近況", groups: "經歷", focusHeading: "關注領域標題",
   focus: "關注領域", works: "代表作", mediaList: "媒體清單列法", media: "媒體", zh: "中文", en: "英文", period: "期間",
   points: "條列說明", url: "連結", date: "日期" };
 const TECH = new Set(["line", "key", "collapsed"]);
-const SUB_NAMES = { items: "", roles: "", text: "", zh: "", en: "英文", role: "職稱", period: "期間", points: "條列說明",
+const SUB_NAMES = { home: "首頁", experience: "經歷", work: "代表作", media: "媒體", items: "", roles: "", text: "", zh: "", en: "英文", role: "職稱", period: "期間", points: "條列說明",
   line: "路線色", minor: "收進「顯示其他」", also: "另見", more: "代表作連結", title: "標題", org: "組織", station: "路線圖站點",
   cv: "放進 CV", web: "放上網站", show: "顯示", mark: "圓章簡稱", logo: "標誌", url: "連結", date: "日期", key: "代號", note: "一句話說明", thumb: "用縮圖", image: "作品圖", stats: "數字", num: "數值", unit: "單位", label: "說明", words: "輪播詞", caption: "圖說", alt: "替代文字", src: "圖檔" };
 const show = v => typeof v === "string" ? `「${v}」` : JSON.stringify(v);
@@ -170,6 +181,21 @@ async function cvPages(site, lang) {
   return pdf ? (pdf.toString("latin1").match(/\/Type\s*\/Page(?!s)/g) || []).length : null;
 }
 
+/* 給搜尋引擎與分享預覽看的標題、說明（不在畫面上，截圖比不出來，所以另外比文字） */
+async function headText(site, url) {
+  const { ctx, page, ok } = await open(site, url, 1280);
+  const h = ok ? await page.evaluate(() => ({ title: document.title, desc: (document.head.querySelector('meta[name="description"]') || { content: "" }).content })) : null;
+  await ctx.close();
+  return h;
+}
+const headChanges = [];
+for (const p of PAGES) {
+  const a = await headText(before, `/${p.file}`), b = await headText(after, `/${p.file}`);
+  if (!a || !b) continue;
+  if (a.title !== b.title) headChanges.push(`- **${p.name}**　標題：「${a.title}」 → 「${b.title}」`);
+  if (a.desc !== b.desc) headChanges.push(`- **${p.name}**　說明：「${a.desc}」 → 「${b.desc}」`);
+}
+
 const shots = [];
 for (const p of PAGES) for (const s of SIZES) shots.push({ id: `${p.file.replace(".html", "")}-${s.key}`, title: `${p.name}（${s.name}）`, url: `/${p.file}`, width: s.width });
 /* content.js 的 english: false（英文版先關掉）時，英文 CV 跟中文一樣，不重複拍 */
@@ -178,8 +204,17 @@ for (const c of CVS_ON) shots.push({ id: `cv-${c.lang}`, title: c.name, url: `/c
 
 const changed = [];
 for (const s of shots) {
-  const a = await shot(before, s.url, s.width, s.media), b = await shot(after, s.url, s.width, s.media);
-  const band = a && b ? changedBand(a, b) : undefined;
+  let a = await shot(before, s.url, s.width, s.media), b = await shot(after, s.url, s.width, s.media);
+  let band = a && b ? changedBand(a, b) : undefined;
+  /* 看起來有變時重拍一次再比：網頁字型偶爾有一小塊沒下載到，會讓某一行字差一個像素，
+     兩份一模一樣的網站也會被判成「有變」（2026-11-17 在只改說明文件的 PR 上發現）。
+     真的有改的地方重拍還是不一樣；重拍後一樣的就當作沒變 */
+  if (band) {
+    const a2 = await shot(before, s.url, s.width, s.media), b2 = await shot(after, s.url, s.width, s.media);
+    const band2 = a2 && b2 ? changedBand(a2, b2) : undefined;
+    if (band2 === null) { console.log(`重拍後相同，不算有變：${s.title}`); continue; }
+    a = a2; b = b2; band = band2;
+  }
   if (band === null) continue;
   if (a) fs.writeFileSync(path.join(OUT, `${s.id}-before.png`), a);
   if (b) fs.writeFileSync(path.join(OUT, `${s.id}-after.png`), b);
@@ -210,6 +245,8 @@ else {
   for (const c of changes.slice(0, MAX)) md.push(`- **${c.kind}**　${c.where}：${c.text}`);
   if (changes.length > MAX) md.push(`- ……另有 ${changes.length - MAX} 處，請看 PR 的 Files changed`);
 }
+md.push(``, `### 搜尋與分享預覽的文字（不在畫面上）`);
+md.push(headChanges.length ? headChanges.join("\n") : `各頁的標題與說明沒有變。`);
 md.push(``, `### CV 頁數（預設版，應該都是 1 頁）`, ``, `| | 改之前 | 改之後 |`, `|---|---|---|`);
 for (const p of pages) md.push(`| ${p.name} | ${p.a ?? "—"} | ${p.b ?? "—"}${p.b !== 1 ? " ⚠️" : ""} |`);
 md.push(``, `### 畫面`);

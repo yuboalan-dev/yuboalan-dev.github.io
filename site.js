@@ -11,8 +11,9 @@
 
    ★ 分頁清單只維護在下面的 PAGES。新增分頁時：
      1. 在 PAGES 加一行
-     2. 複製一個 *.html，改 <title>、description、canonical 和 data-page
-     3. sitemap.xml 加一行
+     2. 複製一個 *.html，改 <title> 和 data-page
+     3. 在 content.js 的 pageInfo 加一行說明（給搜尋引擎與分享預覽）
+     建置（tools/build.mjs）、前後對照（tools/preview.mjs）、sitemap.xml 都會自己找到新分頁，不用另外改。
 
    ★ 預先產生的頁面（tools/build.mjs 在 GitHub 上建置時，把畫好的內容直接寫進 HTML，
      讓搜尋引擎和社群預覽不用跑程式也看得到）：這裡一開始會把那份內容清掉、
@@ -41,6 +42,31 @@
     { id: "work",       href: "/work.html",       zh: "代表作",   en: "Work" },
     { id: "media",      href: "/media.html",      zh: "媒體",     en: "Media" }
   ];
+
+  /* ---------- 給搜尋引擎與分享預覽看的資料（<head>） ----------
+     標題、說明、正式網址都在這裡填：說明取自 content.js 的 pageInfo，網址用 common.js 的 SITE_URL。
+     建置時這些會直接寫進發布的 HTML，所以各 *.html 不用（也不要）自己寫。404 頁不填。 */
+  (function setHead() {
+    if (page === "notfound") return;
+    var cur = PAGES.filter(function (p) { return p.id === page; })[0];
+    if (!cur && page !== "home") return;
+    var site = S.name.zh + " " + S.name.en;
+    var title = cur ? tx(cur.zh, cur.en) + "｜" + site : site;
+    var desc = t((S.pageInfo || {})[page], L) || t(S.summary, L) || "";
+    var url = U.SITE_URL + (cur ? cur.href.replace(/^\//, "") : "");
+    function set(tag, key, name, attr, value) {
+      var el = document.head.querySelector(tag + "[" + key + '="' + name + '"]');
+      if (!el) { el = document.createElement(tag); el.setAttribute(key, name); document.head.appendChild(el); }
+      el.setAttribute(attr, value);
+    }
+    document.title = title;
+    set("meta", "name", "description", "content", desc);
+    set("link", "rel", "canonical", "href", url);
+    set("meta", "property", "og:title", "content", title);
+    set("meta", "property", "og:description", "content", desc);
+    set("meta", "property", "og:url", "content", url);
+    set("meta", "property", "og:image", "content", U.SITE_URL + "assets/og.jpg");
+  })();
 
   /* 正式 CV 的 PDF：GitHub 每次建置時自動產生（tools/build.mjs）。
      download 是對方存檔時看到的檔名。 */
@@ -471,7 +497,7 @@
 
   /* ---------- 結構化資料（schema.org Person），只放首頁 ----------
      Google 用來辨識「游博安」這個人；內容全部取自 content.js。
-     網址用 common.js 的 SITE_URL（換網域只改那裡和 sitemap.xml、robots.txt、各 html 的 canonical）。 */
+     網址用 common.js 的 SITE_URL（換網域只改那裡）。 */
   var SITE_URL = U.SITE_URL;
   function addPersonData() {
     try {
