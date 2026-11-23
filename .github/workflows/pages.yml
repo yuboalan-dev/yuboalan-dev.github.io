@@ -176,7 +176,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
       # 發布完自動確認：線上的 version.txt 要等於這次的 commit。
       # 這一步只確認「新版已經在線上」；畫面對不對仍要用瀏覽器看（CLAUDE.md「改完怎麼驗收」）
       - name: 確認線上已經換成這一版
