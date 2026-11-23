@@ -86,7 +86,7 @@ window.SITE = {
   /* 首頁姓名下方的身分。首頁用好讀的簡稱（不寫「社團法人」等）；
      formal 是正式全名，CV 標題用它（沒寫就用 zh） */
   roles: [
-    { line: "transport", zh: "政大指南路交通改善小組　召集人", en: "Convener, NCCU Zhinan Road Traffic Task Force" },
+    { line: "transport", zh: "指南路交通改善小組　召集人", en: "Convener, Zhinan Road Traffic Task Force" },
     { line: "student", zh: "臺灣學生聯合會　理事", en: "Board Member, National Students' Union of Taiwan" },
     { line: "transport", zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" }
   ],
@@ -219,14 +219,14 @@ window.SITE = {
       { mark: "會議", logo: "",
         org: { zh: "國立政治大學各級會議學生代表", en: "Student Representative, NCCU University Councils" },
         roles: [
-          { role: { zh: "校務會議（兼任學生議員）", en: "University Council (ex officio Student Legislator)" }, period: "2024.08 – 今" },
+          { role: { zh: "校務會議", en: "University Council" }, period: "2024.08 – 今" },  /* 後台紀錄：以學生議員身分兼任 */
           { role: { zh: "校務基金管理委員會", en: "University Endowment Fund Management Committee" }, period: "2026.11 – 今" },
           { role: { zh: "總務會議", en: "General Affairs Council" }, period: "2026.01 – 今", cv: false },
           { role: { zh: "學務會議", en: "Student Affairs Council" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "社會科學學院院務會議", en: "College of Social Sciences Council" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "校園規劃及興建委員會", en: "Campus Planning & Construction Committee" }, period: "2025.08 – 今", cv: false },
           { role: { zh: "學生申訴評議委員會", en: "Student Grievance Committee" }, period: "2025.08 – 2026.07", cv: false },
-          { role: { zh: "教務會議（學院代表）", en: "Academic Affairs Council (college representative)" }, period: "2025.02 – 2025.07", cv: false },
+          { role: { zh: "教務會議", en: "Academic Affairs Council" }, period: "2025.02 – 2025.07", cv: false },  /* 後台紀錄：學院代表 */
           { role: { zh: "校務考核委員會", en: "University Evaluation Committee" }, period: "2024.09 – 2025.07", cv: false }
         ] },
       { mark: "學聯", logo: "assets/logos/nsut.png",
@@ -266,7 +266,7 @@ window.SITE = {
             station: { zh: "人本促進會", en: "Transport NGO" } }
         ] },
       { mark: "指南", logo: "", more: "/work.html",
-        org: { zh: "政大指南路交通改善小組", en: "NCCU Zhinan Road Traffic Improvement Task Force" },
+        org: { zh: "指南路交通改善小組", en: "Zhinan Road Traffic Improvement Task Force" },
         roles: [
           { role: { zh: "召集人", en: "Convener" }, period: "2025.01 – 今",
             station: { zh: "指南路小組", en: "Zhinan Rd." },
@@ -277,25 +277,25 @@ window.SITE = {
       { minor: true, mark: "預算", logo: "",
         org: { zh: "臺北市參與式預算", en: "Taipei Participatory Budgeting" },
         roles: [
-          { role: { zh: "提案人：中正區「您行我也行」（獲臺北市政府感謝狀）", en: "Proposer: Zhongzheng District project (certificate of appreciation)" }, period: "2024" }
+          { role: { zh: "提案人：中正區「您行我也行」", en: "Proposer: Zhongzheng District project" }, period: "2024" }
         ] }
     ] },
 
 
     /* 社會參與：一次性或短期的參與（演講、活動、研習、營隊），不是有任期的職務（2026-11-08 使用者定案）。
        每筆一行：name 活動名稱、role 身分、period 日期（只寫一個時間點：YYYY.MM 或 YYYY）。
-       name 是網站上顯示的短名（大約 25 字內）；正式全名太長時寫在 full，網站滑過會顯示、CV 印全名。
+       寫法照 docs/experience-rules.md 第 7 條：「單位（官方全名）「活動名」｜身分」；太長只刪不改寫，刪掉的寫進 full（網站滑過會顯示、CV 印全名）。
        kind 分小類："talk" 受邀分享、"event" 合作與活動、"training" 研習與營隊；新的寫上面。
        line 寫這筆跟哪條路線有關（決定圓點顏色）；不寫就是灰色。
        CV 預設不印這一段，要印的那筆寫 cv: true。
        只想留紀錄、網站和 CV 都不放的，寫 show: false（注意：repo 是公開的，私密資料不要寫在這裡）。 */
     { key: "civic", line: "", title: { zh: "社會參與", en: "Civic Engagement" }, items: [
       { kind: "talk", line: "transport",
-        name: { zh: "政大附中「走入社區．看見文山」課程", en: "" },
+        name: { zh: "國立政治大學附屬高級中學「走入社區．看見文山社區實踐課程」", en: "" },
         full: { zh: "國立政治大學附屬高級中學與國立政治大學 USR「多元共容‧文山共好」計畫合作課程「走入社區．看見文山社區實踐課程」", en: "" },
         role: { zh: "講師", en: "" }, period: "2026.11" },
       { kind: "talk", line: "transport",
-        name: { zh: "臺北市都市更新處「Be a DOER」計畫", en: "" },
+        name: { zh: "臺北市都市更新處「臺北市都市再生行動育成實驗計畫」", en: "" },
         full: { zh: "臺北市都市更新處「臺北市都市再生行動育成實驗計畫（Be a DOER）」成果媒合會", en: "" },
         role: { zh: "成果媒合會委員", en: "" }, period: "2026.11" },
       { kind: "talk", line: "student",
@@ -305,15 +305,15 @@ window.SITE = {
         name: { zh: "臺北市政府「參與式預算審議員推廣教育課程」", en: "" },
         role: { zh: "分享講者", en: "" }, period: "2025.10" },
       { kind: "event", line: "transport",
-        name: { zh: "國立政治大學全校地坪及空間景觀改善計畫", en: "" },
+        name: { zh: "國立政治大學「全校地坪及空間景觀改善計畫」", en: "" },
         role: { zh: "基本設計顧問", en: "" }, period: "2026" },
       { kind: "event", line: "transport",
-        name: { zh: "國土管理署「人本街道校園推展聯盟」簽署", en: "" },
-        full: { zh: "內政部國土管理署「人本街道校園推展聯盟」合作備忘錄簽署", en: "" },
-        role: { zh: "政大學生代表", en: "" }, period: "2025.09" },
+        name: { zh: "內政部國土管理署「人本街道校園推展聯盟」", en: "" },
+        role: { zh: "合作備忘錄簽署學生代表", en: "" }, period: "2025.09" },
       { kind: "event", line: "transport",
-        name: { zh: "「永續之路－指南溪與指南路走讀工作坊」", en: "" },
-        role: { zh: "合辦：國立政治大學永續發展辦公室", en: "" }, period: "2025.08" },
+        name: { zh: "國立政治大學「永續之路－指南溪與指南路走讀工作坊」", en: "" },
+        full: { zh: "國立政治大學「永續之路－指南溪與指南路走讀工作坊」（與國立政治大學永續發展辦公室共同主辦）", en: "" },
+        role: { zh: "共同主辦", en: "" }, period: "2025.08" },
       { kind: "event", line: "research",
         name: { zh: "國立政治大學國際關係研究中心「政治大學夏令研習營」", en: "NCCU Summer Institute" },
         role: { zh: "副召集人", en: "Deputy Convener" }, period: "2024.08" },
@@ -369,7 +369,7 @@ window.SITE = {
       { minor: true, mark: "市府", logo: "",
         org: { zh: "臺北市政府", en: "Taipei City Government" },
         roles: [
-          { role: { zh: "暑期工讀：大專青年學生公部門", en: "Summer Intern: Public Sector Program for College Students" }, period: "2025.07" }
+          { role: { zh: "工讀生：「大專青年學生公部門暑期工讀」", en: "Summer Intern: Public Sector Program for College Students" }, period: "2025.07" }
         ] },
       { minor: true, cv: false, mark: "野火", logo: "assets/logos/wildfire.png",
         org: { zh: "國立政治大學野火陣線社", en: "NCCU Wildfire Front Club" },
