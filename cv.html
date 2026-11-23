@@ -310,7 +310,8 @@ html[lang="en"] .cv-entry.inline .cv-org::after { content: ", "; color: var(--te
     if (grp("civic")) html += section(t(grp("civic").title, L), entries((grp("civic").items || []).filter(function (it) {
       return opt.full || it.cv === true;
     }).map(function (it) {
-      return { org: it.name, show: it.show, roles: [{ role: it.role, period: it.period }] };
+      /* CV 是正式文件，有正式全名（full）就印全名 */
+      return { org: (it.full && t(it.full, L)) ? it.full : it.name, show: it.show, roles: [{ role: it.role, period: it.period }] };
     })));
     html += section(t((grp("other") || {}).title || { zh: "其他經歷與研習", en: "Other Experience & Training" }, L), entries(minor));
 
