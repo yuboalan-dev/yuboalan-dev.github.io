@@ -34,6 +34,8 @@
      name / kind   社會參與（groups 的 civic）用：name 活動名稱、kind 小類（talk 受邀分享、
                    event 合作與活動、training 研習與營隊）；每筆另寫 role 身分、period 日期
      cv: true      社會參與預設不印在 CV，要印的那筆寫 cv: true
+     full          社會參與用：活動的正式全名（留紀錄、印在 CV；網站上滑過那一行會看到）。
+                   name 寫網站上顯示的短名，太長時才需要另寫 full（2026-11-23 使用者決定）
                    站點依期間的開始年份排列；期間有「今」的會畫成實心點
 
    ★ 標了【待確認】的是 Claude 依現有資料起的草稿，請改成你要的說法。
@@ -282,17 +284,20 @@ window.SITE = {
 
     /* 社會參與：一次性或短期的參與（演講、活動、研習、營隊），不是有任期的職務（2026-11-08 使用者定案）。
        每筆一行：name 活動名稱、role 身分、period 日期（只寫一個時間點：YYYY.MM 或 YYYY）。
+       name 是網站上顯示的短名（大約 25 字內）；正式全名太長時寫在 full，網站滑過會顯示、CV 印全名。
        kind 分小類："talk" 受邀分享、"event" 合作與活動、"training" 研習與營隊；新的寫上面。
        line 寫這筆跟哪條路線有關（決定圓點顏色）；不寫就是灰色。
        CV 預設不印這一段，要印的那筆寫 cv: true。
        只想留紀錄、網站和 CV 都不放的，寫 show: false（注意：repo 是公開的，私密資料不要寫在這裡）。 */
     { key: "civic", line: "", title: { zh: "社會參與", en: "Civic Engagement" }, items: [
       { kind: "talk", line: "transport",
-        name: { zh: "國立政治大學附屬高級中學與國立政治大學 USR「多元共容‧文山共好」計畫合作課程「走入社區．看見文山社區實踐課程」", en: "" },
+        name: { zh: "政大附中「走入社區．看見文山」課程", en: "" },
+        full: { zh: "國立政治大學附屬高級中學與國立政治大學 USR「多元共容‧文山共好」計畫合作課程「走入社區．看見文山社區實踐課程」", en: "" },
         role: { zh: "講師", en: "" }, period: "2026.11" },
       { kind: "talk", line: "transport",
-        name: { zh: "臺北市都市更新處「臺北市都市再生行動育成實驗計畫（Be a DOER）」成果媒合會", en: "" },
-        role: { zh: "媒合會委員", en: "" }, period: "2026.11" },
+        name: { zh: "臺北市都市更新處「Be a DOER」計畫", en: "" },
+        full: { zh: "臺北市都市更新處「臺北市都市再生行動育成實驗計畫（Be a DOER）」成果媒合會", en: "" },
+        role: { zh: "成果媒合會委員", en: "" }, period: "2026.11" },
       { kind: "talk", line: "student",
         name: { zh: "國立臺北科技大學學生自治會「暑期幹部籌備訓練」", en: "" },
         role: { zh: "講師", en: "" }, period: "2026.07" },
@@ -303,8 +308,9 @@ window.SITE = {
         name: { zh: "國立政治大學全校地坪及空間景觀改善計畫", en: "" },
         role: { zh: "基本設計顧問", en: "" }, period: "2026" },
       { kind: "event", line: "transport",
-        name: { zh: "內政部國土管理署「人本街道校園推展聯盟」合作備忘錄簽署", en: "" },
-        role: { zh: "政大學生代表（指南路交通改善小組）", en: "" }, period: "2025.09" },
+        name: { zh: "國土管理署「人本街道校園推展聯盟」簽署", en: "" },
+        full: { zh: "內政部國土管理署「人本街道校園推展聯盟」合作備忘錄簽署", en: "" },
+        role: { zh: "政大學生代表", en: "" }, period: "2025.09" },
       { kind: "event", line: "transport",
         name: { zh: "「永續之路－指南溪與指南路走讀工作坊」", en: "" },
         role: { zh: "合辦：國立政治大學永續發展辦公室", en: "" }, period: "2025.08" },
@@ -312,8 +318,9 @@ window.SITE = {
         name: { zh: "國立政治大學國際關係研究中心「政治大學夏令研習營」", en: "NCCU Summer Institute" },
         role: { zh: "副召集人", en: "Deputy Convener" }, period: "2024.08" },
       { kind: "training", line: "research",
-        name: { zh: "政治學系課程「金融政策的政經分析：數位貨幣與培養理財素養的台日比較」日本明治大學研究成果發表、早稻田大學交流工作坊", en: "" },
-        role: { zh: "學員：小組研究「日本半導體產業人才培育政策」", en: "" }, period: "2025.05" },
+        name: { zh: "政治系課程赴日研究交流（明治大學、早稻田大學）", en: "" },
+        full: { zh: "政治學系課程「金融政策的政經分析：數位貨幣與培養理財素養的台日比較」日本明治大學研究成果發表、早稻田大學交流工作坊；小組研究「日本半導體產業人才培育政策」", en: "" },
+        role: { zh: "學員", en: "" }, period: "2025.05" },
       { kind: "training", line: "",
         name: { zh: "教育部青年發展署「公共事務人才培力基礎入門課程」", en: "Public Affairs Talent Foundation Course, Youth Development Administration" },
         role: { zh: "學員", en: "Participant" }, period: "2025.03" },

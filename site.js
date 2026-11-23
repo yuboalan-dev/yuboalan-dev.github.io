@@ -364,7 +364,9 @@
         if (!rows.length) return "";
         return '<h4 class="civic-kind">' + tx(c.zh, c.en) + '</h4><ul class="exp-roles is-multi civic-list">' + rows.map(function (it) {
           var p = U.period(it.period, L);
-          return '<li class="exp-role civic-row" data-line="' + lineOf(it) + '"><div class="exp-role-head"><span class="role-name">' + esc(t(it.name, L)) +
+          /* 網站顯示短名（name）；正式全名（full）放在滑過時的提示，完整紀錄在 content.js */
+          var full = t(it.full, L);
+          return '<li class="exp-role civic-row" data-line="' + lineOf(it) + '"' + (full ? ' title="' + esc(full) + '"' : "") + '><div class="exp-role-head"><span class="role-name">' + esc(t(it.name, L)) +
             (t(it.role, L) ? '<span class="civic-role">' + esc(t(it.role, L)) + "</span>" : "") + "</span>" +
             (p ? '<span class="exp-period">' + esc(p) + "</span>" : "") + "</div></li>";
         }).join("") + "</ul>";

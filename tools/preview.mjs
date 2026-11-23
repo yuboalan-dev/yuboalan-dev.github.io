@@ -97,7 +97,7 @@ const KEY_NAMES = { pageInfo: "各頁說明（搜尋與分享用）", updated: "
   focus: "關注領域", works: "代表作", mediaList: "媒體清單列法", media: "媒體", zh: "中文", en: "英文", period: "期間",
   points: "條列說明", url: "連結", date: "日期" };
 const TECH = new Set(["line", "key", "collapsed"]);
-const SUB_NAMES = { home: "首頁", experience: "經歷", work: "代表作", media: "媒體", items: "", roles: "", text: "", zh: "", en: "英文", role: "職稱", period: "期間", points: "條列說明",
+const SUB_NAMES = { home: "首頁", experience: "經歷", work: "代表作", media: "媒體", items: "", roles: "", text: "", zh: "", en: "英文", role: "職稱", period: "期間", full: "正式全名", points: "條列說明",
   line: "路線色", minor: "收進「顯示其他」", also: "另見", more: "代表作連結", title: "標題", org: "組織", station: "路線圖站點",
   cv: "放進 CV", web: "放上網站", show: "顯示", mark: "圓章簡稱", logo: "標誌", url: "連結", date: "日期", key: "代號", note: "一句話說明", thumb: "用縮圖", image: "作品圖", stats: "數字", num: "數值", unit: "單位", label: "說明", words: "輪播詞", caption: "圖說", alt: "替代文字", src: "圖檔" };
 const show = v => typeof v === "string" ? `「${v}」` : JSON.stringify(v);
