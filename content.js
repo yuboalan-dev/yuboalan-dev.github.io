@@ -41,7 +41,7 @@
 
 window.SITE = {
 
-  updated: "2026-11-11",
+  updated: "2026-11-23",
 
   /* 英文版開關：false＝網站和 CV 只有中文（頁首不顯示 EN 按鈕、不產生英文 CV）。
      英文內容（各處的 en）照樣留著，英文校對完改成 true 就恢復。 */
@@ -287,6 +287,12 @@ window.SITE = {
        CV 預設不印這一段，要印的那筆寫 cv: true。
        只想留紀錄、網站和 CV 都不放的，寫 show: false（注意：repo 是公開的，私密資料不要寫在這裡）。 */
     { key: "civic", line: "", title: { zh: "社會參與", en: "Civic Engagement" }, items: [
+      { kind: "talk", line: "transport",
+        name: { zh: "國立政治大學附屬高級中學與國立政治大學 USR「多元共容‧文山共好」計畫合作課程「走入社區．看見文山社區實踐課程」", en: "" },
+        role: { zh: "講師", en: "" }, period: "2026.11" },
+      { kind: "talk", line: "transport",
+        name: { zh: "臺北市都市更新處「臺北市都市再生行動育成實驗計畫（Be a DOER）」成果媒合會", en: "" },
+        role: { zh: "媒合會委員", en: "" }, period: "2026.11" },
       { kind: "talk", line: "student",
         name: { zh: "國立臺北科技大學學生自治會「暑期幹部籌備訓練」", en: "" },
         role: { zh: "講師", en: "" }, period: "2026.07" },
