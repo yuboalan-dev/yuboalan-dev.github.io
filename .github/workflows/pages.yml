@@ -79,7 +79,7 @@ jobs:
         if: github.event_name != 'pull_request'
         run: echo "$GITHUB_SHA" > _site/version.txt
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         if: github.event_name != 'pull_request'
         with:
           path: _site
