@@ -291,7 +291,7 @@ html[lang="en"] .who-name h1 { letter-spacing: 0; }
 main > .block:first-child { border-top: 0; }
 .block.washed { background: var(--wash); border-top: 0; }
 .block-head { display: flex; align-items: center; gap: 14px; margin-bottom: clamp(24px, 3vw, 40px); }
-.block-head::before { content: ""; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.block-head::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 4px solid var(--navy); background: #fff; flex-shrink: 0; }   /* 空心深藍點；紅色只留給「現在位置」（2026-11-28） */
 .block-title { font-size: clamp(28px, 3.4vw, 40px); font-weight: 900; color: var(--navy); line-height: 1.25; }
 
 
@@ -384,7 +384,7 @@ main > .block:first-child { border-top: 0; }
     border: 2px solid var(--navy); border-radius: 999px; padding: 9px 20px 9px 16px;
     position: relative; overflow: hidden; transition: background-color .25s ease, color .25s ease, border-color .25s ease;
 }
-.go-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); flex-shrink: 0; transition: transform .25s ease, background-color .25s ease; }
+.go-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--navy); flex-shrink: 0; transition: transform .25s ease, background-color .25s ease; }
 .go-btn:hover { background: var(--navy); color: #fff; }
 .go-btn:hover .go-dot { transform: scale(1.4); background: #fff; }
 
@@ -458,7 +458,7 @@ main > .block:first-child { border-top: 0; }
 .vid:hover .thumb img { transform: scale(1.03); }
 .vid .thumb::after {
     content: ""; position: absolute; left: 14px; bottom: 14px; width: 40px; height: 40px; border-radius: 50%;
-    background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M6 4.5v7l5.5-3.5z'/%3E%3C/svg%3E") center / 22px no-repeat;
+    background: var(--navy) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M6 4.5v7l5.5-3.5z'/%3E%3C/svg%3E") center / 22px no-repeat;
 }
 .vid .src { font-size: 13px; font-weight: 700; color: var(--muted); margin-top: 12px; }
 .vid .vt  { font-size: 16px; font-weight: 700; color: var(--navy); line-height: 1.5; margin-top: 2px; }
@@ -468,7 +468,7 @@ main > .block:first-child { border-top: 0; }
 .vid.is-card:hover { border-color: var(--navy); }
 .vid.is-card::before {
     content: ""; position: absolute; left: 20px; top: 22px; width: 30px; height: 30px; border-radius: 50%;
-    background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M6 4.5v7l5.5-3.5z'/%3E%3C/svg%3E") center / 18px no-repeat;
+    background: var(--navy) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M6 4.5v7l5.5-3.5z'/%3E%3C/svg%3E") center / 18px no-repeat;
 }
 .vid.is-card .src { margin-top: 0; }
 .vid .vn { font-size: 14.5px; color: var(--text); line-height: 1.7; margin-top: 6px; }
@@ -676,7 +676,7 @@ main > .block:first-child { border-top: 0; }
 .seek-rot { display: none; }
 .anim .seek-rot { display: inline; }
 .anim .seek-static { display: none; }   /* seek-static 只在有輪播時才會出現 */
-.rot { display: inline-grid; vertical-align: bottom; overflow: hidden; justify-items: start; transition: width .45s cubic-bezier(.2, .7, .2, 1); color: var(--accent); }
+.rot { display: inline-grid; vertical-align: bottom; overflow: hidden; justify-items: start; transition: width .45s cubic-bezier(.2, .7, .2, 1); color: var(--navy); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 6px; }
 .rot-w { grid-area: 1 / 1; white-space: nowrap; opacity: 0; transform: translateY(70%); transition: transform .45s cubic-bezier(.2, .7, .2, 1), opacity .35s ease; }
 .rot-w.is-on { opacity: 1; transform: none; }
 .rot-w.is-out { opacity: 0; transform: translateY(-70%); }
@@ -705,7 +705,7 @@ mark.hl { color: inherit; background: linear-gradient(transparent 56%, rgba(230,
 }
 .badge-card:active { cursor: grabbing; }
 .badge-card::before { content: ""; position: absolute; top: 10px; left: 50%; width: 34px; height: 7px; margin-left: -17px; border-radius: 999px; background: var(--wash); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .15); }
-.badge-photo { width: 76px; height: 76px; margin: 0 auto; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 4px #fff, 0 0 0 6px var(--accent); }
+.badge-photo { width: 76px; height: 76px; margin: 0 auto; border-radius: 50%; overflow: hidden; }
 .badge-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
 .badge-name { margin-top: 14px; font-family: var(--round); font-size: 24px; font-weight: 900; letter-spacing: .06em; line-height: 1.1; }
 .badge-en { font-size: 12.5px; color: var(--muted); font-weight: 700; }
