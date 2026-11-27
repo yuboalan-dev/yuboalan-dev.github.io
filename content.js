@@ -103,7 +103,8 @@ window.SITE = {
        votes    （可不寫）幾場投票各幾票，寫了就在下面畫出整面「一個點是一票」。首頁不用（太佔位置），留給故事頁 */
   belief: { zh: "即使沒有太多資源，也能改變社會。", en: "You don't need many resources to change society." },
   evidence: [
-    { num: 9843, unit: { zh: "票", en: "votes" },
+    /* web: false（2026-11-28 使用者要求）：首頁不再放票數大字，避免比姓名還搶眼；票數留在代表作頁。改回 true 就會出現在首屏下方 */
+    { web: false, num: 9843, unit: { zh: "票", en: "votes" },
       text: { zh: "指南路的人行環境，在兩場公開投票拿到近萬票支持：臺北市參與式預算 5,827 票、國土署街道醫生 4,016 票。靠的是網路影片、借導護背心在路口模擬紅綠燈、媒體報導後的群組轉傳，和走進社區拜訪居民。",
               en: "Nearly ten thousand votes across two public ballots for safer walking on Zhinan Road." },
       link: "/work.html", linkText: { zh: "看這件事怎麼發生", en: "See how it happened" } }
