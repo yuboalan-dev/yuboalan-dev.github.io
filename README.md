@@ -1,6 +1,6 @@
 # 游博安 Alan Yu｜個人網站
 
-設計：「圓點路線圖」——經歷畫成捷運路線，圓點是站點也是水滴；經歷頁三段各一條路線色，紅點代表最新一站。首頁是信念句加可互動的頭像。詳見 `docs/design.md`。
+設計：「圓點路線圖」——經歷畫成捷運路線，圓點是站點也是水滴；經歷頁三段各一條路線色，紅點代表最新一站。首頁首屏是姓名、信念句和本人照片。詳見 `docs/design.md`。
 
 **等你處理的事**都在這裡：[貼了「等使用者」標籤的 Issue](https://github.com/yuboalan-dev/yuboalan-dev.github.io/issues?q=is%3Aopen+label%3A%E7%AD%89%E4%BD%BF%E7%94%A8%E8%80%85)。改版各期的進度看 [Milestones](https://github.com/yuboalan-dev/yuboalan-dev.github.io/milestones)。
 
@@ -9,8 +9,7 @@
 | 檔案 | 用途 | 要不要改 |
 |---|---|---|
 | `content.js` | **所有文字、經歷、連結** | ✅ 平常只改這個 |
-| `assets/photo.jpg` | 大頭照（直式 3:4）；用在分享預覽圖、CV 勾「附照片」時，首頁不放 | ✅ 換照片就上傳同名檔覆蓋 |
-| `assets/avatar.svg` | 首頁的卡通頭像（目前是佔位版） | ✅ 正式插畫畫好後上傳同名檔覆蓋 |
+| `assets/photo.jpg` | 大頭照（直式 3:4、900×1200）；用在首頁首屏（裁成圓形）、頁尾識別證、分享預覽圖、CV 勾「附照片」時 | ✅ 換照片就上傳同名檔覆蓋 |
 | `index.html`、`experience.html`、`work.html`、`media.html` | 首頁與三個分頁（內容由 `site.js` 畫出） | 不用 |
 | `site.js` | 各分頁共用的版面 | 不用 |
 | `cv.html` | 產生 CV 的工具（網站上不連結，自己用網址打開） | 不用 |
@@ -41,7 +40,7 @@ AI 的改動會開成 PR（Pull request），PR 裡會自動出現一則「前�
 - **社會參與**在 `groups` 的 `civic`：演講、活動、研習、營隊這類一次性或短期的參與。每筆寫 `name`（活動名稱）、`role`（身分）、`period`（日期）、`kind`（`talk` 受邀分享、`event` 合作與活動、`training` 研習與營隊）、`line`（跟哪條路線有關）。CV 預設不印，要印的那筆加 `cv: true,`。
 - **只想留紀錄、網站和 CV 都不放**：加 `show: false,`。repo 是公開的，私密資料不要寫進來。
   - 職稱不寫屆次；日期寫 `2025.02 – 2025.07`，現職寫 `2026.02 – 今`。
-- **首頁主句**在 `belief`（信念句），下面那一行證據在 `evidence`。`tagline`（定位句）已決定不放，留空即可。
+- **首頁主句**在 `belief`（信念句）。`evidence`（票數大字）目前設 `web: false` 不上首頁，改回就會出現。`tagline`（定位句）已決定不放，留空即可。
 - **首頁互動用的欄位**（都可留空或刪掉）：`seekingRotate`（求職那一行輪播的詞）、`highlights`（簡介要劃螢光筆的詞，要和簡介一字不差）、代表作的 `stats`（數字，捲到時累加）。
 - **代表作圖片**：圖檔放 `assets/work/`，在該筆代表作加 `image: { src, alt, caption }`，網站顯示縮圖、點開看原圖。
 - **身分一句**在 `headline`（CV 抬頭與分享預覽圖用），寫學校科系這種不會因卸任失效的身分。
