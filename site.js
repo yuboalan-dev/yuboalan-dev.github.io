@@ -247,24 +247,21 @@
     var route = stops.length ? '<div class="route" data-reveal aria-label="' + tx("經歷路線圖", "Career route") + '">' + legend("route-legend", events.length) +
       '<ol class="route-track" style="--n:' + stops.length + '">' + stops.map(stopHtml).join("") + "</ol></div>" : "";
 
-    /* 首頁（2026-11-11 改版，路線圖 Issue #30 第 1 期）：
-       首屏＝頭像＋姓名（小）→ 信念句（最大）→ 求職一句；
-       接著「做過的事」（證據）→「現在在做的事」（現職）→ 歷程。
-       照片、履歷式簡介、關注領域不再放首頁（簡介仍用在 CV 與搜尋引擎描述）。 */
+    /* 首頁首屏（2026-11-28 改版，使用者要求）：
+       姓名（最大）→ 信念句（第二層）→ 求職一句；右邊是本人照片（content.js 的 photo，裁成圓形）。
+       取代 2026-11-11 版「姓名小、信念句最大、卡通點陣頭像」。 */
     var belief = t(S.belief, L).replace(/。$/, "");   /* 句尾的句號由紅色圓點代替（style.css .belief） */
     var bi = belief.indexOf("，");
     var beliefHtml = (!EN && bi > 0) ? "<span>" + esc(belief.slice(0, bi + 1)) + "</span><span>" + esc(belief.slice(bi + 1)) + "</span>" : esc(belief);
-    /* 頭像：平常是一張圖；有動畫時 motion.js 第 8 段會讓它散成 avatarDots 個點再聚回來 */
-    var avatar = S.avatar ? '<div class="lead-avatar"><div class="avatar-big"' + (S.avatarDots ? ' data-dots="' + esc(S.avatarDots) + '"' : "") + '>' +
-        '<img src="/' + esc(String(S.avatar).replace(/^\//, "")) + '" alt="' + esc(tx("游博安的卡通頭像", "Cartoon portrait of Alan Yu")) + '" width="360" height="360"></div>' +
-        (t(S.avatarNote, L) ? '<p class="avatar-note">' + esc(t(S.avatarNote, L)) + '<span class="avatar-hint">' + tx("滑過或按住看看。", " Hover or press.") + "</span></p>" : "") + "</div>" : "";
+    var photo = S.photo ? '<div class="lead-photo"><img src="/' + esc(String(S.photo).replace(/^\//, "")) + '" alt="' + esc(tx("游博安的照片", "Photo of Alan Yu")) +
+        '" width="900" height="1200" fetchpriority="high"></div>' : "";
     var html =
       '<section class="lead"><div class="wrap"><div class="lead-grid"><div class="lead-text">' +
         '<div class="who-name"><h1>' + esc(EN ? S.name.en : S.name.zh) + '</h1><span class="en">' + esc(EN ? S.name.zh : S.name.en) + "</span></div>" +
         (belief ? '<p class="belief">' + beliefHtml + "</p>" : "") +
         (tl ? '<p class="tagline">' + esc(tl) + "</p>" : "") +
         (seek ? '<p class="seeking"><span class="seeking-dot" aria-hidden="true"></span>' + esc(seek) + "</p>" : "") +
-      "</div>" + avatar + "</div></div></section>";
+      "</div>" + photo + "</div></div></section>";
 
     /* 頁面內的連結按鈕：每一區看完，接到對應的分頁 */
     function goto(href, zh, en) {

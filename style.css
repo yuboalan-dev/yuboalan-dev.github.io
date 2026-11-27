@@ -38,6 +38,14 @@
     --round: "Chiron GoRound TC", "Noto Sans TC", -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
     --sans:  "Noto Sans TC", -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
 
+    /* 字級：全站只用這幾級（2026-11-28 收斂，原本 13 種以上） */
+    --fs-xs:      13px;                          /* 日期、圖說 */
+    --fs-s:       15px;                          /* 次要文字、按鈕 */
+    --fs-m:       17px;                          /* 內文 */
+    --fs-l:       20px;                          /* 小標題 */
+    --fs-xl:      clamp(24px, 2.8vw, 34px);      /* 區塊標題、信念句 */
+    --fs-display: clamp(56px, 8vw, 96px);        /* 姓名 */
+
     --page-w:  1120px;
     --gutter:  clamp(16px, 4vw, 40px);
     --dot:     14px;              /* 標準站點大小 */
@@ -227,35 +235,28 @@ html[lang="en"] .hero-name h1 { letter-spacing: 0; }
 }
 
 
-/* ---------- 2-1. 首頁首屏（2026-11-11 改版）：左邊姓名（小）→ 信念句（最大）→ 求職一句；右邊大顆頭像 ----------
-   一個畫面只說一件事；點陣底紋、照片、簡介都不放。 */
+/* ---------- 2-1. 首頁首屏（2026-11-28 改版）：姓名（最大）→ 信念句 → 求職一句；右邊本人照片，裁成圓形 ----------
+   一個畫面只說一件事：這個人是誰。照片本身就是一個圓點。 */
 .lead { padding: clamp(36px, 6vw, 84px) 0 clamp(40px, 6vw, 84px); overflow: hidden; }
 .lead-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px clamp(28px, 5vw, 72px); align-items: center; }
-.who-name { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 12px; }
-.who-name h1 { font-size: clamp(24px, 3vw, 30px); font-weight: 900; color: var(--navy); letter-spacing: .06em; line-height: 1.2; }
-.who-name .en { font-size: 15px; font-weight: 700; color: var(--muted); }
+.who-name { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 16px; }
+.who-name h1 { font-size: var(--fs-display); font-weight: 900; color: var(--navy); letter-spacing: .06em; line-height: 1.05; }
+.who-name .en { font-size: var(--fs-l); font-weight: 700; color: var(--muted); }
+html[lang="en"] .who-name h1 { letter-spacing: 0; }
 .belief {
-    margin-top: clamp(18px, 2.6vw, 30px); font-family: var(--round); font-weight: 900; color: var(--navy);
-    font-size: clamp(34px, 5.2vw, 66px); line-height: 1.2; letter-spacing: .02em;
+    margin-top: clamp(20px, 2.6vw, 32px); font-family: var(--round); font-weight: 700; color: var(--navy);
+    font-size: var(--fs-xl); line-height: 1.4; letter-spacing: .02em;
 }
 .belief span { display: block; }
 .belief span:last-child::after {   /* 句尾紅點＝句號（site.js 會拿掉文字的「。」） */
-    content: ""; display: inline-block; width: .2em; height: .2em; margin-left: .12em; border-radius: 50%; background: var(--accent);
+    content: ""; display: inline-block; width: .22em; height: .22em; margin-left: .12em; border-radius: 50%; background: var(--accent);
 }
-.lead .seeking { margin-top: clamp(22px, 3vw, 36px); }
-/* 頭像：圓形，外圈一道紅色細環。canvas（motion.js 第 8 段）比頭像大一圈，點才飛得出去 */
-.lead-avatar { width: clamp(240px, 30vw, 360px); }
-.avatar-big { position: relative; width: 100%; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 5px #fff, 0 0 0 8px var(--accent); touch-action: pan-y; cursor: pointer; }
-.avatar-big img { display: block; width: 100%; height: 100%; border-radius: 50%; transition: opacity .25s ease; }
-.avatar-big canvas { position: absolute; left: -30%; top: -30%; width: 160%; height: 160%; pointer-events: none; opacity: 0; transition: opacity .25s ease; }
-.avatar-big.is-dots img { opacity: 0; }
-.avatar-big.is-dots canvas { opacity: 1; }
-.avatar-note { margin-top: 20px; font-size: 13.5px; line-height: 1.7; color: var(--muted); text-align: center; }
-.avatar-hint { display: none; }
-.anim .avatar-big[data-dots] ~ .avatar-note .avatar-hint { display: inline; }
+.lead .seeking { margin-top: clamp(18px, 2.4vw, 28px); }
+.lead-photo { width: clamp(240px, 28vw, 340px); aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--wash); }
+.lead-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 24%; transform: scale(1.3); transform-origin: 50% 26%; }   /* 放大到肩膀以上 */
 @media (max-width: 860px) {
     .lead-grid { grid-template-columns: 1fr; }
-    .lead-avatar { grid-row: 1; width: clamp(200px, 58vw, 280px); margin: 0 auto; }
+    .lead-photo { grid-row: 1; width: clamp(180px, 52vw, 240px); }
 }
 
 /* ---------- 2-2. 信念句的證據：首屏下方一行。大字在左、說明在右；votes（整面圓點）留給故事頁 ---------- */

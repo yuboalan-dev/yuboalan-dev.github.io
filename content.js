@@ -91,17 +91,9 @@ window.SITE = {
     { line: "transport", zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" }
   ],
 
-  /* 照片：命名 photo.jpg 放進 assets 資料夾。沒放時顯示姓氏字樣。 */
+  /* 照片：命名 photo.jpg 放進 assets 資料夾（900×1200）。用在首頁首屏（裁成圓形）、頁尾識別證、CV（勾「附照片」時）與分享圖。
+     2026-11-28 起首頁改放照片，原本的卡通點陣頭像（avatar）拿掉。 */
   photo: "assets/photo.jpg",
-
-  /* 首頁頭像（2026-11-11 使用者決定）：首頁不放照片，改放卡通頭像。
-     照片（上面的 photo）仍用在 CV（勾「附照片」時）與分享圖。
-     目前是幾何圖形的佔位版；正式插畫畫好後，換掉 assets/avatar.svg（或改這裡的檔名）即可。
-     avatarDots：頭像由幾個點組成（訪客滑過或按住，頭像會散成這麼多個點再聚回來）＝指南路兩場投票的總票數；
-     avatarNote：頭像下面那一行說明 */
-  avatar: "assets/avatar.svg",
-  avatarDots: 9843,
-  avatarNote: { zh: "這張臉由 9,843 個點組成，一個點是指南路的一票。", en: "This face is made of 9,843 dots — one for each vote for Zhinan Road." },
 
   /* 首頁主句（信念句）與下面的證據【待確認：文字由 Claude 依 Issue #13 訪談整理起草】
      evidence 每一筆：
