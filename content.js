@@ -91,17 +91,9 @@ window.SITE = {
     { line: "transport", zh: "下一代人本交通促進會　副秘書長", en: "Deputy Secretary-General, Next Generation People-Oriented Transport Association" }
   ],
 
-  /* 照片：命名 photo.jpg 放進 assets 資料夾。沒放時顯示姓氏字樣。 */
+  /* 照片：命名 photo.jpg 放進 assets 資料夾（900×1200）。用在首頁首屏（裁成圓形）、頁尾識別證、CV（勾「附照片」時）與分享圖。
+     2026-11-28 起首頁改放照片，原本的卡通點陣頭像（avatar）拿掉。 */
   photo: "assets/photo.jpg",
-
-  /* 首頁頭像（2026-11-11 使用者決定）：首頁不放照片，改放卡通頭像。
-     照片（上面的 photo）仍用在 CV（勾「附照片」時）與分享圖。
-     目前是幾何圖形的佔位版；正式插畫畫好後，換掉 assets/avatar.svg（或改這裡的檔名）即可。
-     avatarDots：頭像由幾個點組成（訪客滑過或按住，頭像會散成這麼多個點再聚回來）＝指南路兩場投票的總票數；
-     avatarNote：頭像下面那一行說明 */
-  avatar: "assets/avatar.svg",
-  avatarDots: 9843,
-  avatarNote: { zh: "這張臉由 9,843 個點組成，一個點是指南路的一票。", en: "This face is made of 9,843 dots — one for each vote for Zhinan Road." },
 
   /* 首頁主句（信念句）與下面的證據【待確認：文字由 Claude 依 Issue #13 訪談整理起草】
      evidence 每一筆：
@@ -111,7 +103,8 @@ window.SITE = {
        votes    （可不寫）幾場投票各幾票，寫了就在下面畫出整面「一個點是一票」。首頁不用（太佔位置），留給故事頁 */
   belief: { zh: "即使沒有太多資源，也能改變社會。", en: "You don't need many resources to change society." },
   evidence: [
-    { num: 9843, unit: { zh: "票", en: "votes" },
+    /* web: false（2026-11-28 使用者要求）：首頁不再放票數大字，避免比姓名還搶眼；票數留在代表作頁。改回 true 就會出現在首屏下方 */
+    { web: false, num: 9843, unit: { zh: "票", en: "votes" },
       text: { zh: "指南路的人行環境，在兩場公開投票拿到近萬票支持：臺北市參與式預算 5,827 票、國土署街道醫生 4,016 票。靠的是網路影片、借導護背心在路口模擬紅綠燈、媒體報導後的群組轉傳，和走進社區拜訪居民。",
               en: "Nearly ten thousand votes across two public ballots for safer walking on Zhinan Road." },
       link: "/work.html", linkText: { zh: "看這件事怎麼發生", en: "See how it happened" } }
